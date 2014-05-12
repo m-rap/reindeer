@@ -12,6 +12,7 @@ BaseObject::BaseObject() {
 	euler.x = euler.y = euler.z = 0.0f;
 	scale.x = scale.y = scale.z = 1.0f;
 	quaternion = glm::quat(euler);
+	BuildWorld();
 }
 
 BaseObject::~BaseObject() {
@@ -24,12 +25,23 @@ void BaseObject::SetPosition(const glm::vec3& position, bool silent) {
 		BuildWorld();
 }
 
+glm::vec3 BaseObject::GetPosition() {
+	return position;
+}
+
 void BaseObject::SetEuler(const glm::vec3& euler, bool silent) {
-	this->euler = euler;
+	this->euler.x = fmod(euler.x, 360);
+	this->euler.y = fmod(euler.y, 360);
+	this->euler.z = fmod(euler.z, 360);
 	if (!silent) {
-		quaternion = glm::quat(euler);
+		glm::vec3 radEuler(ToRadian(this->euler.x), ToRadian(this->euler.y), ToRadian(this->euler.z));
+		quaternion = glm::quat(radEuler);
 		BuildWorld();
 	}
+}
+
+glm::vec3 BaseObject::GetEuler() {
+	return euler;
 }
 
 void BaseObject::BuildWorld() {

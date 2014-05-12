@@ -11,6 +11,8 @@
 #include <GL/glm/gtx/quaternion.hpp>
 #include <GL/glm/gtc/matrix_transform.hpp>
 
+#include <stdio.h>
+
 #define ToRadian( degree ) ((degree) * (M_PI / 180.0f))
 #define ToDegree( radian ) ((radian) * (180.0f / M_PI))
 
@@ -30,7 +32,10 @@ public:
 	~BaseObject();
 
 	virtual void SetPosition(const glm::vec3& position, bool silent = false);
+	virtual glm::vec3 GetPosition();
+
 	virtual void SetEuler(const glm::vec3& euler, bool silent = false);
+	virtual glm::vec3 GetEuler();
 
 	void BuildWorld();
 };

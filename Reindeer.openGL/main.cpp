@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <GL/gl.h>
 #include <GL/glfw3.h>
 
@@ -17,12 +16,12 @@ int main() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	BoxObject box;
-	glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(30, 0, 0);
+	glm::vec3 position(0.0f, 45.0f, 0.0f), rotation(20, 0, 0);
 	box.SetPosition(position);
 
 	Camera camera;
-	position.y = 30;
-	position.z = -30;
+	position.y = 60.0f;
+	position.z = -60.0f;
 	camera.SetPosition(position);
 	camera.SetEuler(rotation);
 
