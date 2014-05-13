@@ -7,6 +7,7 @@ class BoxObject: public BaseObject {
 protected:
 	glm::vec3 vertices[8];
 	short indices[36];
+	glm::vec3 normals[6];
 public:
 	BoxObject();
 	~BoxObject();

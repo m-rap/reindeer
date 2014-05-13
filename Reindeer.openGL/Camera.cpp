@@ -11,7 +11,7 @@ Camera::~Camera() {
 void Camera::BuildProjection() {
 	projection = glm::perspective(
 		(float)ToRadian(45),    // the horizontal field of view
-		(float)SCREEN_WIDTH / SCREEN_HEIGHT, // aspect ratio
+		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, // aspect ratio
 		1.0f,    // the near view-plane
 		100.0f);    // the far view-plane
 }
