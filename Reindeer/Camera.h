@@ -15,7 +15,7 @@ protected:
 	D3DXMATRIX view, projection;
 public:
 	Camera();
-	~Camera();
+	virtual ~Camera();
 
 	void BuildProjection();
 	void BuildView();
@@ -24,7 +24,7 @@ public:
 	D3DMATRIX GetProjection();
 
 	virtual void SetPosition(const D3DXVECTOR3& position);
-	virtual void SetRotation(const D3DXVECTOR3& rotation);
+	virtual void SetEuler(const D3DXVECTOR3& euler);
 };
 
 #endif

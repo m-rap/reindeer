@@ -29,7 +29,7 @@ protected:
 	glm::mat4 world;
 public:
 	BaseObject();
-	~BaseObject();
+	virtual ~BaseObject();
 
 	virtual void SetPosition(const glm::vec3& position, bool silent = false);
 	virtual glm::vec3 GetPosition();
@@ -37,7 +37,11 @@ public:
 	virtual void SetEuler(const glm::vec3& euler, bool silent = false);
 	virtual glm::vec3 GetEuler();
 
+	virtual void SetScale(const glm::vec3& scale, bool silent = false);
+	virtual glm::vec3 GetScale();
+
 	void BuildWorld();
+	glm::mat4 GetWorld();
 };
 
 #endif /* BASEOBJECT_H_ */

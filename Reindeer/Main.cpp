@@ -47,11 +47,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     initD3D(hWnd);   // set up and initialize Direct3D
 	init_light();    // call the function to initialize the light and material
 
-	d3ddev->SetRenderState(D3DRS_LIGHTING, TRUE);    // turn on the 3D lighting
-    d3ddev->SetRenderState(D3DRS_ZENABLE, TRUE);    // turn on the z-buffer
-    d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(50, 50, 50));    // ambient light
-    d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);    // handle normals in scaling
-
 
 	// [rdr_note] Rdr objects instantiated here
 
@@ -66,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	position.y = 30;
 	position.z = -30;
 	camera.SetPosition(position);
-	camera.SetRotation(rotation);
+	camera.SetEuler(rotation);
 
 
     // enter the main loop:
@@ -92,13 +87,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// [rdr_note] modify Rdr objects behavior
 
-		D3DVECTOR tempPosition = {(float)sin(i) * 12.0f, 0.0f, (float)cos(i) * 25.0f}, tempRotation = box.GetRotation();
+		D3DVECTOR tempPosition = {(float)sin(i) * 12.0f, 0.0f, (float)cos(i) * 25.0f}, tempRotation = box.GetEuler();
 		tempRotation.x += 1;
 		tempRotation.y += 1;
 		tempRotation.z += 1;
-		//box.SetPosition(tempPosition, true);
-		//box.SetRotation(tempRotation, true);
-		//box.BuildWorld();
+		box.SetPosition(tempPosition, true);
+		//box.SetEuler(tempRotation, true);
+		box.BuildWorld();
 
 
 		// [rdr_note] draw Rdr objects
@@ -185,4 +180,9 @@ void init_light(void)
     material.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
     d3ddev->SetMaterial(&material);
+
+	d3ddev->SetRenderState(D3DRS_LIGHTING, TRUE);    // turn on the 3D lighting
+    d3ddev->SetRenderState(D3DRS_ZENABLE, TRUE);    // turn on the z-buffer
+    d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(50, 50, 50));    // ambient light
+    d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);    // handle normals in scaling
 }

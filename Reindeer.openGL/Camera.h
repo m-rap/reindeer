@@ -11,7 +11,7 @@ protected:
 	glm::mat4 view, projection;
 public:
 	Camera();
-	~Camera();
+	virtual ~Camera();
 
 	void BuildProjection();
 	void BuildView();

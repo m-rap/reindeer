@@ -64,8 +64,8 @@ void Camera::SetPosition(const D3DXVECTOR3& position)
 }
 
 
-void Camera::SetRotation(const D3DXVECTOR3& rotation)
+void Camera::SetEuler(const D3DXVECTOR3& rotation)
 {
-	BaseObject::SetRotation(rotation);
+	BaseObject::SetEuler(rotation);
 	BuildView();
 }

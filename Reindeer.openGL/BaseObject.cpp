@@ -44,6 +44,16 @@ glm::vec3 BaseObject::GetEuler() {
 	return euler;
 }
 
+void BaseObject::SetScale(const glm::vec3& scale, bool silent) {
+	this->scale = scale;
+	if (!silent)
+		BuildWorld();
+}
+
+glm::vec3 BaseObject::GetScale() {
+	return scale;
+}
+
 void BaseObject::BuildWorld() {
 	rotationMatrix = glm::toMat4(quaternion);
 	world = glm::translate(glm::mat4(1.0f), position) * rotationMatrix * glm::scale(glm::mat4(1.0f), scale);

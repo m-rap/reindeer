@@ -12,7 +12,7 @@ class BaseObject
 {
 protected:
 	D3DXVECTOR3 position;
-	D3DXVECTOR3 rotation;
+	D3DXVECTOR3 euler;
 	D3DXVECTOR3 scale;
 	D3DXQUATERNION quaternion;
 
@@ -23,13 +23,13 @@ protected:
 	void QuaternionToEuler();
 public:
 	BaseObject();
-	~BaseObject();
+	virtual ~BaseObject();
 
 	virtual void SetPosition(const D3DXVECTOR3& position, bool silent = false);
 	virtual D3DXVECTOR3 GetPosition();
 
-	virtual void SetRotation(const D3DXVECTOR3& rotation, bool silent = false);
-	virtual D3DXVECTOR3 GetRotation();
+	virtual void SetEuler(const D3DXVECTOR3& euler, bool silent = false);
+	virtual D3DXVECTOR3 GetEuler();
 
 	virtual void SetScale(const D3DXVECTOR3& scale, bool silent = false);
 	virtual D3DXVECTOR3 GetScale();

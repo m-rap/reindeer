@@ -21,7 +21,7 @@ protected:
 	void BuildBuffers();
 public:
 	BoxObject(LPDIRECT3DDEVICE9 graphicsDevice = NULL);
-	~BoxObject();
+	virtual ~BoxObject();
 
 	void SetGraphicsDevice(const LPDIRECT3DDEVICE9& graphicsDevice);
 	LPDIRECT3DDEVICE9 GetGraphicsDevice();
