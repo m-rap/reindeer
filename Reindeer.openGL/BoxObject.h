@@ -5,15 +5,16 @@
 
 class BoxObject: public BaseObject {
 protected:
-	glm::vec3 vertices[8];
-	short indices[36];
-	glm::vec3 normals[6];
+	GLfloat vertices[72];
+	GLfloat normals[72];
+	GLbyte indices[36];
 
 	glm::vec3 min, max;
 	float width, height, length;
 
 	void BuildWidthHeightLength();
 	void BuildBuffers();
+	void BuildNormalsIndices();
 public:
 	BoxObject();
 	virtual ~BoxObject();

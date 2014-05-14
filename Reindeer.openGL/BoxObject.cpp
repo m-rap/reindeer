@@ -12,30 +12,7 @@ BoxObject::BoxObject() : BaseObject() {
 	min.x = min.y = min.z = 0;
 	max.x = max.y = max.z = 0;
 
-	normals[0] = glm::vec3( 0,  1,  0);
-	normals[1] = glm::vec3( 0, -1,  0);
-	normals[2] = glm::vec3( 0,  0, -1);
-	normals[3] = glm::vec3( 1,  0,  0);
-	normals[4] = glm::vec3( 0,  0,  1);
-	normals[5] = glm::vec3(-1,  0,  0);
-
-	short indices[] =
-	{
-		1, 0, 2,    // side 1
-		2, 0, 3,
-		5, 4, 6,    // side 2
-		6, 4, 7,
-		0, 1, 4,    // side 3
-		4, 1, 5,
-		1, 2, 5,    // side 4
-		5, 2, 6,
-		2, 3, 6,    // side 5
-		6, 3, 7,
-		3, 0, 7,    // side 6
-		7, 0, 4,
-	};
-	memcpy(this->indices, indices, sizeof(indices));
-
+	BuildNormalsIndices();
 	BuildWidthHeightLength();
 }
 
@@ -47,11 +24,9 @@ void BoxObject::SetMin(const glm::vec3& value) {
 	BuildWidthHeightLength();
 }
 
-
 glm::vec3 BoxObject::GetMin() {
 	return min;
 }
-
 
 void BoxObject::SetMax(const glm::vec3& value) {
 	this->max = value;
@@ -63,7 +38,6 @@ glm::vec3 BoxObject::GetMax() {
 	return max;
 }
 
-
 void BoxObject::SetMinMax(const glm::vec3& min, const glm::vec3& max) {
 	this->min = min;
 	this->max = max;
@@ -71,7 +45,6 @@ void BoxObject::SetMinMax(const glm::vec3& min, const glm::vec3& max) {
 }
 
 void BoxObject::Draw(Camera& camera) {
-
 	glMatrixMode(GL_PROJECTION);
 	glm::mat4 projection = camera.GetProjection();
 	glLoadMatrixf(glm::value_ptr(projection));
@@ -80,20 +53,15 @@ void BoxObject::Draw(Camera& camera) {
 	glm::mat4 modelview = camera.GetView() * world;
 	glLoadMatrixf(glm::value_ptr(modelview));
 
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 36;) {
-		glNormal3fv(glm::value_ptr(normals[i / 6]));
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 
-		glVertex3fv(glm::value_ptr(vertices[indices[i++]]));
-		glVertex3fv(glm::value_ptr(vertices[indices[i++]]));
-		glVertex3fv(glm::value_ptr(vertices[indices[i++]]));
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glNormalPointer(GL_FLOAT, 0, normals);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
 
-		glVertex3fv(glm::value_ptr(vertices[indices[i++]]));
-		glVertex3fv(glm::value_ptr(vertices[indices[i++]]));
-		glVertex3fv(glm::value_ptr(vertices[indices[i++]]));
-	}
-	glEnd();
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_NORMAL_ARRAY);
 }
 
 void BoxObject::BuildWidthHeightLength() {
@@ -105,12 +73,87 @@ void BoxObject::BuildWidthHeightLength() {
 }
 
 void BoxObject::BuildBuffers() {
-	vertices[0] = glm::vec3(-width / 2,  height / 2, -length / 2);
-	vertices[1] = glm::vec3( width / 2,  height / 2, -length / 2);
-	vertices[2] = glm::vec3( width / 2,  height / 2,  length / 2);
-	vertices[3] = glm::vec3(-width / 2,  height / 2,  length / 2);
-	vertices[4] = glm::vec3(-width / 2, -height / 2, -length / 2);
-	vertices[5] = glm::vec3( width / 2, -height / 2, -length / 2);
-	vertices[6] = glm::vec3( width / 2, -height / 2,  length / 2);
-	vertices[7] = glm::vec3(-width / 2, -height / 2,  length / 2);
+	float vertices[] = {
+		-width / 2, -height / 2,  length / 2,    // side 1
+		 width / 2, -height / 2,  length / 2,
+		-width / 2,  height / 2,  length / 2,
+		 width / 2,  height / 2,  length / 2,
+
+		-width / 2, -height / 2, -length / 2,    // side 2
+		-width / 2,  height / 2, -length / 2,
+		 width / 2, -height / 2, -length / 2,
+		 width / 2,  height / 2, -length / 2,
+
+		-width / 2,  height / 2, -length / 2,    // side 3
+		-width / 2,  height / 2,  length / 2,
+		 width / 2,  height / 2, -length / 2,
+		 width / 2,  height / 2,  length / 2,
+
+		-width / 2, -height / 2, -length / 2,    // side 4
+		 width / 2, -height / 2, -length / 2,
+		-width / 2, -height / 2,  length / 2,
+		 width / 2, -height / 2,  length / 2,
+
+		 width / 2, -height / 2, -length / 2,    // side 5
+		 width / 2,  height / 2, -length / 2,
+		 width / 2, -height / 2,  length / 2,
+		 width / 2,  height / 2,  length / 2,
+
+		-width / 2, -height / 2, -length / 2,    // side 6
+		-width / 2, -height / 2,  length / 2,
+		-width / 2,  height / 2, -length / 2,
+		-width / 2,  height / 2,  length / 2,
+	};
+	memcpy(this->vertices, vertices, sizeof(vertices));
+}
+
+void BoxObject::BuildNormalsIndices() {
+	GLfloat normals[] = {
+		 0.0f,  0.0f,  1.0f,
+		 0.0f,  0.0f,  1.0f,
+		 0.0f,  0.0f,  1.0f,
+		 0.0f,  0.0f,  1.0f,
+
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+
+		 0.0f,  1.0f,  0.0f,
+		 0.0f,  1.0f,  0.0f,
+		 0.0f,  1.0f,  0.0f,
+		 0.0f,  1.0f,  0.0f,
+
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+
+		 1.0f,  0.0f,  0.0f,
+		 1.0f,  0.0f,  0.0f,
+		 1.0f,  0.0f,  0.0f,
+		 1.0f,  0.0f,  0.0f,
+
+		-1.0f,  0.0f,  0.0f,
+		-1.0f,  0.0f,  0.0f,
+		-1.0f,  0.0f,  0.0f,
+		-1.0f,  0.0f,  0.0f,
+	};
+	memcpy(this->normals, normals, sizeof(normals));
+
+	GLbyte indices[] = {
+		0, 1, 2,    // side 1
+		2, 1, 3,
+		4, 5, 6,    // side 2
+		6, 5, 7,
+		8, 9, 10,    // side 3
+		10, 9, 11,
+		12, 13, 14,    // side 4
+		14, 13, 15,
+		16, 17, 18,    // side 5
+		18, 17, 19,
+		20, 21, 22,    // side 6
+		22, 21, 23,
+	};
+	memcpy(this->indices, indices, sizeof(indices));
 }
