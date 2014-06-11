@@ -1,7 +1,5 @@
-#include <GL/gl.h>
-#include <GL/glfw3.h>
-
 #include "BoxObject.h"
+#include <GLFW/glfw3.h>
 
 void initOpenGL() {
 	glEnable(GL_LIGHTING);
@@ -38,15 +36,26 @@ void initOpenGL() {
 }
 
 int main() {
-	if (!glfwInit())
+	if (!glfwInit()) {
+		printf("glfw init failed\n");
 		return 0;
+	}
 
 	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Our OpenGL Program", NULL, NULL);
 	if (!window) {
+		printf("glfw create window failed\n");
 		glfwTerminate();
 		return 0;
 	}
 	glfwMakeContextCurrent(window);
+
+
+	if (glewInit() != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW\n");
+		return -1;
+	}
+
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	initOpenGL();

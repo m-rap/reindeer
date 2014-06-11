@@ -3,13 +3,15 @@
 
 #define GLM_FORCE_RADIANS
 #include <math.h>
+#include <GL/glew.h>
 #include <GL/gl.h>
-#include <GL/glm/glm.hpp>
-#include <GL/glm/vec3.hpp>
-#include <GL/glm/mat4x4.hpp>
-#include <GL/glm/gtc/quaternion.hpp>
-#include <GL/glm/gtx/quaternion.hpp>
-#include <GL/glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <stdio.h>
 

@@ -6,7 +6,6 @@
  */
 
 #include "BoxObject.h"
-#include <GL/glm/gtc/type_ptr.hpp>
 
 BoxObject::BoxObject() : BaseObject() {
 	min.x = min.y = min.z = 0;
