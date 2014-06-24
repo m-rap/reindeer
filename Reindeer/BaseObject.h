@@ -34,7 +34,7 @@ public:
 	virtual void SetScale(const D3DXVECTOR3& scale, bool silent = false);
 	virtual D3DXVECTOR3 GetScale();
 
-	void BuildWorld();
+	virtual void BuildWorld();
 	D3DXMATRIX GetWorld();
 };
 

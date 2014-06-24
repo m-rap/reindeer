@@ -3,6 +3,7 @@
 #include <windowsx.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <stdio.h>
 
 #include "BoxObject.h"
 
@@ -24,6 +25,10 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	AllocConsole();
+	AttachConsole(GetCurrentProcessId());
+	freopen( "CON", "w", stdout );
+
     HWND hWnd;
     WNDCLASSEX wc;
 
@@ -54,15 +59,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	D3DVECTOR min = {-3.0f, -3.0f, -3.0f};
 	D3DVECTOR max = { 3.0f,  3.0f,  3.0f};
 	box.SetMinMax(min, max);
-	D3DVECTOR position = {0.0f, 0.0f, 0.0f}, rotation = {30, 0, 0};
+	D3DVECTOR position = {10.0f, 0.0f, 0.0f}, rotation = {30, 0, 0};
 	box.SetPosition(position);
 
 	Camera camera;
+	position.x = 0;
 	position.y = 30;
 	position.z = -30;
-	camera.SetPosition(position);
-	camera.SetEuler(rotation);
-
+	camera.SetPosition(position, true);
+	camera.SetEuler(rotation, true);
+	camera.BuildWorld();
+	
 
     // enter the main loop:
 
@@ -88,13 +95,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// [rdr_note] modify Rdr objects behavior
 
 		D3DVECTOR tempPosition = {(float)sin(i) * 12.0f, 0.0f, (float)cos(i) * 25.0f}, tempRotation = box.GetEuler();
-		tempRotation.x += 1;
-		tempRotation.y += 1;
-		tempRotation.z += 1;
-		box.SetPosition(tempPosition, true);
-		//box.SetEuler(tempRotation, true);
-		box.BuildWorld();
-
+		//box.SetPosition(tempPosition, true);
+		//box.BuildWorld();
+		
 
 		// [rdr_note] draw Rdr objects
 		

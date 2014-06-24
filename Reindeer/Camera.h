@@ -23,8 +23,7 @@ public:
 	D3DMATRIX GetView();
 	D3DMATRIX GetProjection();
 
-	virtual void SetPosition(const D3DXVECTOR3& position);
-	virtual void SetEuler(const D3DXVECTOR3& euler);
+	virtual void BuildWorld();
 };
 
 #endif

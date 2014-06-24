@@ -19,8 +19,7 @@ public:
 	glm::mat4 GetView();
 	glm::mat4 GetProjection();
 
-	virtual void SetPosition(const glm::vec3& position, bool silent = false);
-	virtual void SetEuler(const glm::vec3& euler, bool silent = false);
+	virtual void BuildWorld();
 };
 
 #endif /* CAMERA_H_ */

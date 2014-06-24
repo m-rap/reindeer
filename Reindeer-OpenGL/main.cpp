@@ -50,10 +50,10 @@ int main() {
 	glfwMakeContextCurrent(window);
 
 
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW\n");
-		return -1;
-	}
+//	if (glewInit() != GLEW_OK) {
+//		fprintf(stderr, "Failed to initialize GLEW\n");
+//		return -1;
+//	}
 
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -67,10 +67,11 @@ int main() {
 	glm::vec3 max( 3.0f,  3.0f,  3.0f);
 	BoxObject box;
 	box.SetMinMax(min, max);
-	glm::vec3 position(0.0f, 0.0f, 0.0f), rotation(30, 0, 0);
+	glm::vec3 position(10.0f, 0.0f, 0.0f), rotation(30, 0, 0);
 	box.SetPosition(position);
 
 	Camera camera;
+	position.x = 0.0f;
 	position.y = 30.0f;
 	position.z = -30.0f;
 	camera.SetPosition(position);
@@ -90,9 +91,9 @@ int main() {
 		tempRotation.x += 1;
 		tempRotation.y += 1;
 		tempRotation.z += 1;
-		box.SetPosition(tempPosition, true);
+		//box.SetPosition(tempPosition, true);
 		//box.SetEuler(tempRotation, true);
-		box.BuildWorld();
+		//box.BuildWorld();
 
 
 		// [rdr_note] draw Rdr objects

@@ -30,7 +30,7 @@ D3DXVECTOR3 BaseObject::GetPosition()
 	return position;
 }
 
-void BaseObject::SetEuler(const D3DXVECTOR3& rotation, bool silent)
+void BaseObject::SetEuler(const D3DXVECTOR3& euler, bool silent)
 {
 	this->euler.x = fmod(euler.x, 360);
 	this->euler.y = fmod(euler.y, 360);

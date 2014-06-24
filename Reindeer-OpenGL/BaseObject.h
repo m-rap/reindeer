@@ -42,7 +42,7 @@ public:
 	virtual void SetScale(const glm::vec3& scale, bool silent = false);
 	virtual glm::vec3 GetScale();
 
-	void BuildWorld();
+	virtual void BuildWorld();
 	glm::mat4 GetWorld();
 };
 

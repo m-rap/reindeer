@@ -32,13 +32,7 @@ glm::mat4 Camera::GetProjection() {
 	return projection;
 }
 
-void Camera::SetPosition(const glm::vec3& position, bool silent) {
-	BaseObject::SetPosition(position, silent);
-	if (!silent)
-		BuildView();
-}
-void Camera::SetEuler(const glm::vec3& euler, bool silent) {
-	BaseObject::SetEuler(euler, silent);
-	if (!silent)
-		BuildView();
+void Camera::BuildWorld() {
+    BaseObject::BuildWorld();
+    BuildView();
 }

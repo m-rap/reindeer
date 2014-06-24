@@ -1,6 +1,5 @@
 #include "Camera.h"
 
-
 Camera::Camera()
 	: BaseObject()
 {
@@ -8,11 +7,9 @@ Camera::Camera()
 	BuildView();
 }
 
-
 Camera::~Camera()
 {
 }
-
 
 void Camera::BuildProjection()
 {
@@ -22,7 +19,6 @@ void Camera::BuildProjection()
         1.0f,    // the near view-plane
         100.0f);    // the far view-plane
 }
-
 
 void Camera::BuildView()
 {
@@ -44,28 +40,18 @@ void Camera::BuildView()
 	);
 }
 
-
 D3DMATRIX Camera::GetView()
 {
 	return view;
 }
-
 
 D3DMATRIX Camera::GetProjection()
 {
 	return projection;
 }
 
-
-void Camera::SetPosition(const D3DXVECTOR3& position)
+void Camera::BuildWorld()
 {
-	BaseObject::SetPosition(position);
-	BuildView();
-}
-
-
-void Camera::SetEuler(const D3DXVECTOR3& rotation)
-{
-	BaseObject::SetEuler(rotation);
+	BaseObject::BuildWorld();
 	BuildView();
 }

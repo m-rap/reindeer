@@ -1,16 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Workspace Name="Reindeer" Database="">
-  <Project Name="Reindeer-OpenGL" Path="Reindeer-OpenGL/Reindeer-OpenGL.project" Active="Yes"/>
-  <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="yes">
-      <Project Name="" ConfigName="Debug"/>
-      <Project Name="" ConfigName="Debug"/>
-      <Project Name="Reindeer-OpenGL" ConfigName="Debug"/>
-    </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
-      <Project Name="" ConfigName="Release"/>
-      <Project Name="" ConfigName="Release"/>
-      <Project Name="Reindeer-OpenGL" ConfigName="Release"/>
-    </WorkspaceConfiguration>
-  </BuildMatrix>
-</CodeLite_Workspace>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="Reindeer-OpenGL/Reindeer-OpenGL.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>
