@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reindeer.vs2010", "Reindeer\Reindeer.vs2010.vcxproj", "{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletTest", "BulletTest\BulletTest.vcxproj", "{37040F6B-D513-4836-8643-448F7F721FBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -23,6 +25,16 @@ Global
 		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|Win32.ActiveCfg = Release|Win32
 		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|Win32.Build.0 = Release|Win32
 		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|x86.ActiveCfg = Release|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Debug|Win32.Build.0 = Debug|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Debug|x86.ActiveCfg = Debug|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Release|Win32.ActiveCfg = Release|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Release|Win32.Build.0 = Release|Win32
+		{37040F6B-D513-4836-8643-448F7F721FBC}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

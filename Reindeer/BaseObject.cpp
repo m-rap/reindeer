@@ -7,7 +7,9 @@ BaseObject::BaseObject()
 	euler.x = euler.y = euler.z = 0.0f;
 	scale.x = scale.y = scale.z = 1.0f;
 
-	EulerToQuaternion();
+	D3DXVECTOR3 rotRad;
+	RdrHelper::Vec3ToRadian(rotRad, this->euler);
+	RdrHelper::EulerToQuaternion(quaternion, rotRad);
 
 	BuildWorld();
 }
@@ -36,10 +38,14 @@ void BaseObject::SetEuler(const D3DXVECTOR3& euler, bool silent)
 	this->euler.y = fmod(euler.y, 360);
 	this->euler.z = fmod(euler.z, 360);
 
-	EulerToQuaternion();
+	D3DXVECTOR3 rotRad;
+	RdrHelper::Vec3ToRadian(rotRad, this->euler);
+	RdrHelper::EulerToQuaternion(quaternion, rotRad);
 	
 	if (!silent)
+	{
 		BuildWorld();
+	}
 }
 
 D3DXVECTOR3 BaseObject::GetEuler()
@@ -63,18 +69,6 @@ D3DXVECTOR3 BaseObject::GetScale()
 D3DXMATRIX BaseObject::GetWorld()
 {
 	return world;
-}
-
-void BaseObject::EulerToQuaternion()
-{
-	D3DXVECTOR3 rotRad;
-	RdrHelper::Vec3ToRadian(rotRad, this->euler);
-	RdrHelper::EulerToQuaternion(quaternion, rotRad);
-}
-
-void BaseObject::QuaternionToEuler()
-{
-	//D3DXQuaternionToAxisAngle(quaternion, 
 }
 
 void BaseObject::BuildWorld()

@@ -18,9 +18,6 @@ protected:
 
 	D3DXMATRIX rotationMatrix;
 	D3DXMATRIX world;
-
-	void EulerToQuaternion();
-	void QuaternionToEuler();
 public:
 	BaseObject();
 	virtual ~BaseObject();
