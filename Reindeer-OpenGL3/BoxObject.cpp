@@ -90,14 +90,6 @@ void BoxObject::Draw(Camera& camera) {
 
 	glDisableVertexAttribArray(normalId);
 	glDisableVertexAttribArray(positionId);
-
-	//glBindVertexArray(vertexBuffer);
-
-	//glEnableClientState(GL_NORMAL_ARRAY);
-	//glNormalPointer(GL_BYTE, 36, normals);
-	//glDrawElements(GL_TRIANGLES, 36, GL_BYTE, 0);
-	//glDrawArrays(1, positionId, 5);
-	//glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 void BoxObject::BuildWidthHeightLength() {
@@ -140,9 +132,6 @@ void BoxObject::BuildBuffers() {
 		-width / 2,  height / 2, -length / 2,
 		-width / 2,  height / 2,  length / 2,
 	};
-
-	//glDeleteBuffers(1, &vertexBuffer);
-	//glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
 }
@@ -179,10 +168,6 @@ void BoxObject::BuildNormalsIndices() {
 		-1.0f,  0.0f,  0.0f,
 		-1.0f,  0.0f,  0.0f,
 	};
-
-	//memcpy(this->normals, normals, sizeof(normals));
-	//glDeleteBuffers(1, &normalBuffer);
-	//glGenBuffers(1, &normalBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], GL_STATIC_DRAW);
 
@@ -200,10 +185,6 @@ void BoxObject::BuildNormalsIndices() {
 		20, 21, 22,    // side 6
 		22, 21, 23,
 	};
-
-	//memcpy(this->indices, indices, sizeof(indices));
-	//glDeleteBuffers(1, &indexBuffer);
-	//glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 }
