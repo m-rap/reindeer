@@ -6,12 +6,16 @@ BoxObject::BoxObject() : BaseObject() {
 
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indexBuffer);
+	glGenBuffers(1, &normalBuffer);
 
 	BuildNormalsIndices();
 	BuildWidthHeightLength();
 }
 
 BoxObject::~BoxObject() {
+	glDeleteBuffers(1, &vertexBuffer);
+	glDeleteBuffers(1, &indexBuffer);
+	glDeleteBuffers(1, &normalBuffer);
 }
 
 void BoxObject::SetMin(const glm::vec3& value) {
@@ -25,7 +29,7 @@ glm::vec3 BoxObject::GetMin() {
 
 void BoxObject::SetMax(const glm::vec3& value) {
 	this->max = value;
-	BuildWidthHeightLength();
+	BuildWidthHeightLength();	
 }
 
 
@@ -41,8 +45,11 @@ void BoxObject::SetMinMax(const glm::vec3& min, const glm::vec3& max) {
 
 void BoxObject::SetProgramId(const GLuint& programId) {
 	this->programId = programId;
-	this->positionId = glGetAttribLocation(programId, "position");
-	this->matrixId = glGetUniformLocation(programId, "MVP");
+	this->positionId = glGetAttribLocation(programId, "vertexPosition_modelspace");
+	this->normalId = glGetAttribLocation(programId, "vertexNormal_modelspace");
+	this->mvpId = glGetUniformLocation(programId, "MVP");
+	this->matrixId = glGetUniformLocation(programId, "M");
+	this->viewId = glGetUniformLocation(programId, "V");
 }
 
 void BoxObject::Draw(Camera& camera) {
@@ -52,28 +59,45 @@ void BoxObject::Draw(Camera& camera) {
 	glMatrixMode(GL_MODELVIEW);
 	glm::mat4 modelview = camera.GetView() * world;
 
-	glUseProgram(programId);
 
 	glm::mat4 mvp = projection * modelview;
-    glUniformMatrix4fv(matrixId, 1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
 
-    glEnableVertexAttribArray(positionId);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+    glVertexAttribPointer(
+		normalId,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(GL_FLOAT) * 3,
+		(void*)0
+	);
+    glEnableVertexAttribArray(normalId);
+
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
 		positionId,
 		3,
 		GL_FLOAT,
 		GL_FALSE,
-		0,
+		sizeof(GL_FLOAT) * 3,
 		(void*)0
 	);
+	glEnableVertexAttribArray(positionId);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glNormalPointer(GL_BYTE, 36, normals);
-	glDrawElements(GL_TRIANGLES, 36, GL_BYTE, 0);
-	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableVertexAttribArray(normalId);
+	glDisableVertexAttribArray(positionId);
+
+	//glBindVertexArray(vertexBuffer);
+
+	//glEnableClientState(GL_NORMAL_ARRAY);
+	//glNormalPointer(GL_BYTE, 36, normals);
+	//glDrawElements(GL_TRIANGLES, 36, GL_BYTE, 0);
+	//glDrawArrays(1, positionId, 5);
+	//glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 void BoxObject::BuildWidthHeightLength() {
@@ -117,8 +141,8 @@ void BoxObject::BuildBuffers() {
 		-width / 2,  height / 2,  length / 2,
 	};
 
-	glDeleteBuffers(1, &vertexBuffer);
-	glGenBuffers(1, &vertexBuffer);
+	//glDeleteBuffers(1, &vertexBuffer);
+	//glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
 }
@@ -156,9 +180,13 @@ void BoxObject::BuildNormalsIndices() {
 		-1.0f,  0.0f,  0.0f,
 	};
 
-	memcpy(this->normals, normals, sizeof(normals));
+	//memcpy(this->normals, normals, sizeof(normals));
+	//glDeleteBuffers(1, &normalBuffer);
+	//glGenBuffers(1, &normalBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], GL_STATIC_DRAW);
 
-	GLbyte indices[] = {
+	GLuint indices[] = {
 		0, 1, 2,    // side 1
 		2, 1, 3,
 		4, 5, 6,    // side 2
@@ -173,8 +201,9 @@ void BoxObject::BuildNormalsIndices() {
 		22, 21, 23,
 	};
 
-	glDeleteBuffers(1, &indexBuffer);
-	glGenBuffers(1, &indexBuffer);
+	//memcpy(this->indices, indices, sizeof(indices));
+	//glDeleteBuffers(1, &indexBuffer);
+	//glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 }

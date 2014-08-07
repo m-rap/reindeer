@@ -5,14 +5,19 @@
 
 class BoxObject: public BaseObject {
 protected:
-	GLfloat normals[36];
+	//GLfloat normals[36];
+	GLuint indices[36];
 
 	GLuint vertexBuffer;
+	GLuint normalBuffer;
 	GLuint indexBuffer;
 
 	GLuint programId;
 	GLuint positionId;
+	GLuint normalId;
+	GLuint mvpId;
 	GLuint matrixId;
+	GLuint viewId;
 
 	glm::vec3 min, max;
 	float width, height, length;
