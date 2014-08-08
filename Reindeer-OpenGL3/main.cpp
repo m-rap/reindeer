@@ -4,9 +4,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
+GLuint programId;
+GLuint lightPositionId;
 float lightPosition[] = { 0.0f, 5.0f, 0.0f, 0.0f };
 
+
 void initOpenGL() {
+	programId = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
+	lightPositionId = glGetUniformLocation(programId, "LightPosition_worldspace");
+		
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
@@ -45,9 +51,6 @@ int main() {
 
 	initOpenGL();
 	
-	GLuint programId = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
-	GLuint lightPositionId = glGetUniformLocation(programId, "LightPosition_worldspace");
-
 
 	// [rdr_note] Rdr objects instantiated here
 

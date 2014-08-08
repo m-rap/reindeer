@@ -59,31 +59,33 @@ void BoxObject::Draw(Camera& camera) {
 	glMatrixMode(GL_MODELVIEW);
 	glm::mat4 modelview = camera.GetView() * world;
 
-
 	glm::mat4 mvp = projection * modelview;
-    glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
+    
+	glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(matrixId, 1, GL_FALSE, &world[0][0]);
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, &camera.GetView()[0][0]);
 
-    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-    glVertexAttribPointer(
-		normalId,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(GL_FLOAT) * 3,
-		(void*)0
-	);
-    glEnableVertexAttribArray(normalId);
-
+	glEnableVertexAttribArray(positionId);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
 		positionId,
 		3,
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(GL_FLOAT) * 3,
+		0,//sizeof(GL_FLOAT) * 3,
 		(void*)0
 	);
-	glEnableVertexAttribArray(positionId);
+
+	glEnableVertexAttribArray(normalId);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+    glVertexAttribPointer(
+		normalId,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		0,//sizeof(GL_FLOAT) * 3,
+		(void*)0
+	);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
