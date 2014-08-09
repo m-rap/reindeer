@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Reindeer">
+		<Project filename="Reindeer-OpenGL/Reindeer-OpenGL.linux.cbp" />
+		<Project filename="Reindeer-OpenGL3/Reindeer-OpenGL3.linux.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

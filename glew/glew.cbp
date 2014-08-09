@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="glew" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="mingw32">
+				<Option output="lib/Release/win-mingw32/glew32" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="src/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="mingw32_mx">
+				<Option output="lib/Release MX/win-mingw32/glew32mx" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="src/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-DGLEW_MX" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-O2" />
+			<Add option="-Wall" />
+			<Add option="-DGLEW_NO_GLU" />
+			<Add option="-DGLEW_BUILD" />
+		</Compiler>
+		<Unit filename="src/glew.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

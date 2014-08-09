@@ -1,0 +1,5 @@
+Ini adalah project reindeer. Project ini akan menjadi project 3d game engine, tapi masih jauh. Untuk sementara, sekarang project ini masih dipakai untuk project belajar 3d programming.
+
+Ada Directx, ada juga OpenGL. IDE yang disarankan untuk Directx adalah Visual Studio dengan compiler VC++, sedangkan OpenGL menggunakan Codeblocks dengan compiler GCC jika menggunakan linux atau MinGW jika menggunakan Windows. Untuk tiap IDE sudah disiapkan file descriptor projectnya (.sln, .vcproj, .workspace, .cbp, dll).
+
+Untuk OpenGL yang menggunakan shader (yang ada di folder Reindeer-OpenGL3), dibutuhkan library GLEW. Untuk linux, silakan instal GLEW dari repository menggunakan package manager yang disediakan masing-masing distro. Sedangkan untuk Windows, download source nya dari http://glew.sourceforge.net/ (yang zip), lalu ekstrak ke <direktori reindeer>\glew, dimana folder src yg berasal dari source GLEW akan berada di path yang sama dengan file glew.cbp yg berasal dari project reindeer.
