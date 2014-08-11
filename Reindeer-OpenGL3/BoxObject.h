@@ -18,6 +18,7 @@ protected:
 	GLuint mvpId;
 	GLuint matrixId;
 	GLuint viewId;
+	GLuint viewInvId;
 
 	glm::vec3 min, max;
 	float width, height, length;

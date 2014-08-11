@@ -50,6 +50,7 @@ void BoxObject::SetProgramId(const GLuint& programId) {
 	this->mvpId = glGetUniformLocation(programId, "MVP");
 	this->matrixId = glGetUniformLocation(programId, "M");
 	this->viewId = glGetUniformLocation(programId, "V");
+	this->viewInvId = glGetUniformLocation(programId, "V_inv");
 }
 
 void BoxObject::Draw(Camera& camera) {
@@ -57,13 +58,15 @@ void BoxObject::Draw(Camera& camera) {
 	glm::mat4 projection = camera.GetProjection();
 
 	glMatrixMode(GL_MODELVIEW);
-	glm::mat4 modelview = camera.GetView() * world;
-
+	glm::mat4 view = camera.GetView();
+	glm::mat4 modelview = view * world;
 	glm::mat4 mvp = projection * modelview;
+	glm::mat4 viewInv = glm::inverse(view);
     
 	glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
 	glUniformMatrix4fv(matrixId, 1, GL_FALSE, &world[0][0]);
-	glUniformMatrix4fv(viewId, 1, GL_FALSE, &camera.GetView()[0][0]);
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(viewInvId, 1, GL_FALSE, &viewInv[0][0]);
 
 	glEnableVertexAttribArray(positionId);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

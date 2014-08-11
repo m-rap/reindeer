@@ -87,8 +87,6 @@ int main() {
 		//box.SetEuler(tempRotation, true);
 		//box.BuildWorld();
 
-		printf("%f %f %f\n", tempPosition.x, tempPosition.y, tempPosition.z);
-
 
 		// [rdr_note] draw Rdr objects
 		
