@@ -4,20 +4,22 @@ attribute vec3 vertexPosition_modelspace;
 attribute vec3 vertexNormal_modelspace;
 
 varying vec3 Position_worldspace;
-varying vec3 Normal_worldspace;
-varying vec3 test;
+varying vec3 Normal_cameraspace;
+varying vec3 Normal_modelspace;
 
 uniform mat4 MVP;
 uniform mat4 V;
 uniform mat4 M;
+uniform mat3 N;
 uniform vec3 LightPosition_worldspace;
 
 void main(){
+	Normal_modelspace = vertexNormal_modelspace;
 
 	gl_Position =  MVP * vec4(vertexPosition_modelspace, 1);
-	test = gl_Vertex.xyz;
 	
-	Position_worldspace = (M * vec4(vertexPosition_modelspace, 1)).xyz;
-	Normal_worldspace = (M * vec4(vertexNormal_modelspace, 1)).xyz;
+	Position_worldspace = vec3(M * vec4(vertexPosition_modelspace, 1));
+	Normal_cameraspace = N * vertexNormal_modelspace;
+	//Normal_cameraspace = vec3(M * vec4(vertexNormal_modelspace, 1));
 }
 

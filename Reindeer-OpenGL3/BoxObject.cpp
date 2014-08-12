@@ -51,22 +51,27 @@ void BoxObject::SetProgramId(const GLuint& programId) {
 	this->matrixId = glGetUniformLocation(programId, "M");
 	this->viewId = glGetUniformLocation(programId, "V");
 	this->viewInvId = glGetUniformLocation(programId, "V_inv");
+	this->normalMatId = glGetUniformLocation(programId, "N");
+
 }
 
 void BoxObject::Draw(Camera& camera) {
-	glMatrixMode(GL_PROJECTION);
 	glm::mat4 projection = camera.GetProjection();
-
-	glMatrixMode(GL_MODELVIEW);
 	glm::mat4 view = camera.GetView();
 	glm::mat4 modelview = view * world;
 	glm::mat4 mvp = projection * modelview;
 	glm::mat4 viewInv = glm::inverse(view);
-    
+	glm::mat3 normalMat = glm::inverseTranspose(glm::mat3(modelview));
+	
+	//printf("normalMat\n%f %f %f\n%f %f %f\n%f %f %f", normalMat[0][0], normalMat[0][1], normalMat[0][2],
+	//                                                  normalMat[1][0], normalMat[1][1], normalMat[1][2],
+	//												  normalMat[2][0], normalMat[2][1], normalMat[2][2]);
+
 	glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);
 	glUniformMatrix4fv(matrixId, 1, GL_FALSE, &world[0][0]);
 	glUniformMatrix4fv(viewId, 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(viewInvId, 1, GL_FALSE, &viewInv[0][0]);
+	glUniformMatrix3fv(normalMatId, 1, GL_FALSE, &normalMat[0][0]);
 
 	glEnableVertexAttribArray(positionId);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

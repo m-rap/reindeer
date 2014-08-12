@@ -1,31 +1,35 @@
 #version 120
 
 varying vec3 Position_worldspace;
-varying vec3 Normal_worldspace;
-varying vec3 test;
+varying vec3 Normal_cameraspace;
+varying vec3 Normal_modelspace;
 
 uniform vec3 LightPosition_worldspace;
+uniform mat4 M;
+uniform mat4 V;
 uniform mat4 V_inv;
+uniform mat3 N;
 
 void main(){
 	gl_LightSourceParameters light0;
-	light0.diffuse = vec4(0.5,0.5,0.5,1.0);
-	//light0.specular = vec4(1.0, 1.0, 1.0, 1.0);
+	light0.diffuse = vec4(1.0, 1.0, 1.0, 1.0);
+	//light0.specular = vec4(0.5, 0.5, 0.5, 1.0);
 	light0.constantAttenuation = 0.0;
 	light0.linearAttenuation = 0.125;
 	light0.quadraticAttenuation = 0.0;
 	
 	gl_MaterialParameters frontMaterial;
-	frontMaterial.ambient = vec4(1.0,1.0,1.0,1.0);
-	frontMaterial.diffuse = vec4(1.0,1.0,1.0,1.0);
-	//frontMaterial.specular = vec4(1.0, 1.0, 1.0, 1.0);
+	frontMaterial.ambient = vec4(1.0, 1.0, 1.0, 1.0);
+	frontMaterial.diffuse = vec4(1.0, 1.0, 1.0, 1.0);
+	//frontMaterial.specular = vec4(0.5, 0.5, 0.5, 1.0);
+	//frontMaterial.shininess = 20;
 	
 	vec4 sceneAmbient = vec4(0.2, 0.2, 0.2, 1.0);
 
-	vec3 lightDirection = Position_worldspace - LightPosition_worldspace;
+	vec3 lightDirection = LightPosition_worldspace - Position_worldspace;
 	float dist = length( lightDirection );
 
-	vec3 n = normalize(Normal_worldspace);
+	vec3 n = normalize(Normal_cameraspace);
 	vec3 l = normalize(lightDirection);
 	float cosTheta = max(0.0, dot(n, l));
 
@@ -48,6 +52,6 @@ void main(){
 	                          pow(max(0.0, dot(reflect(-l, n), viewDirection)), frontMaterial.shininess);
 
 	totalLighting = totalLighting + diffuseReflection + specularReflection;
-
-	gl_FragColor.rgb = totalLighting;
+	
+	gl_FragColor = vec4(totalLighting, 1.0);
 }

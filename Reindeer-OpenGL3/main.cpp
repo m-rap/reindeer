@@ -6,7 +6,7 @@
 
 GLuint programId;
 GLuint lightPositionId;
-float lightPosition[] = { 0.0f, 5.0f, 0.0f, 0.0f };
+float lightPosition[] = { 0.0f, 5.0f, 0.0f };
 
 
 void initOpenGL() {
@@ -19,6 +19,7 @@ void initOpenGL() {
 	glDepthFunc(GL_LEQUAL);
 	glClearDepth(1.0f);
 	glEnable(GL_CULL_FACE);
+	//glShadeModel(GL_FLAT);
 }
 
 int main() {
