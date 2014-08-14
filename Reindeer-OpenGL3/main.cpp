@@ -84,9 +84,9 @@ int main() {
 		tempRotation.x += 1;
 		tempRotation.y += 1;
 		tempRotation.z += 1;
-		//box.SetPosition(tempPosition, true);
+		box.SetPosition(tempPosition, true);
 		//box.SetEuler(tempRotation, true);
-		//box.BuildWorld();
+		box.BuildWorld();
 
 
 		// [rdr_note] draw Rdr objects

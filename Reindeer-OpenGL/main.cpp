@@ -1,5 +1,13 @@
 #include "BoxObject.h"
 #include <GLFW/glfw3.h>
+#include <stdio.h>
+#include <time.h>
+
+void sleep(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while (goal > clock());
+}
 
 void initOpenGL() {
 	glEnable(GL_LIGHTING);
@@ -91,9 +99,9 @@ int main() {
 		tempRotation.x += 1;
 		tempRotation.y += 1;
 		tempRotation.z += 1;
-		//box.SetPosition(tempPosition, true);
+		box.SetPosition(tempPosition, true);
 		//box.SetEuler(tempRotation, true);
-		//box.BuildWorld();
+		box.BuildWorld();
 
 
 		// [rdr_note] draw Rdr objects
@@ -103,6 +111,7 @@ int main() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		i += 0.03f;
+		sleep(30);
 	}
 	glfwTerminate();
 

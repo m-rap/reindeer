@@ -20,6 +20,5 @@ void main(){
 	
 	Position_worldspace = vec3(M * vec4(vertexPosition_modelspace, 1));
 	Normal_cameraspace = N * vertexNormal_modelspace;
-	//Normal_cameraspace = vec3(M * vec4(vertexNormal_modelspace, 1));
 }
 

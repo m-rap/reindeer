@@ -95,8 +95,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// [rdr_note] modify Rdr objects behavior
 
 		D3DVECTOR tempPosition = {(float)sin(i) * 12.0f, 0.0f, (float)cos(i) * 25.0f}, tempRotation = box.GetEuler();
-		//box.SetPosition(tempPosition, true);
-		//box.BuildWorld();
+		box.SetPosition(tempPosition, true);
+		box.BuildWorld();
 		
 
 		// [rdr_note] draw Rdr objects

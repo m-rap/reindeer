@@ -61,7 +61,7 @@ void BoxObject::Draw(Camera& camera) {
 	glm::mat4 modelview = view * world;
 	glm::mat4 mvp = projection * modelview;
 	glm::mat4 viewInv = glm::inverse(view);
-	glm::mat3 normalMat = glm::inverseTranspose(glm::mat3(modelview));
+	glm::mat3 normalMat = glm::inverseTranspose(glm::mat3(world));
 	
 	//printf("normalMat\n%f %f %f\n%f %f %f\n%f %f %f", normalMat[0][0], normalMat[0][1], normalMat[0][2],
 	//                                                  normalMat[1][0], normalMat[1][1], normalMat[1][2],
@@ -72,6 +72,18 @@ void BoxObject::Draw(Camera& camera) {
 	glUniformMatrix4fv(viewId, 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(viewInvId, 1, GL_FALSE, &viewInv[0][0]);
 	glUniformMatrix3fv(normalMatId, 1, GL_FALSE, &normalMat[0][0]);
+
+//	glm::vec3 na = glm::vec3(1.0), nb = glm::vec3(-1.0);
+//	glm::vec3 nca = normalMat * na, ncb = normalMat * nb;
+//	glm::vec4 l(0.0f, 5.0f, 0.0f, 1), a(min, 1), b(max, 1);
+//	glm:: vec4 aa = glm::normalize(l - (world * a)), bb = glm::normalize(l - (world * b));
+//	if (glm::dot(nca, glm::vec3(aa)) < 0.1f && glm::dot(ncb, glm::vec3(bb)) < 0.1f)
+//	printf("a %f %f %f = %f\nb %f %f %f = %f\n", nca.x * aa.x, nca.y * aa.y, nca.z * aa.z, glm::dot(nca, glm::vec3(aa)),
+//	                                             ncb.x * bb.x, ncb.y * bb.y, ncb.z * bb.z, glm::dot(ncb, glm::vec3(bb)));
+//	printf("a %f %f %f = %f\nb %f %f %f = %f\n", nca.x, nca.y, nca.z, glm::dot(nca, glm::vec3(aa)),
+//	                                             ncb.x, ncb.y, ncb.z, glm::dot(ncb, glm::vec3(bb)));
+//	printf("a %f %f %f = %f\nb %f %f %f = %f\n", aa.x, aa.y, aa.z, glm::dot(nca, glm::vec3(aa)),
+//	                                             bb.x, bb.y, bb.z, glm::dot(ncb, glm::vec3(bb)));
 
 	glEnableVertexAttribArray(positionId);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
