@@ -140,11 +140,7 @@ void BoxObject::BuildRigidBody()
         )
     );
 
-    glm::vec3 halfExtents = max - min;
-    halfExtents.x /= 2;
-    halfExtents.y /= 2;
-    halfExtents.z /= 2;
-    btCollisionShape* shape = new btBoxShape(btVector3(halfExtents.x, halfExtents.y, halfExtents.z));
+    btCollisionShape* shape = new btBoxShape(btVector3(width / 2, height / 2, length / 2));
 
     float mass = 5;
     btVector3 inertia;

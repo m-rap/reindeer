@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Reindeer-OpenGL" />
+		<Option title="BulletTest" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/Reindeer-OpenGL" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/BulletTest" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/Reindeer-OpenGL" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/BulletTest" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -29,29 +29,43 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-g" />
-			<Add option="-fexceptions" />
+			<Add option="-Wall" />
+			<Add directory="D:/Projects/libs/bullet-2.82-r2704/bullet-2.82-r2704/src" />
 			<Add directory="D:/Projects/libs/glew-1.10.0/include" />
 		</Compiler>
 		<Linker>
+			<Add library="BulletDynamics" />
+			<Add library="BulletCollision" />
+			<Add library="LinearMath" />
 			<Add library="glfw3" />
-			<Add library="gdi32" />
 			<Add library="glew32" />
+			<Add library="gdi32" />
 			<Add library="opengl32" />
+			<Add directory="D:/Projects/libs/bullet-2.82-r2704/bullet-2.82-r2704/lib" />
 			<Add directory="D:/Projects/libs/glew-1.10.0/lib/Release/Win32" />
 		</Linker>
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />
 		<Unit filename="BoxObject.cpp" />
 		<Unit filename="BoxObject.h" />
-		<Unit filename="BoxObjectImp.h" />
+		<Unit filename="BoxRenderer.cpp" />
+		<Unit filename="BoxRenderer.h" />
 		<Unit filename="Camera.cpp" />
 		<Unit filename="Camera.h" />
+		<Unit filename="Drawable.cpp" />
+		<Unit filename="Drawable.h" />
+		<Unit filename="StandardShading.fragmentshader" />
+		<Unit filename="StandardShading.vertexshader" />
+		<Unit filename="World.cpp" />
+		<Unit filename="World.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="shader.cpp" />
+		<Unit filename="shader.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
 			<debugger />
+			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

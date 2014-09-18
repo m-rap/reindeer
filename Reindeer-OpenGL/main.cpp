@@ -40,7 +40,7 @@ void initOpenGL() {
 	glClearDepth(1.0f);
 
 	glEnable(GL_CULL_FACE);
-	glShadeModel(GL_SMOOTH);
+	//glShadeModel(GL_SMOOTH);
 }
 
 int main() {
@@ -63,6 +63,8 @@ int main() {
 //		return -1;
 //	}
 
+	printf("%s\n", glGetString(GL_VERSION));
+	printf("1.5 %d\n", GLEW_VERSION_1_5);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

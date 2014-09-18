@@ -22,12 +22,13 @@ World::World()
 		return;
 	}
 
-	if (!glewIsSupported("GL_VERSION_1_5")) {
+	if (!GLEW_VERSION_1_5) {
 		printf("glGenBuffers is not supported\n");
 		return;
 	}
 
 	printf("%s\n", glGetString(GL_VERSION));
+	printf("1.5 %d\n", GL_VERSION_1_5);
 }
 
 World::~World()
@@ -40,8 +41,36 @@ void World::Init()
     lightPosition[0] = 50.0f;
     lightPosition[1] = 50.0f;
     lightPosition[2] = -50.0f;
-    programId = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
-	lightPositionId = glGetUniformLocation(programId, "LightPosition_worldspace");
+
+    if (GLEW_VERSION_1_5)
+	{
+		programId = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
+		lightPositionId = glGetUniformLocation(programId, "LightPosition_worldspace");
+	}
+	else
+	{
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+
+		//float lightAmbient[] = { 50.0f/255.0f, 50.0f/255.0f, 50.0f/255.0f, 1.0f };
+		float lightDiffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
+		//glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
+		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
+		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
+		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
+
+		float matAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float matDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
+
+		glEnable(GL_COLOR_MATERIAL);
+		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glDepthMask(GL_TRUE);
@@ -70,8 +99,12 @@ void World::Render()
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
         ((BoxObject*)DrawableObjects[i])->SetDynamicsWorld(dynamicsWorld);
 
-    glUseProgram(programId);
-    glUniform3f(lightPositionId, lightPosition[0], lightPosition[1], lightPosition[2]);
+    if (GLEW_VERSION_1_5)
+	{
+		glUseProgram(programId);
+		glUniform3f(lightPositionId, lightPosition[0], lightPosition[1], lightPosition[2]);
+	}
+
     while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		dynamicsWorld->stepSimulation(1/60.f,10);

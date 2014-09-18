@@ -2,6 +2,6 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Reindeer">
 		<Project filename="Reindeer-OpenGL/Reindeer-OpenGL.win-mingw32.cbp" />
-		<Project filename="Reindeer-OpenGL3/Reindeer-OpenGL3.win-mingw32.cbp" />
+		<Project filename="BulletTest/BulletTest.win-mingw32.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
