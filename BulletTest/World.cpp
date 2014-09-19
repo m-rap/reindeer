@@ -40,9 +40,9 @@ World::~World()
 
 void World::Init()
 {
-    lightPosition[0] = 1.0f;
+    lightPosition[0] = -3.0f;
     lightPosition[1] = 3.0f;
-    lightPosition[2] = -1.0f;
+    lightPosition[2] = -3.0f;
     lightPosition[3] = 0.0f;
 
     if (GLEW_VERSION_1_5)
@@ -60,6 +60,7 @@ void World::Init()
 		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
 		//glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+		lightPosition[2] *= -1;
 		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
 		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
@@ -87,20 +88,23 @@ void World::Render()
 {
     btBroadphaseInterface* broadphase = new btDbvtBroadphase();
 	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+	collisionConfiguration->setConvexConvexMultipointIterations(3);
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
 	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
-	dynamicsWorld->setGravity(btVector3(0,-9.8,0));
+	dynamicsWorld->setGravity(btVector3(0.0f, -10.0f * PHYSICS_WORLD_SCALE, 0.0f));
 
-	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
-	btRigidBody::btRigidBodyConstructionInfo
-			groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
+	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 2.0f * PHYSICS_WORLD_SCALE);
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),btVector3(0.0f * PHYSICS_WORLD_SCALE, -2.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE)));
+	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0.0f, 0.0f, 0.0f));
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	dynamicsWorld->addRigidBody(groundRigidBody);
 
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
-        ((BoxObject*)DrawableObjects[i])->SetDynamicsWorld(dynamicsWorld);
+	{
+		((BoxObject*)DrawableObjects[i])->SetDynamicsWorld(dynamicsWorld);
+		dynamicsWorld->addRigidBody(((BoxObject*)DrawableObjects[i])->rigidBody);
+	}
 
     if (GLEW_VERSION_1_5)
 	{
@@ -111,7 +115,7 @@ void World::Render()
 	while (!glfwWindowShouldClose(window)) {
 		clock_t c1 = clock();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		dynamicsWorld->stepSimulation(1/60.f,10);
+		dynamicsWorld->stepSimulation(1/60.f, 10, 1.0f/240.0f);
 
 		for (size_t i = 0; i < DrawableObjects.size(); i++)
         {
@@ -124,7 +128,12 @@ void World::Render()
 		usleep(((1000 / 60) - span * 1000) * 1000);
 	}
 
+	for (size_t i = 0; i < DrawableObjects.size(); i++)
+	{
+		dynamicsWorld->removeRigidBody(((BoxObject*)DrawableObjects[i])->rigidBody);
+	}
 	dynamicsWorld->removeRigidBody(groundRigidBody);
+
 	delete groundRigidBody->getMotionState();
 	delete groundRigidBody;
 

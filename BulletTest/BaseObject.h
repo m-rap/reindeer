@@ -19,6 +19,8 @@
 #define ToRadian( degree ) ((degree) * (M_PI / 180.0f))
 #define ToDegree( radian ) ((radian) * (180.0f / M_PI))
 
+#define PHYSICS_WORLD_SCALE 100
+
 const glm::vec4 VECTOR_UP(0, 1, 0, 0);
 
 class BaseObject {

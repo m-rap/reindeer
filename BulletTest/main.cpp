@@ -77,19 +77,23 @@ int main()
 
     glm::vec3 min(-0.1f, -0.1f, -0.1f);
 	glm::vec3 max( 0.1f,  0.1f,  0.1f);
-	BoxObject box;
-	box.SetProgramId(world.programId);
-	box.SetMinMax(min, max);
-	box.SetPosition(glm::vec3(0.0f, 30.0f, 0.0f), true);
-	box.SetEuler(glm::vec3(44,10,30), true);
-	box.BuildWorld();
+	BoxObject box[10];
+	for (int i = 0; i < 10; i++)
+	{
+		box[i].SetProgramId(world.programId);
+		box[i].SetMinMax(min, max);
+		box[i].SetPosition(glm::vec3(-1.0f + i*0.2f, 3.0f + i*1.0f, 0.0f), true);
+		box[i].SetEuler(glm::vec3(44.0f, 10.0f, 30.0f), true);
+		box[i].BuildWorld();
+		world.DrawableObjects.push_back(&box[i]);
+	}
 
 	Camera& camera = world.camera;
 	camera.SetPosition(glm::vec3(0.0f, 1.0f, -3.0f), true);
 	camera.SetEuler(glm::vec3(0, 0, 0), true);
 	camera.BuildWorld();
 
-	world.DrawableObjects.push_back(&box);
+
 
 	world.Render();
 

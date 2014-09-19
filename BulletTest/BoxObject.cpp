@@ -87,38 +87,36 @@ void BoxObject::BuildRigidBody()
 {
     btMotionState* motionState = new btDefaultMotionState(
         btTransform(
-            btQuaternion(0, 0, 0, 1),
-            btVector3(0, 0, 0)
-            //btQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w),
-            //btVector3(position.x, position.y, position.z)
+            btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
+            btVector3(0.0f, 0.0f, 0.0f)
         )
     );
 
-    btCollisionShape* shape = new btBoxShape(btVector3(width / 2, height / 2, length / 2));
+    btCollisionShape* shape = new btBoxShape(
+		btVector3(
+			(width / 2) * PHYSICS_WORLD_SCALE,
+			(height / 2) * PHYSICS_WORLD_SCALE,
+			(length / 2) * PHYSICS_WORLD_SCALE
+		)
+	);
 
-    float mass = 1;
+    float mass = 1.0f;
     btVector3 inertia;
     shape->calculateLocalInertia(mass, inertia);
     btRigidBody::btRigidBodyConstructionInfo constructionInfo(mass, motionState, shape, inertia);
-    constructionInfo.m_friction = 10.0;
-    constructionInfo.m_restitution = 0.0;
+    constructionInfo.m_friction = 2.0f;
+    constructionInfo.m_restitution = 0.5f;
 
-    if (dynamicsWorld != NULL)
-        dynamicsWorld->removeRigidBody(rigidBody);
     DeleteRigidBody();
-
     rigidBody = new btRigidBody(constructionInfo);
     SetRigidBodyTransform();
-
-    if (dynamicsWorld != NULL)
-        dynamicsWorld->addRigidBody(rigidBody);
 }
 
 void BoxObject::SetRigidBodyTransform()
 {
 	btTransform tr;
     tr.setRotation(btQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w));
-    tr.setOrigin(btVector3(position.x, position.y, position.z));
+    tr.setOrigin(btVector3(position.x * PHYSICS_WORLD_SCALE, position.y * PHYSICS_WORLD_SCALE, position.z * PHYSICS_WORLD_SCALE));
     rigidBody->setCenterOfMassTransform(tr);
 }
 
@@ -134,7 +132,6 @@ void BoxObject::DeleteRigidBody()
 void BoxObject::SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld)
 {
     this->dynamicsWorld = dynamicsWorld;
-    BuildRigidBody();
 }
 
 void BoxObject::Update()
@@ -143,9 +140,9 @@ void BoxObject::Update()
     rigidBody->getMotionState()->getWorldTransform(trans);
     btVector3 origin = trans.getOrigin();
     btQuaternion rot = trans.getRotation();
-    this->position.x = origin.getX();
-    this->position.y = origin.getY();
-    this->position.z = origin.getZ();
+    this->position.x = origin.getX() / PHYSICS_WORLD_SCALE;
+    this->position.y = origin.getY() / PHYSICS_WORLD_SCALE;
+    this->position.z = origin.getZ() / PHYSICS_WORLD_SCALE;
     this->quaternion = glm::quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
     BuildWorld();
 }
