@@ -54,6 +54,10 @@
 		<Unit filename="Camera.h" />
 		<Unit filename="Drawable.cpp" />
 		<Unit filename="Drawable.h" />
+		<Unit filename="LegacyOpenGLBoxRenderer.cpp" />
+		<Unit filename="LegacyOpenGLBoxRenderer.h" />
+		<Unit filename="OpenGLBoxRenderer.cpp" />
+		<Unit filename="OpenGLBoxRenderer.h" />
 		<Unit filename="StandardShading.fragmentshader" />
 		<Unit filename="StandardShading.vertexshader" />
 		<Unit filename="World.cpp" />
