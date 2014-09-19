@@ -1,4 +1,6 @@
 #include "World.h"
+#include <unistd.h>
+#include <time.h>
 
 World::World()
 {
@@ -22,10 +24,10 @@ World::World()
 		return;
 	}
 
-	if (!GLEW_VERSION_1_5) {
+	/*if (!GLEW_VERSION_1_5) {
 		printf("glGenBuffers is not supported\n");
 		return;
-	}
+	}*/
 
 	printf("%s\n", glGetString(GL_VERSION));
 	printf("1.5 %d\n", GL_VERSION_1_5);
@@ -38,9 +40,10 @@ World::~World()
 
 void World::Init()
 {
-    lightPosition[0] = 50.0f;
-    lightPosition[1] = 50.0f;
-    lightPosition[2] = -50.0f;
+    lightPosition[0] = 1.0f;
+    lightPosition[1] = 3.0f;
+    lightPosition[2] = -1.0f;
+    lightPosition[3] = 0.0f;
 
     if (GLEW_VERSION_1_5)
 	{
@@ -87,7 +90,7 @@ void World::Render()
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
 	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
-	dynamicsWorld->setGravity(btVector3(0,-10,0));
+	dynamicsWorld->setGravity(btVector3(0,-9.8,0));
 
 	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
 	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
@@ -105,17 +108,20 @@ void World::Render()
 		glUniform3f(lightPositionId, lightPosition[0], lightPosition[1], lightPosition[2]);
 	}
 
-    while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(window)) {
+		clock_t c1 = clock();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		dynamicsWorld->stepSimulation(1/60.f,10);
 
 		for (size_t i = 0; i < DrawableObjects.size(); i++)
         {
-            DrawableObjects[i]->Draw(camera);
+            DrawableObjects[i]->Draw(&camera);
         }
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		float span = (clock() - c1) / CLOCKS_PER_SEC;
+		usleep(((1000 / 60) - span * 1000) * 1000);
 	}
 
 	dynamicsWorld->removeRigidBody(groundRigidBody);
@@ -128,7 +134,10 @@ void World::Render()
 	delete dispatcher;
 	delete broadphase;
 
-	glDeleteProgram(programId);
+	if (GLEW_VERSION_1_5)
+	{
+		glDeleteProgram(programId);
+	}
 
 	glfwTerminate();
 }

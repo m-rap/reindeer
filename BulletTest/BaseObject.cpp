@@ -28,10 +28,6 @@ void BaseObject::SetPosition(const glm::vec3& position, bool silent) {
 		BuildWorld();
 }
 
-glm::vec3 BaseObject::GetPosition() {
-	return position;
-}
-
 void BaseObject::SetEuler(const glm::vec3& euler, bool silent) {
 	this->euler.x = fmod(euler.x, 360);
 	this->euler.y = fmod(euler.y, 360);
@@ -45,18 +41,27 @@ void BaseObject::SetEuler(const glm::vec3& euler, bool silent) {
 	}
 }
 
-glm::vec3 BaseObject::GetEuler() {
-	return euler;
-}
-
 void BaseObject::SetScale(const glm::vec3& scale, bool silent) {
 	this->scale = scale;
 	if (!silent)
 		BuildWorld();
 }
 
-glm::vec3 BaseObject::GetScale() {
-	return scale;
+glm::vec3* BaseObject::GetPosition() {
+	return &position;
+}
+
+glm::vec3* BaseObject::GetEuler() {
+	return &euler;
+}
+
+glm::vec3* BaseObject::GetScale() {
+	return &scale;
+}
+
+glm::mat4* BaseObject::GetWorld()
+{
+	return &world;
 }
 
 void BaseObject::BuildWorld() {

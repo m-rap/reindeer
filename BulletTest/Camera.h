@@ -16,8 +16,8 @@ public:
 	void BuildProjection();
 	void BuildView();
 
-	glm::mat4 GetView();
-	glm::mat4 GetProjection();
+	glm::mat4* GetView();
+	glm::mat4* GetProjection();
 
 	virtual void BuildWorld();
 };

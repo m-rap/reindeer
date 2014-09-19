@@ -17,7 +17,7 @@ class World
 {
 private:
     GLuint lightPositionId;
-    float lightPosition[3];
+    float lightPosition[4];
     GLFWwindow* window;
 public:
     World();

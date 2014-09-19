@@ -8,6 +8,9 @@
 
 #include "Camera.h"
 #include "Drawable.h"
+#include "BoxRenderer.h"
+#include "OpenGLBoxRenderer.h"
+#include "LegacyOpenGLBoxRenderer.h"
 
 using namespace std;
 
@@ -16,30 +19,14 @@ class BoxObject :
     public Drawable
 {
 protected:
-
-	GLuint indices[36];
-
-	GLuint vertexBuffer;
-	GLuint normalBuffer;
-	GLuint indexBuffer;
-
-	GLuint programId;
-	GLuint positionId;
-	GLuint normalId;
-	GLuint mvpId;
-	GLuint matrixId;
-	GLuint viewId;
-	GLuint viewInvId;
-	GLuint normalMatId;
-
 	glm::vec3 min, max;
 	float width, height, length;
+	BoxRenderer* boxRenderer;
 
 	void BuildWidthHeightLength();
-	void BuildBuffers();
-	void BuildNormalsIndices();
 	void BuildRigidBody();
 	void DeleteRigidBody();
+	void SetRigidBodyTransform();
 public:
 	BoxObject();
 	virtual ~BoxObject();
@@ -47,19 +34,31 @@ public:
     btRigidBody* rigidBody;
     btDiscreteDynamicsWorld* dynamicsWorld;
 
+    virtual void SetPosition(const glm::vec3& position, bool silent = false)
+    {
+    	BaseObject::SetPosition(position, silent);
+    	SetRigidBodyTransform();
+    }
+
+	virtual void SetEuler(const glm::vec3& euler, bool silent = false)
+	{
+		BaseObject::SetEuler(euler, silent);
+		SetRigidBodyTransform();
+	}
+
 	void SetMin(const glm::vec3& min);
-	glm::vec3 GetMin();
-
 	void SetMax(const glm::vec3& max);
-	glm::vec3 GetMax();
-
 	void SetMinMax(const glm::vec3& min, const glm::vec3& max);
 
+	glm::vec3 GetMin();
+	glm::vec3 GetMax();
+    float GetWidth();
+    float GetHeight();
+    float GetLength();
+
 	void SetProgramId(const GLuint& programId);
-
 	void SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld);
-
-	virtual void Draw(Camera& camera);
+	virtual void Draw(Camera* camera);
 	void Update();
 };
 

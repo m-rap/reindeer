@@ -9,7 +9,7 @@ public:
     Drawable();
     virtual ~Drawable();
 
-    virtual void Draw(Camera& camera) = 0;
+    virtual void Draw(Camera* camera) = 0;
 };
 
 #endif // DRAWABLE_H

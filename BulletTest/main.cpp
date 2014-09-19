@@ -75,8 +75,8 @@ int main()
     World world;
     world.Init();
 
-    glm::vec3 min(-3.0f, -3.0f, -3.0f);
-	glm::vec3 max( 3.0f,  3.0f,  3.0f);
+    glm::vec3 min(-0.1f, -0.1f, -0.1f);
+	glm::vec3 max( 0.1f,  0.1f,  0.1f);
 	BoxObject box;
 	box.SetProgramId(world.programId);
 	box.SetMinMax(min, max);
@@ -85,7 +85,7 @@ int main()
 	box.BuildWorld();
 
 	Camera& camera = world.camera;
-	camera.SetPosition(glm::vec3(0.0f, 15.0f, -50.0f), true);
+	camera.SetPosition(glm::vec3(0.0f, 1.0f, -3.0f), true);
 	camera.SetEuler(glm::vec3(0, 0, 0), true);
 	camera.BuildWorld();
 

@@ -35,16 +35,15 @@ public:
 	virtual ~BaseObject();
 
 	virtual void SetPosition(const glm::vec3& position, bool silent = false);
-	virtual glm::vec3 GetPosition();
-
 	virtual void SetEuler(const glm::vec3& euler, bool silent = false);
-	virtual glm::vec3 GetEuler();
-
 	virtual void SetScale(const glm::vec3& scale, bool silent = false);
-	virtual glm::vec3 GetScale();
+
+	virtual glm::vec3* GetPosition();
+	virtual glm::vec3* GetEuler();
+	virtual glm::vec3* GetScale();
+	glm::mat4* GetWorld();
 
 	virtual void BuildWorld();
-	glm::mat4 GetWorld();
 };
 
 #endif /* BASEOBJECT_H_ */

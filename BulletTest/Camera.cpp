@@ -24,12 +24,12 @@ void Camera::BuildView() {
 	view = glm::lookAt(position, glm::vec3(lookAt), glm::vec3(up));
 }
 
-glm::mat4 Camera::GetView() {
-	return view;
+glm::mat4* Camera::GetView() {
+	return &view;
 }
 
-glm::mat4 Camera::GetProjection() {
-	return projection;
+glm::mat4* Camera::GetProjection() {
+	return &projection;
 }
 
 void Camera::BuildWorld() {
