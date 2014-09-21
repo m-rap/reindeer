@@ -12,7 +12,7 @@ uniform mat3 N;
 
 void main(){
 	gl_LightSourceParameters light0;
-	light0.diffuse = vec4(5.0, 5.0, 5.0, 1.0);
+	light0.diffuse = vec4(0.5, 0.5, 0.5, 1.0);
 	//light0.specular = vec4(0.5, 0.5, 0.5, 1.0);
 	light0.constantAttenuation = 0.0;
 	light0.linearAttenuation = 0.125;

@@ -82,7 +82,7 @@ int main()
 	{
 		box[i].SetProgramId(world.programId);
 		box[i].SetMinMax(min, max);
-		box[i].SetPosition(glm::vec3(-1.0f + i*0.2f, 3.0f + i*1.0f, 0.0f), true);
+		box[i].SetPosition(glm::vec3(-1.0f + i*0.1f, 3.0f + i*1.0f, 0.0f), true);
 		box[i].SetEuler(glm::vec3(44.0f, 10.0f, 30.0f), true);
 		box[i].BuildWorld();
 		world.DrawableObjects.push_back(&box[i]);
