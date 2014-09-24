@@ -1,10 +1,3 @@
-/*
- * BaseObject.cpp
- *
- *  Created on: May 2, 2014
- *      Author: MRP
- */
-
 #include "BaseObject.h"
 
 BaseObject::BaseObject() {

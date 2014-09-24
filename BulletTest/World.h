@@ -1,12 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "shader.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <vector>
 #include "Drawable.h"
 #include "Camera.h"
 #include "BoxObject.h"

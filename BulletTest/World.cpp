@@ -1,6 +1,5 @@
 #include "World.h"
-#include <unistd.h>
-#include <time.h>
+#include "GLDebugDrawer.h"
 
 World::World()
 {
@@ -92,10 +91,14 @@ void World::Render()
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
 	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
-	dynamicsWorld->setGravity(btVector3(0.0f, -10.0f * PHYSICS_WORLD_SCALE, 0.0f));
+	dynamicsWorld->setGravity(btVector3(0.0f * PHYSICS_WORLD_SCALE, -10.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
 
-	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 2.0f * PHYSICS_WORLD_SCALE);
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),btVector3(0.0f * PHYSICS_WORLD_SCALE, -2.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE)));
+	//btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 10.0f * PHYSICS_WORLD_SCALE);
+	btCollisionShape* groundShape = new btBoxShape(btVector3(50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE));
+	btTransform groundTransform;
+	groundTransform.setIdentity();
+	groundTransform.setOrigin(btVector3(0.0f * PHYSICS_WORLD_SCALE, -50.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0.0f, 0.0f, 0.0f));
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	dynamicsWorld->addRigidBody(groundRigidBody);
@@ -115,7 +118,18 @@ void World::Render()
 	while (!glfwWindowShouldClose(window)) {
 		clock_t c1 = clock();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		dynamicsWorld->stepSimulation(1/60.f, 10, 1.0f/240.0f);
+		dynamicsWorld->stepSimulation(1/60.f);//, 10, 1.0f/240.0f);
+
+		//glm::mat4& projection = *camera.GetProjection();
+		//glm::mat4& view = *camera.GetView();
+		//glm::mat4 world = glm::mat4();//
+		//
+		//glMatrixMode(GL_PROJECTION);
+		//glLoadMatrixf(glm::value_ptr(projection));
+		//
+		//glMatrixMode(GL_MODELVIEW);
+		//glm::mat4 modelview = view * world;
+		//glLoadMatrixf(glm::value_ptr(modelview));
 
 		for (size_t i = 0; i < DrawableObjects.size(); i++)
         {

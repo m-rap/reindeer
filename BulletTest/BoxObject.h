@@ -1,11 +1,6 @@
 #ifndef BOXOBJECT_H_
 #define BOXOBJECT_H_
 
-#include <iostream>
-#include <btBulletCollisionCommon.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-
 #include "Camera.h"
 #include "Drawable.h"
 #include "BoxRenderer.h"
@@ -27,6 +22,7 @@ protected:
 	void BuildRigidBody();
 	void DeleteRigidBody();
 	void SetRigidBodyTransform();
+	void BoxShapeDrawer(Camera* camera);
 public:
 	BoxObject();
 	virtual ~BoxObject();
