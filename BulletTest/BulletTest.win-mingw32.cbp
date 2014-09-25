@@ -56,7 +56,6 @@
 		<Unit filename="Camera.h" />
 		<Unit filename="Drawable.cpp" />
 		<Unit filename="Drawable.h" />
-		<Unit filename="GLDebugDrawer.cpp" />
 		<Unit filename="GLDebugDrawer.h" />
 		<Unit filename="LegacyOpenGLBoxRenderer.cpp" />
 		<Unit filename="LegacyOpenGLBoxRenderer.h" />

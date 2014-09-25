@@ -16,13 +16,13 @@ int main()
 	World world;
     world.Init();
 
-    glm::vec3 min(-0.1f, -0.1f, -0.1f);
-	glm::vec3 max( 0.1f,  0.1f,  0.1f);
+    glm::vec3 boxmin(-0.1f, -0.1f, -0.1f);
+	glm::vec3 boxmax( 0.1f,  0.1f,  0.1f);
 
 	for (int i = 0; i < nBox; i++)
 	{
 		box[i].SetProgramId(world.programId);
-		box[i].SetMinMax(min, max);
+		box[i].SetMinMax(boxmin, boxmax);
 		box[i].SetPosition(glm::vec3(-1.0f + i*0.1f, 7.0f + i*1.0f, 0.0f), true);
 		box[i].SetEuler(glm::vec3(44.0f, 10.0f, 30.0f), true);
 		box[i].BuildWorld();

@@ -28,6 +28,7 @@ public:
 	virtual ~BoxObject();
 
     btRigidBody* rigidBody;
+    btCollisionShape* collisionShape;
     btDiscreteDynamicsWorld* dynamicsWorld;
 
     virtual void SetPosition(const glm::vec3& position, bool silent = false)

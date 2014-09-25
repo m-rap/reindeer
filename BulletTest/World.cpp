@@ -1,8 +1,62 @@
 #include "World.h"
-#include "GLDebugDrawer.h"
+
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch(message)
+    {
+        case WM_DESTROY:
+            {
+                PostQuitMessage(0);
+                return 0;
+            } break;
+    }
+
+    return DefWindowProc (hWnd, message, wParam, lParam);
+}
 
 World::World()
 {
+#ifdef _MSC_VER	
+	HWND hWnd;
+    WNDCLASSEX wc;
+	HGLRC hRC;
+	PIXELFORMATDESCRIPTOR pfd;
+	int pixelformat;
+
+	ZeroMemory(&wc, sizeof(WNDCLASSEX));
+
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.style = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc = WindowProc;
+    wc.hInstance = GetModuleHandle(0);
+	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.lpszClassName = L"WindowClass";
+
+	RegisterClassEx(&wc);
+	hWnd = CreateWindowEx(NULL, L"WindowClass", L"Reindeer", WS_OVERLAPPEDWINDOW, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, GetModuleHandle(0), NULL);
+	hDC = GetDC(hWnd);
+	
+	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 32;
+	pfd.cDepthBits = 16;
+	pfd.iLayerType = PFD_MAIN_PLANE;
+
+	//pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+    //pfd.nVersion = 1;
+    //pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+    
+	pixelformat = ChoosePixelFormat(hDC, &pfd);
+	SetPixelFormat(hDC, pixelformat, &pfd);
+	
+	hRC = wglCreateContext(hDC);
+	wglMakeCurrent(hDC,hRC);
+	ShowWindow(hWnd, SW_SHOWDEFAULT);
+#else
     int init = glfwInit();
 	if (init == GL_FALSE) {
 		printf("glfw init failed\n");
@@ -16,10 +70,11 @@ World::World()
 		return;
 	}
 	glfwMakeContextCurrent(window);
+#endif
 
-
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW\n");
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
 		return;
 	}
 
@@ -115,31 +170,40 @@ void World::Render()
 		glUniform3f(lightPositionId, lightPosition[0], lightPosition[1], lightPosition[2]);
 	}
 
+#ifdef _MSC_VER
+	MSG msg;
+	while(TRUE)
+    {
+        while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+
+        if(msg.message == WM_QUIT)
+            break;
+#else
 	while (!glfwWindowShouldClose(window)) {
+#endif
 		clock_t c1 = clock();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		dynamicsWorld->stepSimulation(1/60.f);//, 10, 1.0f/240.0f);
-
-		//glm::mat4& projection = *camera.GetProjection();
-		//glm::mat4& view = *camera.GetView();
-		//glm::mat4 world = glm::mat4();//
-		//
-		//glMatrixMode(GL_PROJECTION);
-		//glLoadMatrixf(glm::value_ptr(projection));
-		//
-		//glMatrixMode(GL_MODELVIEW);
-		//glm::mat4 modelview = view * world;
-		//glLoadMatrixf(glm::value_ptr(modelview));
 
 		for (size_t i = 0; i < DrawableObjects.size(); i++)
         {
             DrawableObjects[i]->Draw(&camera);
         }
-
+		
+#ifdef _MSC_VER
+		SwapBuffers(hDC);
+		long span = (clock() - c1) / CLOCKS_PER_SEC;
+		Sleep(((1000 / 60) - span * 1000));
+#else
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		float span = (clock() - c1) / CLOCKS_PER_SEC;
 		usleep(((1000 / 60) - span * 1000) * 1000);
+#endif
 	}
 
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
@@ -150,6 +214,7 @@ void World::Render()
 
 	delete groundRigidBody->getMotionState();
 	delete groundRigidBody;
+	delete groundShape;
 
 	delete dynamicsWorld;
 	delete solver;
@@ -162,5 +227,8 @@ void World::Render()
 		glDeleteProgram(programId);
 	}
 
+#ifdef _MSC_VER
+#else
 	glfwTerminate();
+#endif
 }

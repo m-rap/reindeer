@@ -1,6 +1,10 @@
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 #include <GL/glew.h>
+#ifdef _MSC_VER
+#include <GL/wglew.h>
+#endif
 
 #include <GL/gl.h>
 
@@ -14,15 +18,22 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
-#include <GLFW/glfw3.h>
-
 #include <btBulletCollisionCommon.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#include <windowsx.h>
+#else
+#include <GLFW/glfw3.h>
+#endif
+
 #include <iostream>
 #include <stdio.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 #include <time.h>
 #include <vector>
 

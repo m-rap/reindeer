@@ -5,6 +5,7 @@ BoxObject::BoxObject() : BaseObject() {
 	max.x = max.y = max.z = 0;
 
 	rigidBody = NULL;
+	collisionShape = NULL;
 	dynamicsWorld = NULL;
 
 	if (GLEW_VERSION_1_5)
@@ -136,7 +137,9 @@ void BoxObject::BuildRigidBody()
 
     btDefaultMotionState* motionState = new btDefaultMotionState(tr);
 
-    btCollisionShape* shape = new btBoxShape(
+    DeleteRigidBody();
+
+    collisionShape = new btBoxShape(
 		btVector3(
 			(width / 2) * PHYSICS_WORLD_SCALE,
 			(height / 2) * PHYSICS_WORLD_SCALE,
@@ -144,14 +147,14 @@ void BoxObject::BuildRigidBody()
 		)
 	);
 
-    float mass = 3.0f;
+    float mass = 1.0f;
     btVector3 inertia;
-    shape->calculateLocalInertia(mass, inertia);
-    btRigidBody::btRigidBodyConstructionInfo constructionInfo(mass, motionState, shape, inertia);
-    constructionInfo.m_friction = 10.0f;
-    constructionInfo.m_restitution = 0.0f;
+    collisionShape->calculateLocalInertia(mass, inertia);
+    btBoxShape* temp = ((btBoxShape*)collisionShape);
 
-    DeleteRigidBody();
+    btRigidBody::btRigidBodyConstructionInfo constructionInfo(mass, motionState, collisionShape, inertia);
+    constructionInfo.m_friction = 1.0f;
+    constructionInfo.m_restitution = 0.0f;
     rigidBody = new btRigidBody(constructionInfo);
 }
 
@@ -170,6 +173,7 @@ void BoxObject::DeleteRigidBody()
     {
         delete rigidBody->getMotionState();
         delete rigidBody;
+    	delete collisionShape;
     }
 }
 
