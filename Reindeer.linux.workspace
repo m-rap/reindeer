@@ -2,6 +2,6 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Reindeer">
 		<Project filename="Reindeer-OpenGL3/Reindeer-OpenGL3.linux.cbp" />
-		<Project filename="BulletTest/BulletTest.cbp" />
+		<Project filename="BulletTest/BulletTest.linux.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

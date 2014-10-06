@@ -30,7 +30,8 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="/extSdCard/bullet/bullet-2.82-r2704/src" />
+			<Add option="-DGLEW_STATIC" />
+			<Add directory="../include" />
 		</Compiler>
 		<Linker>
 			<Add library="BulletDynamics" />
@@ -39,21 +40,29 @@
 			<Add library="glfw" />
 			<Add library="GLEW" />
 			<Add library="GL" />
-			<Add directory="/extSdCard/bullet/bullet-2.82-r2704/lib" />
+			<Add directory="../lib" />
 		</Linker>
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />
 		<Unit filename="BoxObject.cpp" />
 		<Unit filename="BoxObject.h" />
+		<Unit filename="BoxRenderer.cpp" />
+		<Unit filename="BoxRenderer.h" />
 		<Unit filename="Camera.cpp" />
 		<Unit filename="Camera.h" />
 		<Unit filename="Drawable.cpp" />
 		<Unit filename="Drawable.h" />
+		<Unit filename="LegacyOpenGLBoxRenderer.cpp" />
+		<Unit filename="LegacyOpenGLBoxRenderer.h" />
+		<Unit filename="OpenGLBoxRenderer.cpp" />
+		<Unit filename="OpenGLBoxRenderer.h" />
 		<Unit filename="StandardShading.fragmentshader" />
 		<Unit filename="StandardShading.vertexshader" />
 		<Unit filename="World.cpp" />
 		<Unit filename="World.h" />
+		<Unit filename="config.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="reindeer.h" />
 		<Unit filename="shader.cpp" />
 		<Unit filename="shader.h" />
 		<Extensions>

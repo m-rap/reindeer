@@ -5,6 +5,9 @@ using namespace std;
 
 int main()
 {
+	World world;
+    world.Init();
+
 	int nBox;
 	printf("nBox: ");
 	scanf("%d", &nBox);
@@ -12,9 +15,6 @@ int main()
 
 	printf("scale: ");
 	scanf("%f", &PHYSICS_WORLD_SCALE);
-
-	World world;
-    world.Init();
 
     glm::vec3 boxmin(-0.1f, -0.1f, -0.1f);
 	glm::vec3 boxmax( 0.1f,  0.1f,  0.1f);

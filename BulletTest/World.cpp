@@ -1,5 +1,6 @@
 #include "World.h"
 
+#ifdef _MSC_VER
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -13,10 +14,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
     return DefWindowProc (hWnd, message, wParam, lParam);
 }
+#endif
 
 World::World()
 {
-#ifdef _MSC_VER	
+#ifdef _MSC_VER
 	HWND hWnd;
     WNDCLASSEX wc;
 	HGLRC hRC;
@@ -36,7 +38,7 @@ World::World()
 	RegisterClassEx(&wc);
 	hWnd = CreateWindowEx(NULL, L"WindowClass", L"Reindeer", WS_OVERLAPPEDWINDOW, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, GetModuleHandle(0), NULL);
 	hDC = GetDC(hWnd);
-	
+
 	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
 	pfd.nVersion = 1;
@@ -46,13 +48,9 @@ World::World()
 	pfd.cDepthBits = 16;
 	pfd.iLayerType = PFD_MAIN_PLANE;
 
-	//pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-    //pfd.nVersion = 1;
-    //pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
-    
 	pixelformat = ChoosePixelFormat(hDC, &pfd);
 	SetPixelFormat(hDC, pixelformat, &pfd);
-	
+
 	hRC = wglCreateContext(hDC);
 	wglMakeCurrent(hDC,hRC);
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -193,7 +191,7 @@ void World::Render()
         {
             DrawableObjects[i]->Draw(&camera);
         }
-		
+
 #ifdef _MSC_VER
 		SwapBuffers(hDC);
 		long span = (clock() - c1) / CLOCKS_PER_SEC;
