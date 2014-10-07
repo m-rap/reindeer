@@ -9,20 +9,21 @@ using namespace std;
 
 int main()
 {
+	int nBox;
+	printf("nBox: ");
+	scanf("%d", &nBox);
+
+	printf("scale: ");
+	scanf("%f", &PHYSICS_WORLD_SCALE);
+
 #ifdef USE_D3D9
 	Direct3DWorld world;
 #else
 	OpenGLWorld world;
 #endif
     world.Init();
-
-	int nBox;
-	printf("nBox: ");
-	scanf("%d", &nBox);
+	
 	BoxObject* box = new BoxObject[nBox];
-
-	printf("scale: ");
-	scanf("%f", &PHYSICS_WORLD_SCALE);
 
     RDRVEC3 boxmin(-0.1f, -0.1f, -0.1f);
 	RDRVEC3 boxmax( 0.1f,  0.1f,  0.1f);

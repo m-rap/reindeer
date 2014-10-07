@@ -124,7 +124,7 @@ void BoxObject::BoxShapeDrawer(Camera* camera)
 }
 
 void BoxObject::Draw(Camera* camera) {
-    Update();
+    //Update();
     boxRenderer->Draw(camera);
 }
 
@@ -195,11 +195,14 @@ void BoxObject::Update()
 {
     btTransform trans;
     rigidBody->getMotionState()->getWorldTransform(trans);
-    btVector3 origin = trans.getOrigin();
+
     btQuaternion rot = trans.getRotation();
+    this->quaternion = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+
+    btVector3 origin = trans.getOrigin();
     this->position.x = origin.getX() / PHYSICS_WORLD_SCALE;
     this->position.y = origin.getY() / PHYSICS_WORLD_SCALE;
     this->position.z = origin.getZ() / PHYSICS_WORLD_SCALE;
-    this->quaternion = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+
     BuildWorld();
 }

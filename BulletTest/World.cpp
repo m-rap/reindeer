@@ -35,8 +35,6 @@ void World::InitWindow()
 {
 #ifdef _MSC_VER
     WNDCLASSEX wc;
-	HGLRC hRC;
-	int pixelformat;
 
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
@@ -54,6 +52,8 @@ void World::InitWindow()
 
 #ifdef USE_OPENGL
 	PIXELFORMATDESCRIPTOR pfd;
+	HGLRC hRC;
+	int pixelformat;
 	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
 	pfd.nVersion = 1;
@@ -110,9 +110,12 @@ void World::Render()
 
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
 	{
-		((BoxObject*)DrawableObjects[i])->SetDynamicsWorld(dynamicsWorld);
-		dynamicsWorld->addRigidBody(((BoxObject*)DrawableObjects[i])->rigidBody);
+		DrawableObjects[i]->SetDynamicsWorld(dynamicsWorld);
+		dynamicsWorld->addRigidBody(DrawableObjects[i]->rigidBody);
 	}
+
+	btClock cl;
+	float accumulator = 0.0f, interval = 1.f/60.f;
 
 #ifdef _MSC_VER
 	MSG msg;
@@ -129,11 +132,17 @@ void World::Render()
 #else
 	while (!glfwWindowShouldClose(window)) {
 #endif
-		clock_t c1 = clock();
+		btScalar dt = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+		cl.reset();
+		accumulator += dt;
+		while (accumulator >= interval)
+		{
+			Integrate(dynamicsWorld, interval);
+			accumulator -= interval;
+		}
 
 		PreUpdate();
 
-		dynamicsWorld->stepSimulation(1/60.f);//, 10, 1.0f/240.0f);
 		for (size_t i = 0; i < DrawableObjects.size(); i++)
         {
             DrawableObjects[i]->Draw(&camera);
@@ -143,19 +152,19 @@ void World::Render()
 
 #ifdef _MSC_VER
 		SwapBuffers(hDC);
-		long span = (clock() - c1) / CLOCKS_PER_SEC;
-		Sleep(((1000 / 60) - span * 1000));
+		//long span = (clock() - c1) / CLOCKS_PER_SEC;
+		//Sleep(((1000 / 60) - span * 1000));
 #else
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		float span = (clock() - c1) / CLOCKS_PER_SEC;
-		usleep(((1000 / 60) - span * 1000) * 1000);
+		//float span = (clock() - c1) / CLOCKS_PER_SEC;
+		//usleep(((1000 / 60) - span * 1000) * 1000);
 #endif
 	}
 
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
 	{
-		dynamicsWorld->removeRigidBody(((BoxObject*)DrawableObjects[i])->rigidBody);
+		dynamicsWorld->removeRigidBody(DrawableObjects[i]->rigidBody);
 	}
 	dynamicsWorld->removeRigidBody(groundRigidBody);
 
@@ -175,4 +184,13 @@ void World::Render()
 #else
 	glfwTerminate();
 #endif
+}
+
+void World::Integrate(btDiscreteDynamicsWorld* dynamicsWorld, float dt)
+{
+	dynamicsWorld->stepSimulation(dt);//1/60.f, 10, 1.0f/240.0f);
+	for (size_t i = 0; i < DrawableObjects.size(); i++)
+	{
+		DrawableObjects[i]->Update();
+	}
 }

@@ -26,6 +26,7 @@ protected:
 	virtual void PreUpdate() = 0;
 	virtual void PostUpdate() = 0;
 	virtual void PostRender() = 0;
+	void Integrate(btDiscreteDynamicsWorld* dynamicsWorld, float dt);
 
 public:
     World();
@@ -34,7 +35,7 @@ public:
     Camera camera;
     GLuint programId;
 
-    vector<Drawable*> DrawableObjects;
+    vector<BoxObject*> DrawableObjects;
 	
     void Init();
     void Render();
