@@ -5,7 +5,7 @@ Ada Directx, ada juga OpenGL. IDE yang disarankan untuk Directx adalah Visual St
 Dependensi:
 - glew http://glew.sourceforge.net/
 - glfw3 http://www.glfw.org/
-- glm http://glm.g-truc.net/0.9.5/index.html(cuma header)
+- glm http://glm.g-truc.net/0.9.5/index.html (cuma header)
 - bullet physics http://bulletphysics.org/wordpress/
 
 Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (syukur-syukur kalo sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
