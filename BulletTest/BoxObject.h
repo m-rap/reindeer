@@ -4,8 +4,13 @@
 #include "Camera.h"
 #include "Drawable.h"
 #include "BoxRenderer.h"
+
+#ifdef USE_D3D9
+#include "D3d9BoxRenderer.h"
+#else
 #include "OpenGLBoxRenderer.h"
 #include "LegacyOpenGLBoxRenderer.h"
+#endif
 
 using namespace std;
 
@@ -14,7 +19,7 @@ class BoxObject :
     public Drawable
 {
 protected:
-	glm::vec3 min, max;
+	RDRVEC3 min, max;
 	float width, height, length;
 	BoxRenderer* boxRenderer;
 
@@ -31,29 +36,31 @@ public:
     btCollisionShape* collisionShape;
     btDiscreteDynamicsWorld* dynamicsWorld;
 
-    virtual void SetPosition(const glm::vec3& position, bool silent = false)
+    virtual void SetPosition(const RDRVEC3& position, bool silent = false)
     {
     	BaseObject::SetPosition(position, silent);
     	SetRigidBodyTransform();
     }
 
-	virtual void SetEuler(const glm::vec3& euler, bool silent = false)
+	virtual void SetEuler(const RDRVEC3& euler, bool silent = false)
 	{
 		BaseObject::SetEuler(euler, silent);
 		SetRigidBodyTransform();
 	}
 
-	void SetMin(const glm::vec3& min);
-	void SetMax(const glm::vec3& max);
-	void SetMinMax(const glm::vec3& min, const glm::vec3& max);
+	void SetMin(const RDRVEC3& min);
+	void SetMax(const RDRVEC3& max);
+	void SetMinMax(const RDRVEC3& min, const RDRVEC3& max);
 
-	glm::vec3 GetMin();
-	glm::vec3 GetMax();
+	RDRVEC3 GetMin();
+	RDRVEC3 GetMax();
     float GetWidth();
     float GetHeight();
     float GetLength();
 
+#ifdef USE_OPENGL
 	void SetProgramId(const GLuint& programId);
+#endif
 	void SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld);
 	virtual void Draw(Camera* camera);
 	void Update();

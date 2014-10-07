@@ -30,6 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
 			<Add directory="../include" />
 		</Compiler>
@@ -56,6 +57,10 @@
 		<Unit filename="LegacyOpenGLBoxRenderer.h" />
 		<Unit filename="OpenGLBoxRenderer.cpp" />
 		<Unit filename="OpenGLBoxRenderer.h" />
+		<Unit filename="OpenGLWorld.cpp" />
+		<Unit filename="OpenGLWorld.h" />
+		<Unit filename="RdrHelper.cpp" />
+		<Unit filename="RdrHelper.h" />
 		<Unit filename="StandardShading.fragmentshader" />
 		<Unit filename="StandardShading.vertexshader" />
 		<Unit filename="World.cpp" />

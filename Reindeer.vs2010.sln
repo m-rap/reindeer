@@ -1,40 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reindeer.vs2010", "Reindeer\Reindeer.vs2010.vcxproj", "{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletTest.opengl", "BulletTest\BulletTest.opengl.vcxproj", "{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletTest", "BulletTest\BulletTest.vcxproj", "{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletTest.d3d9", "BulletTest\BulletTest.d3d9.vcxproj", "{E9795B96-6254-44CD-96B9-D1F9F2C89509}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|Win32 = Debug|Win32
-		Debug|x86 = Debug|x86
-		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|Win32 = Release|Win32
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Debug|Win32.Build.0 = Debug|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Debug|x86.ActiveCfg = Debug|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|Win32.ActiveCfg = Release|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|Win32.Build.0 = Release|Win32
-		{5B4CE4F6-BEF8-4547-91B9-2072C7F779EC}.Release|x86.ActiveCfg = Release|Win32
-		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Debug|Win32.Build.0 = Debug|Win32
-		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Debug|x86.ActiveCfg = Debug|Win32
-		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|Win32.ActiveCfg = Release|Win32
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|Win32.Build.0 = Release|Win32
-		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|x86.ActiveCfg = Release|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Debug|Win32.Build.0 = Debug|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Release|Win32.ActiveCfg = Release|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

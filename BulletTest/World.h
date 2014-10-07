@@ -14,14 +14,19 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 class World
 {
-private:
-    GLuint lightPositionId;
-    float lightPosition[4];
+protected:
 #ifdef _MSC_VER
+	HWND hWnd;
 	HDC hDC;		// Private GDI Device Context
 #else
     GLFWwindow* window;
 #endif
+	void InitWindow();
+	virtual void Init3d() = 0;
+	virtual void PreUpdate() = 0;
+	virtual void PostUpdate() = 0;
+	virtual void PostRender() = 0;
+
 public:
     World();
     virtual ~World();
@@ -30,7 +35,7 @@ public:
     GLuint programId;
 
     vector<Drawable*> DrawableObjects;
-
+	
     void Init();
     void Render();
 };

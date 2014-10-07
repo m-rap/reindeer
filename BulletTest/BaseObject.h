@@ -5,25 +5,25 @@
 
 class BaseObject {
 protected:
-	glm::vec3 position;
-	glm::vec3 euler;
-	glm::vec3 scale;
-	glm::quat quaternion;
+	RDRVEC3 position;
+	RDRVEC3 euler;
+	RDRVEC3 scale;
+	RDRQUAT quaternion;
 
-	glm::mat4 rotationMatrix;
-	glm::mat4 world;
+	RDRMAT4 rotationMatrix;
+	RDRMAT4 world;
 public:
 	BaseObject();
 	virtual ~BaseObject();
 
-	virtual void SetPosition(const glm::vec3& position, bool silent = false);
-	virtual void SetEuler(const glm::vec3& euler, bool silent = false);
-	virtual void SetScale(const glm::vec3& scale, bool silent = false);
+	virtual void SetPosition(const RDRVEC3& position, bool silent = false);
+	virtual void SetEuler(const RDRVEC3& euler, bool silent = false);
+	virtual void SetScale(const RDRVEC3& scale, bool silent = false);
 
-	virtual glm::vec3* GetPosition();
-	virtual glm::vec3* GetEuler();
-	virtual glm::vec3* GetScale();
-	glm::mat4* GetWorld();
+	virtual RDRVEC3* GetPosition();
+	virtual RDRVEC3* GetEuler();
+	virtual RDRVEC3* GetScale();
+	RDRMAT4* GetWorld();
 
 	virtual void BuildWorld();
 };

@@ -18,11 +18,24 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 World::World()
 {
+}
+
+World::~World()
+{
+    //dtor
+}
+
+void World::Init()
+{
+	InitWindow();
+	Init3d();
+}
+
+void World::InitWindow()
+{
 #ifdef _MSC_VER
-	HWND hWnd;
     WNDCLASSEX wc;
 	HGLRC hRC;
-	PIXELFORMATDESCRIPTOR pfd;
 	int pixelformat;
 
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -39,6 +52,8 @@ World::World()
 	hWnd = CreateWindowEx(NULL, L"WindowClass", L"Reindeer", WS_OVERLAPPEDWINDOW, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, GetModuleHandle(0), NULL);
 	hDC = GetDC(hWnd);
 
+#ifdef USE_OPENGL
+	PIXELFORMATDESCRIPTOR pfd;
 	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
 	pfd.nVersion = 1;
@@ -53,6 +68,8 @@ World::World()
 
 	hRC = wglCreateContext(hDC);
 	wglMakeCurrent(hDC,hRC);
+#endif
+
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 #else
     int init = glfwInit();
@@ -61,7 +78,7 @@ World::World()
 		return;
 	}
 
-	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Our OpenGL Program", NULL, NULL);
+	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Reindeer", NULL, NULL);
 	if (!window) {
 		printf("glfw create window failed\n");
 		glfwTerminate();
@@ -69,71 +86,6 @@ World::World()
 	}
 	glfwMakeContextCurrent(window);
 #endif
-
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
-		return;
-	}
-
-	/*if (!GLEW_VERSION_1_5) {
-		printf("glGenBuffers is not supported\n");
-		return;
-	}*/
-
-	printf("%s\n", glGetString(GL_VERSION));
-	printf("1.5 %d\n", GL_VERSION_1_5);
-}
-
-World::~World()
-{
-    //dtor
-}
-
-void World::Init()
-{
-    lightPosition[0] = -3.0f;
-    lightPosition[1] = 3.0f;
-    lightPosition[2] = -3.0f;
-    lightPosition[3] = 0.0f;
-
-    if (GLEW_VERSION_1_5)
-	{
-		programId = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
-		lightPositionId = glGetUniformLocation(programId, "LightPosition_worldspace");
-	}
-	else
-	{
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-
-		//float lightAmbient[] = { 50.0f/255.0f, 50.0f/255.0f, 50.0f/255.0f, 1.0f };
-		float lightDiffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
-		//glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-		lightPosition[2] *= -1;
-		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
-		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
-		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
-		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
-
-		float matAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		float matDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-
-		glEnable(GL_COLOR_MATERIAL);
-		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-	}
-
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glDepthMask(GL_TRUE);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glClearDepth(1.0f);
-	glEnable(GL_CULL_FACE);
 }
 
 void World::Render()
@@ -162,12 +114,6 @@ void World::Render()
 		dynamicsWorld->addRigidBody(((BoxObject*)DrawableObjects[i])->rigidBody);
 	}
 
-    if (GLEW_VERSION_1_5)
-	{
-		glUseProgram(programId);
-		glUniform3f(lightPositionId, lightPosition[0], lightPosition[1], lightPosition[2]);
-	}
-
 #ifdef _MSC_VER
 	MSG msg;
 	while(TRUE)
@@ -184,13 +130,16 @@ void World::Render()
 	while (!glfwWindowShouldClose(window)) {
 #endif
 		clock_t c1 = clock();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		dynamicsWorld->stepSimulation(1/60.f);//, 10, 1.0f/240.0f);
 
+		PreUpdate();
+
+		dynamicsWorld->stepSimulation(1/60.f);//, 10, 1.0f/240.0f);
 		for (size_t i = 0; i < DrawableObjects.size(); i++)
         {
             DrawableObjects[i]->Draw(&camera);
         }
+
+		PostUpdate();
 
 #ifdef _MSC_VER
 		SwapBuffers(hDC);
@@ -220,10 +169,7 @@ void World::Render()
 	delete dispatcher;
 	delete broadphase;
 
-	if (GLEW_VERSION_1_5)
-	{
-		glDeleteProgram(programId);
-	}
+	PostRender();
 
 #ifdef _MSC_VER
 #else

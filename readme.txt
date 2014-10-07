@@ -2,4 +2,13 @@ Ini adalah project reindeer. Project ini akan menjadi project 3d game engine, ta
 
 Ada Directx, ada juga OpenGL. IDE yang disarankan untuk Directx adalah Visual Studio dengan compiler VC++, sedangkan OpenGL menggunakan Codeblocks dengan compiler GCC jika menggunakan linux atau MinGW jika menggunakan Windows. Untuk tiap IDE sudah disiapkan file descriptor projectnya (.sln, .vcproj, .workspace, .cbp, dll).
 
-Untuk OpenGL yang menggunakan shader (yang ada di folder Reindeer-OpenGL3), dibutuhkan library GLEW. Untuk linux, silakan instal GLEW dari repository menggunakan package manager yang disediakan masing-masing distro. Sedangkan untuk Windows, download source nya dari http://glew.sourceforge.net/ (yang zip), lalu ekstrak ke <direktori reindeer>\glew, dimana folder src yg berasal dari source GLEW akan berada di path yang sama dengan file glew.cbp yg berasal dari project reindeer.
+Dependensi:
+- glew http://glew.sourceforge.net/
+- glfw3 http://www.glfw.org/
+- glm http://glm.g-truc.net/0.9.5/index.html(cuma header)
+- bullet physics http://bulletphysics.org/wordpress/
+
+Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (syukur-syukur kalo sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
+Untuk bullet physics sementara hanya butuh build BulletCollision, BulletDynamics, dan LinearMath.
+
+Terima kasih telah mengunjungi reindeer.

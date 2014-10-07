@@ -8,6 +8,9 @@ BoxObject::BoxObject() : BaseObject() {
 	collisionShape = NULL;
 	dynamicsWorld = NULL;
 
+#ifdef USE_D3D9
+	boxRenderer = new D3d9BoxRenderer(this);
+#else
 	if (GLEW_VERSION_1_5)
 	{
 		boxRenderer = new OpenGLBoxRenderer(this);
@@ -16,6 +19,7 @@ BoxObject::BoxObject() : BaseObject() {
 	{
 		boxRenderer = new LegacyOpenGLBoxRenderer(this);
 	}
+#endif
 
 	boxRenderer->BuildNormalsIndices();
 	BuildWidthHeightLength();
@@ -26,26 +30,26 @@ BoxObject::~BoxObject() {
 	DeleteRigidBody();
 }
 
-void BoxObject::SetMin(const glm::vec3& value) {
+void BoxObject::SetMin(const RDRVEC3& value) {
 	this->min = value;
 	BuildWidthHeightLength();
 }
 
-glm::vec3 BoxObject::GetMin() {
+RDRVEC3 BoxObject::GetMin() {
 	return min;
 }
 
-void BoxObject::SetMax(const glm::vec3& value) {
+void BoxObject::SetMax(const RDRVEC3& value) {
 	this->max = value;
 	BuildWidthHeightLength();
 }
 
 
-glm::vec3 BoxObject::GetMax() {
+RDRVEC3 BoxObject::GetMax() {
 	return max;
 }
 
-void BoxObject::SetMinMax(const glm::vec3& min, const glm::vec3& max) {
+void BoxObject::SetMinMax(const RDRVEC3& min, const RDRVEC3& max) {
 	this->min = min;
 	this->max = max;
 	BuildWidthHeightLength();
@@ -66,13 +70,17 @@ float BoxObject::GetLength()
 	return length;
 }
 
+#ifdef USE_OPENGL
 void BoxObject::SetProgramId(const GLuint& programId) {
     boxRenderer->SetProgramId(programId);
 }
 
 inline void glDrawVector(const btVector3& v) { glVertex3d(v[0], v[1], v[2]); }
+#endif
+
 void BoxObject::BoxShapeDrawer(Camera* camera)
 {
+#ifdef USE_OPENGL
 	glm::mat4& projection = *camera->GetProjection();
     glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(projection));
@@ -112,6 +120,7 @@ void BoxObject::BoxShapeDrawer(Camera* camera)
 	glDrawVector(org - dx - dy + dz);
 	glDrawVector(org - dx + dy + dz);
 	glEnd();
+#endif
 }
 
 void BoxObject::Draw(Camera* camera) {
@@ -191,6 +200,6 @@ void BoxObject::Update()
     this->position.x = origin.getX() / PHYSICS_WORLD_SCALE;
     this->position.y = origin.getY() / PHYSICS_WORLD_SCALE;
     this->position.z = origin.getZ() / PHYSICS_WORLD_SCALE;
-    this->quaternion = glm::quat(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+    this->quaternion = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
     BuildWorld();
 }

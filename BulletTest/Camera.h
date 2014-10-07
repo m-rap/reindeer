@@ -5,7 +5,7 @@
 
 class Camera : public BaseObject {
 protected:
-	glm::mat4 view, projection;
+	RDRMAT4 view, projection;
 public:
 	Camera();
 	virtual ~Camera();
@@ -13,8 +13,8 @@ public:
 	void BuildProjection();
 	void BuildView();
 
-	glm::mat4* GetView();
-	glm::mat4* GetProjection();
+	RDRMAT4* GetView();
+	RDRMAT4* GetProjection();
 
 	virtual void BuildWorld();
 };
