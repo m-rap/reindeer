@@ -3,16 +3,16 @@
 #ifndef OPENGLWORLD_H
 #define OPENGLWORLD_H
 
-#include "world.h"
+#include "World.h"
 
 class OpenGLWorld :
 	public World
 {
-private:	
+private:
     GLuint lightPositionId;
     float lightPosition[4];
 
-protected:	
+protected:
 	virtual void Init3d();
 	virtual void PreUpdate();
 	virtual void PostUpdate();
