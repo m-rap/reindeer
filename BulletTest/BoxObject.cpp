@@ -197,7 +197,11 @@ void BoxObject::Update()
     rigidBody->getMotionState()->getWorldTransform(trans);
 
     btQuaternion rot = trans.getRotation();
+#ifdef USE_D3D9
     this->quaternion = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+#else
+	this->quaternion = RDRQUAT(rot.getW(), rot.getX(), rot.getY(), rot.getZ());
+#endif
 
     btVector3 origin = trans.getOrigin();
     this->position.x = origin.getX() / PHYSICS_WORLD_SCALE;
