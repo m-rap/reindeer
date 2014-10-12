@@ -12,3 +12,5 @@ Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu 
 Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
 
 Terima kasih telah mengunjungi reindeer.
+
+Progress sekarang: https://www.youtube.com/watch?v=YLE1mDGWrmI
