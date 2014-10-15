@@ -89,6 +89,7 @@
     <ClCompile Include="Direct3DWorld.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="objloader.cpp" />
     <ClCompile Include="RdrHelper.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -100,6 +101,7 @@
     <ClInclude Include="D3d9BoxRenderer.h" />
     <ClInclude Include="Direct3DWorld.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="objloader.h" />
     <ClInclude Include="RdrHelper.h" />
     <ClInclude Include="reindeer.h" />
     <ClInclude Include="World.h" />

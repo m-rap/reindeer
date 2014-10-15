@@ -29,17 +29,6 @@ extern LPDIRECT3DDEVICE9 d3ddev;
 
 #endif
 
-#include <btBulletCollisionCommon.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-
-#ifdef _MSC_VER
-#include <windows.h>
-#include <windowsx.h>
-#else
-#include <GLFW/glfw3.h>
-#endif
-
 #include <iostream>
 #include <stdio.h>
 #ifndef _MSC_VER

@@ -114,6 +114,12 @@ void World::Render()
 		dynamicsWorld->addRigidBody(DrawableObjects[i]->rigidBody);
 	}
 
+	//ModelObject obj("../cube.obj");
+	//obj.SetProgramId(programId);
+	//obj.SetPosition(glm::vec3(0, 2, 2), true);
+	//obj.SetEuler(glm::vec3(0, 20, 20), true);
+	//obj.BuildWorld();
+
 	btClock cl;
 	float accumulator = 0.0f, interval = 1.f/60.f;
 
@@ -147,6 +153,7 @@ void World::Render()
         {
             DrawableObjects[i]->Draw(&camera);
         }
+		//obj.Draw(&camera);
 
 		PostUpdate();
 

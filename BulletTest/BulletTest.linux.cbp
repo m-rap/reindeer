@@ -55,8 +55,14 @@
 		<Unit filename="Drawable.h" />
 		<Unit filename="LegacyOpenGLBoxRenderer.cpp" />
 		<Unit filename="LegacyOpenGLBoxRenderer.h" />
+		<Unit filename="ModelObject.cpp" />
+		<Unit filename="ModelObject.h" />
+		<Unit filename="ModelRenderer.cpp" />
+		<Unit filename="ModelRenderer.h" />
 		<Unit filename="OpenGLBoxRenderer.cpp" />
 		<Unit filename="OpenGLBoxRenderer.h" />
+		<Unit filename="OpenGLModelRenderer.cpp" />
+		<Unit filename="OpenGLModelRenderer.h" />
 		<Unit filename="OpenGLWorld.cpp" />
 		<Unit filename="OpenGLWorld.h" />
 		<Unit filename="RdrHelper.cpp" />
@@ -67,6 +73,8 @@
 		<Unit filename="World.h" />
 		<Unit filename="config.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="objloader.cpp" />
+		<Unit filename="objloader.h" />
 		<Unit filename="reindeer.h" />
 		<Unit filename="shader.cpp" />
 		<Unit filename="shader.h" />

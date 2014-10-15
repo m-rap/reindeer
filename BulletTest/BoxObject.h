@@ -12,6 +12,10 @@
 #include "LegacyOpenGLBoxRenderer.h"
 #endif
 
+#include <btBulletCollisionCommon.h>
+#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
+#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+
 using namespace std;
 
 class BoxObject :

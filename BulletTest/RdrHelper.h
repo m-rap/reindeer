@@ -6,12 +6,14 @@
 #ifndef RDRHELPER_H
 #define RDRHELPER_H
 #ifdef USE_D3D9
+#define RDRVEC2 D3DXVECTOR2
 #define RDRVEC3 D3DXVECTOR3
 #define RDRVEC4 D3DXVECTOR4
 #define RDRQUAT D3DXQUATERNION
 #define RDRMAT4 D3DXMATRIX
 extern const float PIOVER2;
 #else
+#define RDRVEC2 glm::vec2
 #define RDRVEC3 glm::vec3
 #define RDRVEC4 glm::vec4
 #define RDRQUAT glm::quat

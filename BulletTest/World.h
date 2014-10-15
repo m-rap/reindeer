@@ -5,6 +5,14 @@
 #include "Drawable.h"
 #include "Camera.h"
 #include "BoxObject.h"
+#include "ModelObject.h"
+
+#ifdef _MSC_VER
+#include <windows.h>
+#include <windowsx.h>
+#else
+#include <GLFW/glfw3.h>
+#endif
 
 using namespace std;
 
