@@ -124,7 +124,6 @@ void BoxObject::BoxShapeDrawer(Camera* camera)
 }
 
 void BoxObject::Draw(Camera* camera) {
-    //Update();
     boxRenderer->Draw(camera);
 }
 

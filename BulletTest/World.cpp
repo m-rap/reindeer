@@ -114,11 +114,13 @@ void World::Render()
 		dynamicsWorld->addRigidBody(DrawableObjects[i]->rigidBody);
 	}
 
-	//ModelObject obj("../cube.obj");
-	//obj.SetProgramId(programId);
-	//obj.SetPosition(glm::vec3(0, 2, 2), true);
-	//obj.SetEuler(glm::vec3(0, 20, 20), true);
-	//obj.BuildWorld();
+	ModelObject obj("../suzanne.obj");
+	obj.SetProgramId(programId);
+	obj.SetPosition(glm::vec3(0, 10, 10), true);
+	obj.SetEuler(glm::vec3(0, 20, 20), true);
+	obj.BuildWorld();
+
+	dynamicsWorld->addRigidBody(obj.rigidBody);
 
 	btClock cl;
 	float accumulator = 0.0f, interval = 1.f/60.f;
@@ -144,6 +146,7 @@ void World::Render()
 		while (accumulator >= interval)
 		{
 			Integrate(dynamicsWorld, interval);
+			obj.Update();
 			accumulator -= interval;
 		}
 
@@ -153,19 +156,15 @@ void World::Render()
         {
             DrawableObjects[i]->Draw(&camera);
         }
-		//obj.Draw(&camera);
+		obj.Draw(&camera);
 
 		PostUpdate();
 
 #ifdef _MSC_VER
 		SwapBuffers(hDC);
-		//long span = (clock() - c1) / CLOCKS_PER_SEC;
-		//Sleep(((1000 / 60) - span * 1000));
 #else
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		//float span = (clock() - c1) / CLOCKS_PER_SEC;
-		//usleep(((1000 / 60) - span * 1000) * 1000);
 #endif
 	}
 

@@ -34,7 +34,7 @@ int main()
 		box[i].SetProgramId(world.programId);
 #endif
 		box[i].SetMinMax(boxmin, boxmax);
-		box[i].SetPosition(RDRVEC3(-1.0f + i*0.1f, 7.0f + i*1.0f, 1.0f), true);
+		box[i].SetPosition(RDRVEC3(-1.0f + i*0.1f, 7.0f + i*1.0f, 10.0f), true);
 		box[i].SetEuler(RDRVEC3(44.0f, 10.0f, 30.0f), true);
 		box[i].BuildWorld();
 		world.DrawableObjects.push_back(&box[i]);
