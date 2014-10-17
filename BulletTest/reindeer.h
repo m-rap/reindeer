@@ -1,3 +1,6 @@
+#ifndef REINDEER_H
+#define REINDEER_H
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -42,3 +45,5 @@ extern int SCREEN_HEIGHT;
 extern float PHYSICS_WORLD_SCALE;
 
 #include "RdrHelper.h"
+
+#endif

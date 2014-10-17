@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="BoxRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -89,28 +90,29 @@
     <ClCompile Include="LegacyOpenGLBoxRenderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModelObject.cpp" />
-    <ClCompile Include="ModelRenderer.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="OpenGLBoxRenderer.cpp" />
     <ClCompile Include="OpenGLModelRenderer.cpp" />
     <ClCompile Include="OpenGLWorld.cpp" />
+    <ClCompile Include="PhysicalObject.cpp" />
     <ClCompile Include="RdrHelper.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="BoxRenderer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="LegacyOpenGLBoxRenderer.h" />
     <ClInclude Include="ModelObject.h" />
-    <ClInclude Include="ModelRenderer.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="OpenGLBoxRenderer.h" />
     <ClInclude Include="OpenGLModelRenderer.h" />
     <ClInclude Include="OpenGLWorld.h" />
+    <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="RdrHelper.h" />
     <ClInclude Include="reindeer.h" />
     <ClInclude Include="shader.h" />

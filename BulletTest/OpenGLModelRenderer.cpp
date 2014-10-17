@@ -2,7 +2,7 @@
 #include "ModelObject.h"
 #include "objloader.h"
 
-OpenGLModelRenderer::OpenGLModelRenderer(ModelObject* parent) : ModelRenderer(parent)
+OpenGLModelRenderer::OpenGLModelRenderer(BaseObject* parent) : BaseRenderer(parent)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &normalBuffer);
@@ -28,6 +28,8 @@ void OpenGLModelRenderer::SetProgramId(const GLuint& programId)
 
 void OpenGLModelRenderer::BuildBuffers()
 {
+	ModelObject* parent = (ModelObject*)this->parent;
+
 	std::vector<RDRVEC3>& vertices = parent->vertices;
 	std::vector<RDRVEC2>& uvs = parent->uvs;
 	std::vector<RDRVEC3>& normals = parent->normals;
@@ -36,6 +38,9 @@ void OpenGLModelRenderer::BuildBuffers()
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 }
 
 void OpenGLModelRenderer::Draw(Camera* camera)

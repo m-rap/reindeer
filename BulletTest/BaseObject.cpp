@@ -18,6 +18,7 @@ BaseObject::~BaseObject() {
 
 void BaseObject::SetPosition(const RDRVEC3& position, bool silent) {
 	this->position = position;
+	
 	if (!silent)
 		BuildWorld();
 }
@@ -64,20 +65,18 @@ void BaseObject::BuildWorld() {
 	D3DXMATRIX tempMatrix;
 	D3DXMatrixIdentity(&world);
 
-	
 	// scale
 	D3DXMatrixScaling(&tempMatrix, scale.x, scale.y, scale.z);
 	D3DXMatrixMultiply(&world, &world, &tempMatrix);
 
-	
 	// rotation
 	D3DXMatrixRotationQuaternion(&rotationMatrix, &quaternion);
 	D3DXMatrixMultiply(&world, &world, &rotationMatrix);
 
-
 	// position
 	D3DXMatrixTranslation(&tempMatrix, position.x, position.y, position.z);
 	D3DXMatrixMultiply(&world, &world, &tempMatrix);
+
 #elif defined( USE_OPENGL )
 	rotationMatrix = glm::toMat4(quaternion);
 	world = glm::translate(glm::mat4(1.0f), position) * rotationMatrix * glm::scale(glm::mat4(1.0f), scale);

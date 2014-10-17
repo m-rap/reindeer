@@ -12,7 +12,7 @@ private:
 	LPDIRECT3DINDEXBUFFER9 indexBuffer;
 
 public:
-	D3d9BoxRenderer(BoxObject* parent);
+	D3d9BoxRenderer(BaseObject* parent);
 	virtual ~D3d9BoxRenderer(void);
 
 	virtual void BuildBuffers();

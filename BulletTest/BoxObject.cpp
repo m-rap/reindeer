@@ -1,12 +1,8 @@
 #include "BoxObject.h"
 
-BoxObject::BoxObject() : BaseObject() {
+BoxObject::BoxObject() : PhysicalObject() {
 	min.x = min.y = min.z = 0;
 	max.x = max.y = max.z = 0;
-
-	rigidBody = NULL;
-	collisionShape = NULL;
-	dynamicsWorld = NULL;
 
 #ifdef USE_D3D9
 	boxRenderer = new D3d9BoxRenderer(this);
@@ -27,7 +23,17 @@ BoxObject::BoxObject() : BaseObject() {
 
 BoxObject::~BoxObject() {
 	delete boxRenderer;
-	DeleteRigidBody();
+}
+
+void BoxObject::BuildShape()
+{
+	collisionShape = new btBoxShape(
+		btVector3(
+			(width / 2) * PHYSICS_WORLD_SCALE,
+			(height / 2) * PHYSICS_WORLD_SCALE,
+			(length / 2) * PHYSICS_WORLD_SCALE
+		)
+	);
 }
 
 void BoxObject::SetMin(const RDRVEC3& value) {
@@ -134,78 +140,4 @@ void BoxObject::BuildWidthHeightLength() {
 
 	BuildRigidBody();
 	boxRenderer->BuildBuffers();
-}
-
-void BoxObject::BuildRigidBody()
-{
-	btTransform tr;
-    tr.setIdentity();
-    tr.setRotation(btQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w));
-    tr.setOrigin(btVector3(position.x * PHYSICS_WORLD_SCALE, position.y * PHYSICS_WORLD_SCALE, position.z * PHYSICS_WORLD_SCALE));
-
-    btDefaultMotionState* motionState = new btDefaultMotionState(tr);
-
-    DeleteRigidBody();
-
-    collisionShape = new btBoxShape(
-		btVector3(
-			(width / 2) * PHYSICS_WORLD_SCALE,
-			(height / 2) * PHYSICS_WORLD_SCALE,
-			(length / 2) * PHYSICS_WORLD_SCALE
-		)
-	);
-
-    float mass = 1.0f;
-    btVector3 inertia;
-    collisionShape->calculateLocalInertia(mass, inertia);
-    btBoxShape* temp = ((btBoxShape*)collisionShape);
-
-    btRigidBody::btRigidBodyConstructionInfo constructionInfo(mass, motionState, collisionShape, inertia);
-    constructionInfo.m_friction = 1.0f;
-    constructionInfo.m_restitution = 0.0f;
-    rigidBody = new btRigidBody(constructionInfo);
-}
-
-void BoxObject::SetRigidBodyTransform()
-{
-	btTransform tr;
-	tr.setIdentity();
-    tr.setRotation(btQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w));
-    tr.setOrigin(btVector3(position.x * PHYSICS_WORLD_SCALE, position.y * PHYSICS_WORLD_SCALE, position.z * PHYSICS_WORLD_SCALE));
-    rigidBody->setCenterOfMassTransform(tr);
-}
-
-void BoxObject::DeleteRigidBody()
-{
-	if (rigidBody != NULL)
-    {
-        delete rigidBody->getMotionState();
-        delete rigidBody;
-    	delete collisionShape;
-    }
-}
-
-void BoxObject::SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld)
-{
-    this->dynamicsWorld = dynamicsWorld;
-}
-
-void BoxObject::Update()
-{
-    btTransform trans;
-    rigidBody->getMotionState()->getWorldTransform(trans);
-
-    btQuaternion rot = trans.getRotation();
-#ifdef USE_D3D9
-    this->quaternion = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
-#else
-	this->quaternion = RDRQUAT(rot.getW(), rot.getX(), rot.getY(), rot.getZ());
-#endif
-
-    btVector3 origin = trans.getOrigin();
-    this->position.x = origin.getX() / PHYSICS_WORLD_SCALE;
-    this->position.y = origin.getY() / PHYSICS_WORLD_SCALE;
-    this->position.z = origin.getZ() / PHYSICS_WORLD_SCALE;
-
-    BuildWorld();
 }

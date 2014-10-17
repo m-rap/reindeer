@@ -1,7 +1,7 @@
 #include "OpenGLBoxRenderer.h"
 #include "BoxObject.h"
 
-OpenGLBoxRenderer::OpenGLBoxRenderer(BoxObject* parent) :
+OpenGLBoxRenderer::OpenGLBoxRenderer(BaseObject* parent) :
 	BoxRenderer(parent)
 {
 	glGenBuffers(1, &vertexBuffer);
@@ -30,6 +30,8 @@ void OpenGLBoxRenderer::SetProgramId(const GLuint& programId)
 
 void OpenGLBoxRenderer::BuildBuffers()
 {
+	BoxObject* parent = (BoxObject*)this->parent;
+
 	float width  = parent->GetWidth(),
 		  height = parent->GetHeight(),
 		  length = parent->GetLength();

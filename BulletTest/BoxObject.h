@@ -2,6 +2,7 @@
 #define BOXOBJECT_H_
 
 #include "Camera.h"
+#include "PhysicalObject.h"
 #include "Drawable.h"
 #include "BoxRenderer.h"
 
@@ -12,46 +13,24 @@
 #include "LegacyOpenGLBoxRenderer.h"
 #endif
 
-#include <btBulletCollisionCommon.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-
 using namespace std;
 
 class BoxObject :
-    public BaseObject,
-    public Drawable
+    public PhysicalObject
 {
 protected:
 	RDRVEC3 min, max;
 	float width, height, length;
 	BoxRenderer* boxRenderer;
 
+	virtual void BuildShape();
 	void BuildWidthHeightLength();
-	void BuildRigidBody();
-	void DeleteRigidBody();
-	void SetRigidBodyTransform();
 	void BoxShapeDrawer(Camera* camera);
+
 public:
 	BoxObject();
 	virtual ~BoxObject();
-
-    btRigidBody* rigidBody;
-    btCollisionShape* collisionShape;
-    btDiscreteDynamicsWorld* dynamicsWorld;
-
-    virtual void SetPosition(const RDRVEC3& position, bool silent = false)
-    {
-    	BaseObject::SetPosition(position, silent);
-    	SetRigidBodyTransform();
-    }
-
-	virtual void SetEuler(const RDRVEC3& euler, bool silent = false)
-	{
-		BaseObject::SetEuler(euler, silent);
-		SetRigidBodyTransform();
-	}
-
+	
 	void SetMin(const RDRVEC3& min);
 	void SetMax(const RDRVEC3& max);
 	void SetMinMax(const RDRVEC3& min, const RDRVEC3& max);
@@ -65,9 +44,7 @@ public:
 #ifdef USE_OPENGL
 	void SetProgramId(const GLuint& programId);
 #endif
-	void SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld);
 	virtual void Draw(Camera* camera);
-	void Update();
 };
 
 #endif /* BOXOBJECT_H_ */

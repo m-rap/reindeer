@@ -1,18 +1,17 @@
 #pragma once
-#ifndef MODELRENDERER_H
-#define MODELRENDERER_H
+#ifndef BASERENDERER_H
+#define BASERENDERER_H
 
 #include "Camera.h"
 
-class ModelObject;
-
-class ModelRenderer
+class BaseRenderer
 {
 protected:
-	ModelObject* parent;
+	BaseObject* parent;
+
 public:
-	ModelRenderer(ModelObject* parent);
-	virtual ~ModelRenderer(void);
+	BaseRenderer(BaseObject* parent);
+	virtual ~BaseRenderer(void);
 
 #ifdef USE_OPENGL
 	virtual void SetProgramId(const GLuint& programId) = 0;

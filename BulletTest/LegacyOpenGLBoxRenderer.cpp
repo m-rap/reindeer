@@ -1,7 +1,7 @@
 #include "LegacyOpenGLBoxRenderer.h"
 #include "BoxObject.h"
 
-LegacyOpenGLBoxRenderer::LegacyOpenGLBoxRenderer(BoxObject* parent) : BoxRenderer(parent)
+LegacyOpenGLBoxRenderer::LegacyOpenGLBoxRenderer(BaseObject* parent) : BoxRenderer(parent)
 {
 }
 
@@ -15,6 +15,8 @@ void LegacyOpenGLBoxRenderer::SetProgramId(const GLuint& programId)
 
 void LegacyOpenGLBoxRenderer::BuildBuffers()
 {
+	BoxObject* parent = (BoxObject*)this->parent;
+
 	float width  = parent->GetWidth(),
 		  height = parent->GetHeight(),
 		  length = parent->GetLength();

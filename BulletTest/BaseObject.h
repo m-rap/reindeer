@@ -3,6 +3,10 @@
 
 #include "reindeer.h"
 
+#include <btBulletCollisionCommon.h>
+#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
+#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+
 class BaseObject {
 protected:
 	RDRVEC3 position;
@@ -12,6 +16,7 @@ protected:
 
 	RDRMAT4 rotationMatrix;
 	RDRMAT4 world;
+
 public:
 	BaseObject();
 	virtual ~BaseObject();

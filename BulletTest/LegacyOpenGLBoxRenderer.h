@@ -11,7 +11,7 @@ private:
 	GLfloat normals[72];
 	GLbyte indices[36];
 public:
-	LegacyOpenGLBoxRenderer(BoxObject* parent);
+	LegacyOpenGLBoxRenderer(BaseObject* parent);
 	virtual ~LegacyOpenGLBoxRenderer();
 
 	virtual void SetProgramId(const GLuint& programId);

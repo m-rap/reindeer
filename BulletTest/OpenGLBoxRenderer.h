@@ -20,7 +20,7 @@ private:
 	GLuint viewInvId;
 	GLuint normalMatId;
 public:
-	OpenGLBoxRenderer(BoxObject* parent);
+	OpenGLBoxRenderer(BaseObject* parent);
 	virtual ~OpenGLBoxRenderer();
 
 	virtual void SetProgramId(const GLuint& programId);

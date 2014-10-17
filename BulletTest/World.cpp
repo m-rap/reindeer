@@ -115,9 +115,11 @@ void World::Render()
 	}
 
 	ModelObject obj("../suzanne.obj");
+#ifdef USE_OPENGL
 	obj.SetProgramId(programId);
-	obj.SetPosition(glm::vec3(0, 10, 10), true);
-	obj.SetEuler(glm::vec3(0, 20, 20), true);
+#endif
+	obj.SetPosition(RDRVEC3(0, 10, 5), true);
+	obj.SetEuler(RDRVEC3(0, 20, 20), true);
 	obj.BuildWorld();
 
 	dynamicsWorld->addRigidBody(obj.rigidBody);

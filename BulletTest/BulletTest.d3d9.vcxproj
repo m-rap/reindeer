@@ -81,27 +81,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="BoxRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="D3d9BoxRenderer.cpp" />
+    <ClCompile Include="D3d9ModelRenderer.cpp" />
     <ClCompile Include="Direct3DWorld.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="objloader.cpp" />
+    <ClCompile Include="PhysicalObject.cpp" />
     <ClCompile Include="RdrHelper.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="BoxRenderer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3d9BoxRenderer.h" />
+    <ClInclude Include="D3d9ModelRenderer.h" />
     <ClInclude Include="Direct3DWorld.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="ModelObject.h" />
     <ClInclude Include="objloader.h" />
+    <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="RdrHelper.h" />
     <ClInclude Include="reindeer.h" />
     <ClInclude Include="World.h" />

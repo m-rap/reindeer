@@ -1,24 +1,16 @@
 #ifndef BOXRENDERER_H
 #define BOXRENDERER_H
 
-#include "Camera.h"
+#include "BaseRenderer.h"
 
-class BoxObject;
-
-class BoxRenderer
+class BoxRenderer :
+	public BaseRenderer
 {
-protected:
-	BoxObject* parent;
 public:
-	BoxRenderer(BoxObject* parent);
+	BoxRenderer(BaseObject* parent);
 	virtual ~BoxRenderer();
 
-#ifdef USE_OPENGL
-	virtual void SetProgramId(const GLuint& programId) = 0;
-#endif
-	virtual void BuildBuffers() = 0;
 	virtual void BuildNormalsIndices() = 0;
-	virtual void Draw(Camera* camera) = 0;
 };
 
 #endif // BOXOBJECTIMP_H

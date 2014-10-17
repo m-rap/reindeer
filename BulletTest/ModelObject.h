@@ -3,21 +3,22 @@
 #ifndef MODELOBJECT_H
 #define MODELOBJECT_H
 
-#include "BaseObject.h"
+#include "PhysicalObject.h"
+#ifdef USE_D3D9
+#include "D3d9ModelRenderer.h"
+#else
 #include "OpenGLModelRenderer.h"
-
-#include <btBulletCollisionCommon.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#endif
 
 class ModelObject :
-	public BaseObject
+	public PhysicalObject
 {
 private:
-	ModelRenderer* renderer;
-	void BuildRigidBody();
-	void DeleteRigidBody();
-	void SetRigidBodyTransform();
+	BaseRenderer* renderer;
+
+protected:
+	virtual void BuildShape();
+
 public:
 	ModelObject(const char* modelPath);
 	virtual ~ModelObject(void);
@@ -26,29 +27,12 @@ public:
 	std::vector<RDRVEC2> uvs;
 	std::vector<RDRVEC3> normals;
 
-	btRigidBody* rigidBody;
-    btCollisionShape* collisionShape;
-    btDiscreteDynamicsWorld* dynamicsWorld;
-
 #ifdef USE_OPENGL
 	void SetProgramId(GLuint programId);
 #endif
 	void LoadModel(const char* modelPath);
-	void SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld);
-	void Update();
 	void Draw(Camera* camera);
 
-    virtual void SetPosition(const RDRVEC3& position, bool silent = false)
-    {
-    	BaseObject::SetPosition(position, silent);
-    	SetRigidBodyTransform();
-    }
-
-	virtual void SetEuler(const RDRVEC3& euler, bool silent = false)
-	{
-		BaseObject::SetEuler(euler, silent);
-		SetRigidBodyTransform();
-	}
 };
 
 #endif

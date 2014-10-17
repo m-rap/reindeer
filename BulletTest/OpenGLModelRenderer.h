@@ -2,10 +2,10 @@
 #ifndef OPENGLMODELRENDERER_H
 #define OPENGLMODELRENDERER_H
 
-#include "ModelRenderer.h"
+#include "BaseRenderer.h"
 
 class OpenGLModelRenderer :
-	public ModelRenderer
+	public BaseRenderer
 {
 private:
 	GLuint vertexBuffer;
@@ -22,7 +22,7 @@ private:
 
 	size_t vertexCount;
 public:
-	OpenGLModelRenderer(ModelObject* parent);
+	OpenGLModelRenderer(BaseObject* parent);
 	virtual ~OpenGLModelRenderer(void);
 
 	virtual void SetProgramId(const GLuint& programId);

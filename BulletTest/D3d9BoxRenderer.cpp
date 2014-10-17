@@ -1,7 +1,7 @@
 #include "D3d9BoxRenderer.h"
 #include "BoxObject.h"
 
-D3d9BoxRenderer::D3d9BoxRenderer(BoxObject* parent) : BoxRenderer(parent)
+D3d9BoxRenderer::D3d9BoxRenderer(BaseObject* parent) : BoxRenderer(parent)
 {
 	vertexBuffer = NULL;
 	indexBuffer = NULL;
@@ -10,10 +10,22 @@ D3d9BoxRenderer::D3d9BoxRenderer(BoxObject* parent) : BoxRenderer(parent)
 
 D3d9BoxRenderer::~D3d9BoxRenderer(void)
 {
+	if (vertexBuffer != NULL)
+	{
+		vertexBuffer->Release();
+		vertexBuffer = NULL;
+	}
+	if (indexBuffer != NULL)
+	{
+		indexBuffer->Release();
+		indexBuffer = NULL;
+	}
 }
 
 void D3d9BoxRenderer::BuildBuffers()
 {	
+	BoxObject* parent = (BoxObject*)this->parent;
+
 	float width  = parent->GetWidth(),
 		  height = parent->GetHeight(),
 		  length = parent->GetLength();

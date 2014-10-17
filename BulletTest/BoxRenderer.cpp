@@ -1,8 +1,7 @@
 #include "BoxRenderer.h"
 
-BoxRenderer::BoxRenderer(BoxObject* parent)
+BoxRenderer::BoxRenderer(BaseObject* parent) : BaseRenderer(parent)
 {
-	this->parent = parent;
 }
 
 BoxRenderer::~BoxRenderer()
