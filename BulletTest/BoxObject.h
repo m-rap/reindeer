@@ -16,7 +16,8 @@
 using namespace std;
 
 class BoxObject :
-    public PhysicalObject
+    public PhysicalObject,
+	public Drawable
 {
 protected:
 	RDRVEC3 min, max;

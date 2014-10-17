@@ -108,21 +108,11 @@ void World::Render()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	dynamicsWorld->addRigidBody(groundRigidBody);
 
-	for (size_t i = 0; i < DrawableObjects.size(); i++)
+	for (size_t i = 0; i < PhysicalObjects.size(); i++)
 	{
-		DrawableObjects[i]->SetDynamicsWorld(dynamicsWorld);
-		dynamicsWorld->addRigidBody(DrawableObjects[i]->rigidBody);
+		PhysicalObjects[i]->SetDynamicsWorld(dynamicsWorld);
+		dynamicsWorld->addRigidBody(PhysicalObjects[i]->rigidBody);
 	}
-
-	ModelObject obj("../suzanne.obj");
-#ifdef USE_OPENGL
-	obj.SetProgramId(programId);
-#endif
-	obj.SetPosition(RDRVEC3(0, 10, 5), true);
-	obj.SetEuler(RDRVEC3(0, 20, 20), true);
-	obj.BuildWorld();
-
-	dynamicsWorld->addRigidBody(obj.rigidBody);
 
 	btClock cl;
 	float accumulator = 0.0f, interval = 1.f/60.f;
@@ -148,7 +138,6 @@ void World::Render()
 		while (accumulator >= interval)
 		{
 			Integrate(dynamicsWorld, interval);
-			obj.Update();
 			accumulator -= interval;
 		}
 
@@ -158,7 +147,6 @@ void World::Render()
         {
             DrawableObjects[i]->Draw(&camera);
         }
-		obj.Draw(&camera);
 
 		PostUpdate();
 
@@ -170,11 +158,14 @@ void World::Render()
 #endif
 	}
 
-	for (size_t i = 0; i < DrawableObjects.size(); i++)
+	for (size_t i = 0; i < PhysicalObjects.size(); i++)
 	{
-		dynamicsWorld->removeRigidBody(DrawableObjects[i]->rigidBody);
+		dynamicsWorld->removeRigidBody(PhysicalObjects[i]->rigidBody);
 	}
 	dynamicsWorld->removeRigidBody(groundRigidBody);
+
+	DrawableObjects.clear();
+	PhysicalObjects.clear();
 
 	delete groundRigidBody->getMotionState();
 	delete groundRigidBody;
@@ -197,8 +188,8 @@ void World::Render()
 void World::Integrate(btDiscreteDynamicsWorld* dynamicsWorld, float dt)
 {
 	dynamicsWorld->stepSimulation(dt);//1/60.f, 10, 1.0f/240.0f);
-	for (size_t i = 0; i < DrawableObjects.size(); i++)
+	for (size_t i = 0; i < PhysicalObjects.size(); i++)
 	{
-		DrawableObjects[i]->Update();
+		PhysicalObjects[i]->Update();
 	}
 }

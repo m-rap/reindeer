@@ -43,7 +43,8 @@ public:
     Camera camera;
     GLuint programId;
 
-    vector<BoxObject*> DrawableObjects;
+    vector<Drawable*> DrawableObjects;
+	vector<PhysicalObject*> PhysicalObjects;
 	
     void Init();
     void Render();

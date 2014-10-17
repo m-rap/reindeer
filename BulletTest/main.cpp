@@ -23,6 +23,7 @@ int main()
 #endif
     world.Init();
 	
+
 	BoxObject* box = new BoxObject[nBox];
 
     RDRVEC3 boxmin(-0.1f, -0.1f, -0.1f);
@@ -38,7 +39,20 @@ int main()
 		box[i].SetEuler(RDRVEC3(44.0f, 10.0f, 30.0f), true);
 		box[i].BuildWorld();
 		world.DrawableObjects.push_back(&box[i]);
+		world.PhysicalObjects.push_back(&box[i]);
 	}
+
+
+	ModelObject obj("../suzanne.obj");
+#ifdef USE_OPENGL
+	obj.SetProgramId(world.programId);
+#endif
+	obj.SetPosition(RDRVEC3(0, 10, 5), true);
+	obj.SetEuler(RDRVEC3(0, 20, 20), true);
+	obj.BuildWorld();
+	world.DrawableObjects.push_back(&obj);
+	world.PhysicalObjects.push_back(&obj);
+
 
 	Camera& camera = world.camera;
 	camera.SetPosition(RDRVEC3(0.0f, 1.0f, -3.0f), true);

@@ -4,6 +4,7 @@
 #define MODELOBJECT_H
 
 #include "PhysicalObject.h"
+#include "Drawable.h"
 #ifdef USE_D3D9
 #include "D3d9ModelRenderer.h"
 #else
@@ -11,7 +12,8 @@
 #endif
 
 class ModelObject :
-	public PhysicalObject
+	public PhysicalObject,
+	public Drawable
 {
 private:
 	BaseRenderer* renderer;
