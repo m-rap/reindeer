@@ -14,7 +14,16 @@ Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, Bullet
 Progress sekarang: https://www.youtube.com/watch?v=YLE1mDGWrmI
 
 To do:
-- too many bad smell code, perlu generalisasi beberapa class.
+- port direct3d 11
+- lighting
+- texture
+- shadow
+- fog
+- animation
+- editor, kalo bisa sih sekeren unity3d :p
+
+catatan:
 - ide baru untuk pertimbangan, pake compositor pattern untuk object. sepertinya unity pake pendekatan ini juga.
+- referensi contoh misi sebuah game engine: https://github.com/turbulenz/turbulenz_engine#what-are-the-design-goals-of-the-turbulenz-engine
 
 Terima kasih telah mengunjungi reindeer.

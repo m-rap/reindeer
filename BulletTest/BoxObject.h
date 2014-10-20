@@ -26,7 +26,6 @@ protected:
 
 	virtual void BuildShape();
 	void BuildWidthHeightLength();
-	void BoxShapeDrawer(Camera* camera);
 
 public:
 	BoxObject();

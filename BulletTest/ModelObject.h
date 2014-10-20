@@ -19,7 +19,9 @@ private:
 	BaseRenderer* renderer;
 
 protected:
+	char* modelPath;
 	virtual void BuildShape();
+	size_t vertexCount;
 
 public:
 	ModelObject(const char* modelPath);

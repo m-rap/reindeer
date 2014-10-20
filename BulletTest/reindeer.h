@@ -34,15 +34,22 @@ extern LPDIRECT3DDEVICE9 d3ddev;
 
 #include <iostream>
 #include <stdio.h>
+#include <time.h>
+#include <vector>
+#include <unordered_map>
+#include <string>
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
-#include <time.h>
-#include <vector>
+
+using namespace std;
+
+#include "BulletCollision/CollisionShapes/btCollisionShape.h"
 
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
 extern float PHYSICS_WORLD_SCALE;
+extern unordered_map<string, btCollisionShape*> CollisionShapes;
 
 #include "RdrHelper.h"
 

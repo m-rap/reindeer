@@ -3,10 +3,6 @@
 
 #include "reindeer.h"
 
-#include <btBulletCollisionCommon.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-
 class BaseObject {
 protected:
 	RDRVEC3 position;

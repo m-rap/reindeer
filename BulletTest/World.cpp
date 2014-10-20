@@ -177,6 +177,12 @@ void World::Render()
 	delete dispatcher;
 	delete broadphase;
 
+	for (unordered_map<string, btCollisionShape*>::iterator it = CollisionShapes.begin(); it != CollisionShapes.end(); it++)
+	{
+		delete it->second;
+	}
+	CollisionShapes.clear();
+
 	PostRender();
 
 #ifdef _MSC_VER

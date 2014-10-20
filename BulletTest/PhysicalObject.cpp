@@ -10,6 +10,7 @@ PhysicalObject::PhysicalObject(void)
 
 PhysicalObject::~PhysicalObject(void)
 {
+	DeleteRigidBody();
 }
 
 void PhysicalObject::BuildRigidBody()
@@ -28,7 +29,6 @@ void PhysicalObject::BuildRigidBody()
     float mass = 1.0f;
     btVector3 inertia;
     collisionShape->calculateLocalInertia(mass, inertia);
-    btBoxShape* temp = ((btBoxShape*)collisionShape);
 
     btRigidBody::btRigidBodyConstructionInfo constructionInfo(mass, motionState, collisionShape, inertia);
     constructionInfo.m_friction = 1.0f;
@@ -51,7 +51,7 @@ void PhysicalObject::DeleteRigidBody()
     {
         delete rigidBody->getMotionState();
         delete rigidBody;
-    	delete collisionShape;
+    	collisionShape = NULL;
     }
 }
 
