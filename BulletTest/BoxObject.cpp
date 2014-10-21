@@ -27,7 +27,15 @@ BoxObject::~BoxObject() {
 
 void BoxObject::BuildShape()
 {
-	string key = "box " + to_string((long double)width) + " " + to_string((long double)height) + " " + to_string((long double)length);
+	string key("box ");
+	char buff[50];
+	snprintf(buff, 50, "%f ", width);
+	key += string(buff);
+	snprintf(buff, 50, "%f ", height);
+	key += string(buff);
+	snprintf(buff, 50, "%f", length);
+	key += string(buff);
+
 	if (CollisionShapes.find(key) == CollisionShapes.end())
 	{
 		CollisionShapes[key] = new btBoxShape(

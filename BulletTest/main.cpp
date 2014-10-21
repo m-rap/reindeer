@@ -1,5 +1,5 @@
 #ifdef USE_D3D9
-#include "Direct3DWorld.h"
+#include "D3d9World.h"
 #else
 #include "OpenGLWorld.h"
 #endif
@@ -17,7 +17,7 @@ int main()
 	scanf("%f", &PHYSICS_WORLD_SCALE);
 
 #ifdef USE_D3D9
-	Direct3DWorld world;
+	D3d9World world;
 #else
 	OpenGLWorld world;
 #endif
@@ -47,7 +47,7 @@ int main()
 #ifdef USE_OPENGL
 	obj.SetProgramId(world.programId);
 #endif
-	obj.SetPosition(RDRVEC3(0, 30, 3), true);
+	obj.SetPosition(RDRVEC3(3, 30, 3), true);
 	obj.SetEuler(RDRVEC3(0, 180, 0), true);
 	obj.BuildWorld();
 	world.DrawableObjects.push_back(&obj);

@@ -29,6 +29,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
@@ -42,10 +43,12 @@
 			<Add library="glew32" />
 			<Add library="gdi32" />
 			<Add library="opengl32" />
-			<Add directory="../lib" />
+			<Add directory="../lib/win-mingw32" />
 		</Linker>
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />
+		<Unit filename="BaseRenderer.cpp" />
+		<Unit filename="BaseRenderer.h" />
 		<Unit filename="BoxObject.cpp" />
 		<Unit filename="BoxObject.h" />
 		<Unit filename="BoxRenderer.cpp" />
@@ -54,19 +57,20 @@
 		<Unit filename="Camera.h" />
 		<Unit filename="Drawable.cpp" />
 		<Unit filename="Drawable.h" />
+		<Unit filename="GLDebugDrawer.cpp" />
 		<Unit filename="GLDebugDrawer.h" />
 		<Unit filename="LegacyOpenGLBoxRenderer.cpp" />
 		<Unit filename="LegacyOpenGLBoxRenderer.h" />
 		<Unit filename="ModelObject.cpp" />
 		<Unit filename="ModelObject.h" />
-		<Unit filename="ModelRenderer.cpp" />
-		<Unit filename="ModelRenderer.h" />
 		<Unit filename="OpenGLBoxRenderer.cpp" />
 		<Unit filename="OpenGLBoxRenderer.h" />
 		<Unit filename="OpenGLModelRenderer.cpp" />
 		<Unit filename="OpenGLModelRenderer.h" />
 		<Unit filename="OpenGLWorld.cpp" />
 		<Unit filename="OpenGLWorld.h" />
+		<Unit filename="PhysicalObject.cpp" />
+		<Unit filename="PhysicalObject.h" />
 		<Unit filename="RdrHelper.cpp" />
 		<Unit filename="RdrHelper.h" />
 		<Unit filename="StandardShading.fragmentshader" />

@@ -1,25 +1,29 @@
 #pragma once
 
-#ifndef DIRECT3DWORLD_H
-#define DIRECT3DWORLD_H
+#ifdef USE_D3D9
+
+#ifndef D3D9WORLD_H
+#define D3D9WORLD_H
 
 #include "world.h"
 
-class Direct3DWorld :
+class D3d9World :
 	public World
 {
 private:
 	LPDIRECT3D9 d3d;
 
-protected:	
+protected:
 	virtual void Init3d();
 	virtual void PreUpdate();
 	virtual void PostUpdate();
 	virtual void PostRender();
 
 public:
-	Direct3DWorld(void);
-	virtual ~Direct3DWorld(void);
+	D3d9World(void);
+	virtual ~D3d9World(void);
 };
+
+#endif
 
 #endif

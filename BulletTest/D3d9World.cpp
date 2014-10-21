@@ -1,17 +1,17 @@
-#include "Direct3DWorld.h"
+#include "D3d9World.h"
 
 LPDIRECT3DDEVICE9 d3ddev;
 
-Direct3DWorld::Direct3DWorld(void) : World()
+D3d9World::D3d9World(void) : World()
 {
 }
 
 
-Direct3DWorld::~Direct3DWorld(void)
+D3d9World::~D3d9World(void)
 {
 }
 
-void Direct3DWorld::Init3d()
+void D3d9World::Init3d()
 {
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -63,20 +63,20 @@ void Direct3DWorld::Init3d()
     d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);    // handle normals in scaling
 }
 
-void Direct3DWorld::PreUpdate()
+void D3d9World::PreUpdate()
 {
 	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 	d3ddev->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 	d3ddev->BeginScene();
 }
 
-void Direct3DWorld::PostUpdate()
+void D3d9World::PostUpdate()
 {
 	d3ddev->EndScene();
 	d3ddev->Present(NULL, NULL, NULL, NULL);
 }
 
-void Direct3DWorld::PostRender()
+void D3d9World::PostRender()
 {
 	// clean d3d
     d3ddev->Release();    // close and release the 3D device

@@ -23,7 +23,6 @@ void D3d9ModelRenderer::BuildBuffers()
 
 	VOID* pVoid;    // a void pointer
 
-	#pragma region build vertex buffer
 	// create the vertices using the CUSTOMVERTEX struct
     CUSTOMVERTEX* vertices = new CUSTOMVERTEX[vertexCount];
 	for (size_t i = 0; i < vertexCount; i++)
@@ -49,11 +48,10 @@ void D3d9ModelRenderer::BuildBuffers()
 
     // lock v_buffer and load the vertices into it
     vertexBuffer->Lock(0, 0, (void**)&pVoid, 0);
-    memcpy(pVoid, vertices, sizeof(vertices));
+    memcpy(pVoid, vertices, vertexCount * sizeof(CUSTOMVERTEX));
     vertexBuffer->Unlock();
 
 	delete[] vertices;
-	#pragma endregion
 }
 
 void D3d9ModelRenderer::Draw(Camera* camera)

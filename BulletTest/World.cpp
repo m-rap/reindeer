@@ -115,7 +115,7 @@ void World::Render()
 	}
 
 	btClock cl;
-	float accumulator = 0.0f, interval = 1.f/60.f;
+	btScalar accumulator = 0.0f, dt = 1.f/60.f, currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 
 #ifdef _MSC_VER
 	MSG msg;
@@ -132,13 +132,17 @@ void World::Render()
 #else
 	while (!glfwWindowShouldClose(window)) {
 #endif
-		btScalar dt = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
-		cl.reset();
-		accumulator += dt;
-		while (accumulator >= interval)
+		btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+		btScalar frameTime = newTime - currentTime;
+		if (frameTime > 0.25)
+			frameTime = 0.25;
+		currentTime = newTime;
+
+		accumulator += frameTime;
+		while (accumulator >= dt)
 		{
-			Integrate(dynamicsWorld, interval);
-			accumulator -= interval;
+			Integrate(dynamicsWorld, dt);
+			accumulator -= dt;
 		}
 
 		PreUpdate();

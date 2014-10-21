@@ -14,6 +14,7 @@ Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, Bullet
 Progress sekarang: https://www.youtube.com/watch?v=YLE1mDGWrmI
 
 To do:
+- hasil render model object aneh di d3d9
 - port direct3d 11
 - lighting
 - texture

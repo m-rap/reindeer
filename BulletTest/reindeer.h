@@ -38,8 +38,11 @@ extern LPDIRECT3DDEVICE9 d3ddev;
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <sstream>
 #ifndef _MSC_VER
 #include <unistd.h>
+#else
+#define snprintf _snprintf
 #endif
 
 using namespace std;
