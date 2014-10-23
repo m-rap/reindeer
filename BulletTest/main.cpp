@@ -35,7 +35,7 @@ int main()
 		box[i].SetProgramId(world.programId);
 #endif
 		box[i].SetMinMax(boxmin, boxmax);
-		box[i].SetPosition(RDRVEC3(-1.0f + i*0.1f, 7.0f + i*1.0f, 5.0f), true);
+		box[i].SetPosition(RDRVEC3(-1.0f + i*0.1f, 10.0f + i*1.0f, 5.0f), true);
 		box[i].SetEuler(RDRVEC3(44.0f, 10.0f, 30.0f), true);
 		box[i].BuildWorld();
 		world.DrawableObjects.push_back(&box[i]);
@@ -47,7 +47,7 @@ int main()
 #ifdef USE_OPENGL
 	obj.SetProgramId(world.programId);
 #endif
-	obj.SetPosition(RDRVEC3(3, 30, 3), true);
+	obj.SetPosition(RDRVEC3(-0.7, 1, 4.55), true);
 	obj.SetEuler(RDRVEC3(0, 180, 0), true);
 	obj.BuildWorld();
 	world.DrawableObjects.push_back(&obj);

@@ -11,7 +11,7 @@ Dependensi:
 Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
 Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
 
-Progress sekarang: https://www.youtube.com/watch?v=YLE1mDGWrmI
+Progress sekarang: https://www.youtube.com/watch?v=ELnp_dx780g
 
 To do:
 - hasil render model object aneh di d3d9
