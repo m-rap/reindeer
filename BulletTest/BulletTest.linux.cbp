@@ -29,6 +29,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
@@ -38,10 +39,15 @@
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
-			<Add library="glfw" />
+			<Add library="glfw3" />
 			<Add library="GLEW" />
 			<Add library="GL" />
-			<Add directory="../lib" />
+			<Add library="X11" />
+			<Add library="Xxf86vm" />
+			<Add library="pthread" />
+			<Add library="Xrandr" />
+			<Add library="Xi" />
+			<Add directory="../lib/linux" />
 		</Linker>
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />

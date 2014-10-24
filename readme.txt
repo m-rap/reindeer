@@ -9,7 +9,10 @@ Dependensi:
 - bullet physics http://bulletphysics.org/wordpress/
 
 Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
-Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
+Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath. Untuk pengguna linux, setelah mem-build semua lib, reindeer dapat di-build dengan perintah make pada directory /BulletTest.
+
+Apabila Anda menggunakan linux distro keluarga debian, pastikan package-package ini sudah ter-install:
+libxxf86vm-dev libgl1-mesa-dev libxrandr-dev xorg-dev libglu1-mesa-dev
 
 Progress sekarang: https://www.youtube.com/watch?v=ELnp_dx780g
 

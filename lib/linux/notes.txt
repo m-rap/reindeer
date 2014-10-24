@@ -1,1 +1,3 @@
 put linux lib binary files here
+
+to link glfw as static lib http://stackoverflow.com/questions/17559280/how-do-i-build-my-glfw3-project-on-linux
