@@ -2,15 +2,15 @@
 #include "reindeer.h"
 
 bool loadOBJ(
-	const char * path, 
-	std::vector<RDRVEC3> & out_vertices, 
+	const char * path,
+	std::vector<RDRVEC3> & out_vertices,
 	std::vector<RDRVEC2> & out_uvs,
 	std::vector<RDRVEC3> & out_normals
 ) {
 	printf("Loading OBJ file %s...\n", path);
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	std::vector<RDRVEC3> temp_vertices; 
+	std::vector<RDRVEC3> temp_vertices;
 	std::vector<RDRVEC2> temp_uvs;
 	std::vector<RDRVEC3> temp_normals;
 
@@ -30,7 +30,7 @@ bool loadOBJ(
 				break; // EOF = End Of File. Quit the loop.
 
 		// else : parse lineHeader
-                
+
 		if ( strcmp( lineHeader, "v" ) == 0 ){
 			RDRVEC3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
@@ -73,12 +73,12 @@ bool loadOBJ(
 							break;
 						}
 					}
-					
+
 					if (in == EOF)
 						break;
 					if (in == '\n')
 						break;
-					
+
 					if (in == '/')
 						type = (type + 1) % 3;
 					else if (lastIn != ' ')
@@ -91,13 +91,13 @@ bool loadOBJ(
 				}
 				else
 				{
-					char inStr[] = {in, '\0'};
+					char inStr[] = {(char)in, '\0'};
 					strcat(buff, inStr);
 					len++;
 				}
 				lastIn = in;
 			}
-					
+
 			//int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
 			//if (matches != 9){
 			//        printf("File can't be read by our simple parser :-( Try exporting with other options\n");
@@ -134,10 +134,10 @@ bool loadOBJ(
 
 		// Get the indices of its attributes
 		unsigned int vertexIndex = vertexIndices[i];
-		        
+
 		// Get the attributes thanks to the index
 		RDRVEC3 vertex = temp_vertices[ vertexIndex-1 ];
-		        
+
 		// Put the attributes in buffers
 		out_vertices.push_back(vertex);
 	}

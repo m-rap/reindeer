@@ -12,7 +12,7 @@ LD = g++
 WINDRES = windres
 
 INC = -I../include
-CFLAGS = -std=c++11 -Wall -DUSE_OPENGL -DGLEW_STATIC
+CFLAGS = -std=c++11 -Wall -Wno-unused-variable -Wno-strict-aliasing -DUSE_OPENGL -DGLEW_STATIC
 RESINC = 
 LIBDIR = -L../lib/linux
 LIB = -lBulletDynamics -lBulletCollision -lLinearMath -lglfw3 -lGLEW -lGL -lX11 -lXxf86vm -lpthread -lXrandr -lXi
