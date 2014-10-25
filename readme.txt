@@ -6,10 +6,11 @@ Dependensi:
 - glew http://glew.sourceforge.net/
 - glfw3 http://www.glfw.org/
 - glm http://glm.g-truc.net/0.9.5/index.html (cuma header)
-- bullet physics http://bulletphysics.org/wordpress/
+- bullet physics http://bulletphysics.org/
 
 Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
-Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath. Untuk pengguna linux, setelah mem-build semua lib, reindeer dapat di-build dengan perintah make pada directory /BulletTest.
+Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
+Untuk pengguna linux, setelah mem-build semua lib, reindeer dapat di-build dengan perintah make dari root directory.
 
 Apabila Anda menggunakan linux distro keluarga debian, pastikan package-package ini sudah ter-install:
 libxxf86vm-dev libgl1-mesa-dev libxrandr-dev xorg-dev libglu1-mesa-dev
@@ -24,7 +25,7 @@ To do:
 - shadow
 - fog
 - animation
-- editor, kalo bisa sih sekeren unity3d :p
+- editor, contoh yang keren: unity3d, paradox3d
 
 catatan:
 - ide baru untuk pertimbangan, pake compositor pattern untuk object. sepertinya unity pake pendekatan ini juga.
