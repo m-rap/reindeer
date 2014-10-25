@@ -1,4 +1,10 @@
 #include "BoxObject.h"
+#ifdef USE_D3D9
+#include "D3d9BoxRenderer.h"
+#else
+#include "OpenGLBoxRenderer.h"
+#include "LegacyOpenGLBoxRenderer.h"
+#endif
 
 BoxObject::BoxObject() : PhysicalObject() {
 	min.x = min.y = min.z = 0;

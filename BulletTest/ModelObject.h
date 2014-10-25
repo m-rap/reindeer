@@ -5,11 +5,7 @@
 
 #include "PhysicalObject.h"
 #include "Drawable.h"
-#ifdef USE_D3D9
-#include "D3d9ModelRenderer.h"
-#else
-#include "OpenGLModelRenderer.h"
-#endif
+#include "BaseRenderer.h"
 
 class ModelObject :
 	public PhysicalObject,

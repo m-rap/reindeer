@@ -1,12 +1,25 @@
 #include "ModelObject.h"
 #include "objloader.h"
+#ifdef USE_D3D9
+#include "D3d9ModelRenderer.h"
+#else
+#include "OpenGLModelRenderer.h"
+#include "LegacyOpenGLModelRenderer.h"
+#endif
 
 ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 {
 #ifdef USE_D3D9
 	renderer = new D3d9ModelRenderer(this);
 #else
-	renderer = new OpenGLModelRenderer(this);
+	if (GLEW_VERSION_1_5)
+	{
+		renderer = new OpenGLModelRenderer(this);
+	}
+	else
+	{
+		renderer = new LegacyOpenGLModelRenderer(this);
+	}
 #endif
 	this->modelPath = (char*)modelPath;
 	LoadModel(modelPath);

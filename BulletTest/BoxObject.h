@@ -6,15 +6,6 @@
 #include "Drawable.h"
 #include "BoxRenderer.h"
 
-#ifdef USE_D3D9
-#include "D3d9BoxRenderer.h"
-#else
-#include "OpenGLBoxRenderer.h"
-#include "LegacyOpenGLBoxRenderer.h"
-#endif
-
-using namespace std;
-
 class BoxObject :
     public PhysicalObject,
 	public Drawable

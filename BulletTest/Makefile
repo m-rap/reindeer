@@ -25,9 +25,9 @@ RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
 LIB_DEBUG = $(LIB)
 LDFLAGS_DEBUG = $(LDFLAGS)
-OBJDIR_DEBUG = obj/Debug
+OBJDIR_DEBUG = obj/linux/Debug
 DEP_DEBUG = 
-OUT_DEBUG = bin/Debug/BulletTest
+OUT_DEBUG = bin/linux/Debug/BulletTest
 
 INC_RELEASE = $(INC)
 CFLAGS_RELEASE = $(CFLAGS) -O2
@@ -36,20 +36,20 @@ RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
 LIB_RELEASE = $(LIB)
 LDFLAGS_RELEASE = $(LDFLAGS) -s
-OBJDIR_RELEASE = obj/Release
+OBJDIR_RELEASE = obj/linux/Release
 DEP_RELEASE = 
-OUT_RELEASE = bin/Release/BulletTest
+OUT_RELEASE = bin/linux/Release/BulletTest
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/OpenGLModelRenderer.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/BoxRenderer.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLBoxRenderer.o $(OBJDIR_DEBUG)/ModelObject.o $(OBJDIR_DEBUG)/OpenGLBoxRenderer.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/OpenGLModelRenderer.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/OpenGLBoxRenderer.o $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/BoxRenderer.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLBoxRenderer.o $(OBJDIR_DEBUG)/LegacyOpenGLModelRenderer.o $(OBJDIR_DEBUG)/ModelObject.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/OpenGLModelRenderer.o $(OBJDIR_RELEASE)/OpenGLWorld.o $(OBJDIR_RELEASE)/PhysicalObject.o $(OBJDIR_RELEASE)/RdrHelper.o $(OBJDIR_RELEASE)/World.o $(OBJDIR_RELEASE)/config.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/objloader.o $(OBJDIR_RELEASE)/shader.o $(OBJDIR_RELEASE)/Drawable.o $(OBJDIR_RELEASE)/BaseRenderer.o $(OBJDIR_RELEASE)/BoxObject.o $(OBJDIR_RELEASE)/BoxRenderer.o $(OBJDIR_RELEASE)/Camera.o $(OBJDIR_RELEASE)/BaseObject.o $(OBJDIR_RELEASE)/GLDebugDrawer.o $(OBJDIR_RELEASE)/LegacyOpenGLBoxRenderer.o $(OBJDIR_RELEASE)/ModelObject.o $(OBJDIR_RELEASE)/OpenGLBoxRenderer.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/OpenGLModelRenderer.o $(OBJDIR_RELEASE)/OpenGLWorld.o $(OBJDIR_RELEASE)/PhysicalObject.o $(OBJDIR_RELEASE)/RdrHelper.o $(OBJDIR_RELEASE)/OpenGLBoxRenderer.o $(OBJDIR_RELEASE)/World.o $(OBJDIR_RELEASE)/config.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/objloader.o $(OBJDIR_RELEASE)/shader.o $(OBJDIR_RELEASE)/Drawable.o $(OBJDIR_RELEASE)/BaseRenderer.o $(OBJDIR_RELEASE)/BoxObject.o $(OBJDIR_RELEASE)/BoxRenderer.o $(OBJDIR_RELEASE)/Camera.o $(OBJDIR_RELEASE)/BaseObject.o $(OBJDIR_RELEASE)/GLDebugDrawer.o $(OBJDIR_RELEASE)/LegacyOpenGLBoxRenderer.o $(OBJDIR_RELEASE)/LegacyOpenGLModelRenderer.o $(OBJDIR_RELEASE)/ModelObject.o
 
 all: debug release
 
 clean: clean_debug clean_release
 
 before_debug: 
-	test -d bin/Debug || mkdir -p bin/Debug
+	test -d bin/linux/Debug || mkdir -p bin/linux/Debug
 	test -d $(OBJDIR_DEBUG) || mkdir -p $(OBJDIR_DEBUG)
 
 after_debug: 
@@ -70,6 +70,9 @@ $(OBJDIR_DEBUG)/PhysicalObject.o: PhysicalObject.cpp
 
 $(OBJDIR_DEBUG)/RdrHelper.o: RdrHelper.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c RdrHelper.cpp -o $(OBJDIR_DEBUG)/RdrHelper.o
+
+$(OBJDIR_DEBUG)/OpenGLBoxRenderer.o: OpenGLBoxRenderer.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c OpenGLBoxRenderer.cpp -o $(OBJDIR_DEBUG)/OpenGLBoxRenderer.o
 
 $(OBJDIR_DEBUG)/World.o: World.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c World.cpp -o $(OBJDIR_DEBUG)/World.o
@@ -110,19 +113,19 @@ $(OBJDIR_DEBUG)/GLDebugDrawer.o: GLDebugDrawer.cpp
 $(OBJDIR_DEBUG)/LegacyOpenGLBoxRenderer.o: LegacyOpenGLBoxRenderer.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c LegacyOpenGLBoxRenderer.cpp -o $(OBJDIR_DEBUG)/LegacyOpenGLBoxRenderer.o
 
+$(OBJDIR_DEBUG)/LegacyOpenGLModelRenderer.o: LegacyOpenGLModelRenderer.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c LegacyOpenGLModelRenderer.cpp -o $(OBJDIR_DEBUG)/LegacyOpenGLModelRenderer.o
+
 $(OBJDIR_DEBUG)/ModelObject.o: ModelObject.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c ModelObject.cpp -o $(OBJDIR_DEBUG)/ModelObject.o
 
-$(OBJDIR_DEBUG)/OpenGLBoxRenderer.o: OpenGLBoxRenderer.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c OpenGLBoxRenderer.cpp -o $(OBJDIR_DEBUG)/OpenGLBoxRenderer.o
-
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
-	rm -rf bin/Debug
+	rm -rf bin/linux/Debug
 	rm -rf $(OBJDIR_DEBUG)
 
 before_release: 
-	test -d bin/Release || mkdir -p bin/Release
+	test -d bin/linux/Release || mkdir -p bin/linux/Release
 	test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
 
 after_release: 
@@ -143,6 +146,9 @@ $(OBJDIR_RELEASE)/PhysicalObject.o: PhysicalObject.cpp
 
 $(OBJDIR_RELEASE)/RdrHelper.o: RdrHelper.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c RdrHelper.cpp -o $(OBJDIR_RELEASE)/RdrHelper.o
+
+$(OBJDIR_RELEASE)/OpenGLBoxRenderer.o: OpenGLBoxRenderer.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c OpenGLBoxRenderer.cpp -o $(OBJDIR_RELEASE)/OpenGLBoxRenderer.o
 
 $(OBJDIR_RELEASE)/World.o: World.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c World.cpp -o $(OBJDIR_RELEASE)/World.o
@@ -183,15 +189,15 @@ $(OBJDIR_RELEASE)/GLDebugDrawer.o: GLDebugDrawer.cpp
 $(OBJDIR_RELEASE)/LegacyOpenGLBoxRenderer.o: LegacyOpenGLBoxRenderer.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c LegacyOpenGLBoxRenderer.cpp -o $(OBJDIR_RELEASE)/LegacyOpenGLBoxRenderer.o
 
+$(OBJDIR_RELEASE)/LegacyOpenGLModelRenderer.o: LegacyOpenGLModelRenderer.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c LegacyOpenGLModelRenderer.cpp -o $(OBJDIR_RELEASE)/LegacyOpenGLModelRenderer.o
+
 $(OBJDIR_RELEASE)/ModelObject.o: ModelObject.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c ModelObject.cpp -o $(OBJDIR_RELEASE)/ModelObject.o
 
-$(OBJDIR_RELEASE)/OpenGLBoxRenderer.o: OpenGLBoxRenderer.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c OpenGLBoxRenderer.cpp -o $(OBJDIR_RELEASE)/OpenGLBoxRenderer.o
-
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
-	rm -rf bin/Release
+	rm -rf bin/linux/Release
 	rm -rf $(OBJDIR_RELEASE)
 
 .PHONY: before_debug after_debug clean_debug before_release after_release clean_release

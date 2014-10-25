@@ -56,4 +56,10 @@ extern unordered_map<string, btCollisionShape*> CollisionShapes;
 
 #include "RdrHelper.h"
 
+// untuk test legacy opengl di device dengan versi 1.5 ke atas uncomment di bawah ini
+//#ifdef GLEW_VERSION_1_5
+//#undef GLEW_VERSION_1_5
+//#endif
+//#define GLEW_VERSION_1_5 0
+
 #endif

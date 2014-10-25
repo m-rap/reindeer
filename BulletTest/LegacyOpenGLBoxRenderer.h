@@ -14,7 +14,6 @@ public:
 	LegacyOpenGLBoxRenderer(BaseObject* parent);
 	virtual ~LegacyOpenGLBoxRenderer();
 
-	virtual void SetProgramId(const GLuint& programId);
 	virtual void BuildBuffers();
 	virtual void BuildNormalsIndices();
 	virtual void Draw(Camera* camera);

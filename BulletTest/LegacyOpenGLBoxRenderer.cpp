@@ -9,10 +9,6 @@ LegacyOpenGLBoxRenderer::~LegacyOpenGLBoxRenderer()
 {
 }
 
-void LegacyOpenGLBoxRenderer::SetProgramId(const GLuint& programId)
-{
-}
-
 void LegacyOpenGLBoxRenderer::BuildBuffers()
 {
 	BoxObject* parent = (BoxObject*)this->parent;

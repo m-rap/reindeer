@@ -90,6 +90,7 @@
     <ClCompile Include="config.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="LegacyOpenGLBoxRenderer.cpp" />
+    <ClCompile Include="LegacyOpenGLModelRenderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="objloader.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="LegacyOpenGLBoxRenderer.h" />
+    <ClInclude Include="LegacyOpenGLModelRenderer.h" />
     <ClInclude Include="ModelObject.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="OpenGLBoxRenderer.h" />

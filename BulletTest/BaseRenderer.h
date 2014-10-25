@@ -14,7 +14,9 @@ public:
 	virtual ~BaseRenderer(void);
 
 #ifdef USE_OPENGL
-	virtual void SetProgramId(const GLuint& programId) = 0;
+	virtual void SetProgramId(const GLuint& programId)
+	{
+	}
 #endif
 	virtual void BuildBuffers() = 0;
 	virtual void Draw(Camera* camera) = 0;
