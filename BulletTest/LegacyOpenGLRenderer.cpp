@@ -65,7 +65,7 @@ void LegacyOpenGLRenderer::Draw(Camera* camera)
 	glNormalPointer(GL_FLOAT, 0, normals);
 
 	if (isIndexed)
-		glDrawElements(GL_TRIANGLES, indexCount, GL_SHORT, indices);
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, indices);
 	else
 		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
