@@ -85,11 +85,9 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="BoxObject.cpp" />
-    <ClCompile Include="BoxRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="config.cpp" />
-    <ClCompile Include="D3d9BoxRenderer.cpp" />
-    <ClCompile Include="D3d9ModelRenderer.cpp" />
+    <ClCompile Include="D3d9Renderer.cpp" />
     <ClCompile Include="D3d9World.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="main.cpp" />
@@ -103,10 +101,8 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
-    <ClInclude Include="BoxRenderer.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="D3d9BoxRenderer.h" />
-    <ClInclude Include="D3d9ModelRenderer.h" />
+    <ClInclude Include="D3d9Renderer.h" />
     <ClInclude Include="D3d9World.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="ModelObject.h" />

@@ -197,7 +197,7 @@ void World::Render()
 
 void World::Integrate(btDiscreteDynamicsWorld* dynamicsWorld, float dt)
 {
-	dynamicsWorld->stepSimulation(dt);//1/60.f, 10, 1.0f/240.0f);
+	dynamicsWorld->stepSimulation(dt, 1, dt);
 	for (size_t i = 0; i < PhysicalObjects.size(); i++)
 	{
 		PhysicalObjects[i]->Update();

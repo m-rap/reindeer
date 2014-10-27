@@ -1,20 +1,22 @@
-#include "OpenGLModelRenderer.h"
+#include "OpenGLRenderer.h"
 #include "ModelObject.h"
 #include "objloader.h"
 
-OpenGLModelRenderer::OpenGLModelRenderer(BaseObject* parent) : BaseRenderer(parent)
+OpenGLRenderer::OpenGLRenderer(BaseObject* parent, bool isIndexed) : BaseRenderer(parent, isIndexed)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &normalBuffer);
+	glGenBuffers(1, &indexBuffer);
 }
 
-OpenGLModelRenderer::~OpenGLModelRenderer(void)
+OpenGLRenderer::~OpenGLRenderer(void)
 {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &normalBuffer);
+	glDeleteBuffers(1, &indexBuffer);
 }
 
-void OpenGLModelRenderer::SetProgramId(const GLuint& programId)
+void OpenGLRenderer::SetProgramId(const GLuint& programId)
 {
 	this->programId = programId;
 	this->positionId = glGetAttribLocation(programId, "vertexPosition_modelspace");
@@ -26,24 +28,28 @@ void OpenGLModelRenderer::SetProgramId(const GLuint& programId)
 	this->normalMatId = glGetUniformLocation(programId, "N");
 }
 
-void OpenGLModelRenderer::BuildBuffers()
+void OpenGLRenderer::BuildBuffers(
+		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
+		size_t vertexCount, size_t indexCount, size_t uvCount
+	)
 {
-	ModelObject* parent = (ModelObject*)this->parent;
-
-	std::vector<RDRVEC3>& vertices = parent->vertices;
-	std::vector<RDRVEC2>& uvs = parent->uvs;
-	std::vector<RDRVEC3>& normals = parent->normals;
-
-	vertexCount = vertices.size();
+	this->vertexCount = vertexCount;
+	this->indexCount = indexCount;
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+
+	if (indexCount > 0)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
+	}
 }
 
-void OpenGLModelRenderer::Draw(Camera* camera)
+void OpenGLRenderer::Draw(Camera* camera)
 {
 	glm::mat4& projection = *camera->GetProjection();
 	glm::mat4& view = *camera->GetView();
@@ -81,7 +87,15 @@ void OpenGLModelRenderer::Draw(Camera* camera)
 		(void*)0
 	);
 
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	if (isIndexed)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, 0);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	}
 
 	glDisableVertexAttribArray(normalId);
 	glDisableVertexAttribArray(positionId);

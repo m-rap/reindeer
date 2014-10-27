@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "PhysicalObject.h"
 #include "Drawable.h"
-#include "BoxRenderer.h"
+#include "BaseRenderer.h"
 
 class BoxObject :
     public PhysicalObject,
@@ -13,7 +13,7 @@ class BoxObject :
 protected:
 	RDRVEC3 min, max;
 	float width, height, length;
-	BoxRenderer* boxRenderer;
+	BaseRenderer* boxRenderer;
 
 	virtual void BuildShape();
 	void BuildWidthHeightLength();
@@ -21,7 +21,7 @@ protected:
 public:
 	BoxObject();
 	virtual ~BoxObject();
-	
+
 	void SetMin(const RDRVEC3& min);
 	void SetMax(const RDRVEC3& max);
 	void SetMinMax(const RDRVEC3& min, const RDRVEC3& max);

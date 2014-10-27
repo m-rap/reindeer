@@ -8,9 +8,12 @@ class BaseRenderer
 {
 protected:
 	BaseObject* parent;
+	bool isIndexed;
+	size_t vertexCount;
+	size_t indexCount;
 
 public:
-	BaseRenderer(BaseObject* parent);
+	BaseRenderer(BaseObject* parent, bool isIndexed = false);
 	virtual ~BaseRenderer(void);
 
 #ifdef USE_OPENGL
@@ -18,7 +21,10 @@ public:
 	{
 	}
 #endif
-	virtual void BuildBuffers() = 0;
+	virtual void BuildBuffers(
+		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
+		size_t vertexCount, size_t indexCount, size_t uvCount
+	) = 0;
 	virtual void Draw(Camera* camera) = 0;
 };
 

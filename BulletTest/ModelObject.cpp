@@ -1,30 +1,33 @@
 #include "ModelObject.h"
 #include "objloader.h"
 #ifdef USE_D3D9
-#include "D3d9ModelRenderer.h"
+#include "D3d9Renderer.h"
 #else
-#include "OpenGLModelRenderer.h"
-#include "LegacyOpenGLModelRenderer.h"
+#include "OpenGLRenderer.h"
+#include "LegacyOpenGLRenderer.h"
 #endif
 
 ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 {
 #ifdef USE_D3D9
-	renderer = new D3d9ModelRenderer(this);
+	renderer = new D3d9Renderer(this);
 #else
 	if (GLEW_VERSION_1_5)
 	{
-		renderer = new OpenGLModelRenderer(this);
+		renderer = new OpenGLRenderer(this);
 	}
 	else
 	{
-		renderer = new LegacyOpenGLModelRenderer(this);
+		renderer = new LegacyOpenGLRenderer(this);
 	}
 #endif
 	this->modelPath = (char*)modelPath;
 	LoadModel(modelPath);
 	BuildRigidBody();
-	renderer->BuildBuffers();
+	renderer->BuildBuffers(
+		&vertices[0], &normals[0], NULL, NULL,
+		vertexCount, 0, 0
+	);
 }
 
 ModelObject::~ModelObject(void)

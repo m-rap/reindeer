@@ -1,9 +1,9 @@
 #include "BoxObject.h"
 #ifdef USE_D3D9
-#include "D3d9BoxRenderer.h"
+#include "D3d9Renderer.h"
 #else
-#include "OpenGLBoxRenderer.h"
-#include "LegacyOpenGLBoxRenderer.h"
+#include "OpenGLRenderer.h"
+#include "LegacyOpenGLRenderer.h"
 #endif
 
 BoxObject::BoxObject() : PhysicalObject() {
@@ -11,19 +11,18 @@ BoxObject::BoxObject() : PhysicalObject() {
 	max.x = max.y = max.z = 0;
 
 #ifdef USE_D3D9
-	boxRenderer = new D3d9BoxRenderer(this);
+	boxRenderer = new D3d9Renderer(this, true);
 #else
 	if (GLEW_VERSION_1_5)
 	{
-		boxRenderer = new OpenGLBoxRenderer(this);
+		boxRenderer = new OpenGLRenderer(this, true);
 	}
 	else
 	{
-		boxRenderer = new LegacyOpenGLBoxRenderer(this);
+		boxRenderer = new LegacyOpenGLRenderer(this, true);
 	}
 #endif
 
-	boxRenderer->BuildNormalsIndices();
 	BuildWidthHeightLength();
 }
 
@@ -111,6 +110,90 @@ void BoxObject::BuildWidthHeightLength() {
 	height = max.y - min.y;
 	length = max.z - min.z;
 
+	RDRVEC3 vertices[] = {
+		RDRVEC3(-width / 2, -height / 2,  length / 2),    // side 1
+		RDRVEC3( width / 2, -height / 2,  length / 2),
+		RDRVEC3(-width / 2,  height / 2,  length / 2),
+		RDRVEC3( width / 2,  height / 2,  length / 2),
+		
+		RDRVEC3(-width / 2, -height / 2, -length / 2),    // side 2
+		RDRVEC3(-width / 2,  height / 2, -length / 2),
+		RDRVEC3( width / 2, -height / 2, -length / 2),
+		RDRVEC3( width / 2,  height / 2, -length / 2),
+		
+		RDRVEC3(-width / 2,  height / 2, -length / 2),    // side 3
+		RDRVEC3(-width / 2,  height / 2,  length / 2),
+		RDRVEC3( width / 2,  height / 2, -length / 2),
+		RDRVEC3( width / 2,  height / 2,  length / 2),
+		
+		RDRVEC3(-width / 2, -height / 2, -length / 2),    // side 4
+		RDRVEC3( width / 2, -height / 2, -length / 2),
+		RDRVEC3(-width / 2, -height / 2,  length / 2),
+		RDRVEC3( width / 2, -height / 2,  length / 2),
+		
+		RDRVEC3( width / 2, -height / 2, -length / 2),    // side 5
+		RDRVEC3( width / 2,  height / 2, -length / 2),
+		RDRVEC3( width / 2, -height / 2,  length / 2),
+		RDRVEC3( width / 2,  height / 2,  length / 2),
+		
+		RDRVEC3(-width / 2, -height / 2, -length / 2),    // side 6
+		RDRVEC3(-width / 2, -height / 2,  length / 2),
+		RDRVEC3(-width / 2,  height / 2, -length / 2),
+		RDRVEC3(-width / 2,  height / 2,  length / 2),
+	};
+
+	unsigned short indices[] = {
+		0, 1, 2,    // side 1
+		2, 1, 3,
+		4, 5, 6,    // side 2
+		6, 5, 7,
+		8, 9, 10,    // side 3
+		10, 9, 11,
+		12, 13, 14,    // side 4
+		14, 13, 15,
+		16, 17, 18,    // side 5
+		18, 17, 19,
+		20, 21, 22,    // side 6
+		22, 21, 23,
+	};
+
+	RDRVEC3 normals[] = {
+		 RDRVEC3( 0.0f,  0.0f,  1.0f),
+		 RDRVEC3( 0.0f,  0.0f,  1.0f),
+		 RDRVEC3( 0.0f,  0.0f,  1.0f),
+		 RDRVEC3( 0.0f,  0.0f,  1.0f),
+
+		 RDRVEC3( 0.0f,  0.0f, -1.0f),
+		 RDRVEC3( 0.0f,  0.0f, -1.0f),
+		 RDRVEC3( 0.0f,  0.0f, -1.0f),
+		 RDRVEC3( 0.0f,  0.0f, -1.0f),
+
+		 RDRVEC3( 0.0f,  1.0f,  0.0f),
+		 RDRVEC3( 0.0f,  1.0f,  0.0f),
+		 RDRVEC3( 0.0f,  1.0f,  0.0f),
+		 RDRVEC3( 0.0f,  1.0f,  0.0f),
+
+		 RDRVEC3( 0.0f, -1.0f,  0.0f),
+		 RDRVEC3( 0.0f, -1.0f,  0.0f),
+		 RDRVEC3( 0.0f, -1.0f,  0.0f),
+		 RDRVEC3( 0.0f, -1.0f,  0.0f),
+
+		 RDRVEC3( 1.0f,  0.0f,  0.0f),
+		 RDRVEC3( 1.0f,  0.0f,  0.0f),
+		 RDRVEC3( 1.0f,  0.0f,  0.0f),
+		 RDRVEC3( 1.0f,  0.0f,  0.0f),
+
+		 RDRVEC3(-1.0f,  0.0f,  0.0f),
+		 RDRVEC3(-1.0f,  0.0f,  0.0f),
+		 RDRVEC3(-1.0f,  0.0f,  0.0f),
+		 RDRVEC3(-1.0f,  0.0f,  0.0f),
+	};
+
+	RDRVEC2* uvs = NULL;
+
 	BuildRigidBody();
-	boxRenderer->BuildBuffers();
+	boxRenderer->BuildBuffers(
+		vertices, normals, indices, NULL,
+		72, 36, 0
+	);
 }
