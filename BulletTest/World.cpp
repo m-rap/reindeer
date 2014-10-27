@@ -115,7 +115,7 @@ void World::Render()
 	}
 
 	btClock cl;
-	btScalar accumulator = 0.0f, dt = 1.f/60.f, currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+	btScalar currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 
 #ifdef _MSC_VER
 	MSG msg;
@@ -134,15 +134,13 @@ void World::Render()
 #endif
 		btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 		btScalar frameTime = newTime - currentTime;
-		if (frameTime > 0.25)
-			frameTime = 0.25;
 		currentTime = newTime;
 
-		accumulator += frameTime;
-		while (accumulator >= dt)
+		dynamicsWorld->stepSimulation(frameTime, 7);
+
+		for (size_t i = 0; i < PhysicalObjects.size(); i++)
 		{
-			Integrate(dynamicsWorld, dt);
-			accumulator -= dt;
+			PhysicalObjects[i]->Update();
 		}
 
 		PreUpdate();
@@ -193,13 +191,4 @@ void World::Render()
 #else
 	glfwTerminate();
 #endif
-}
-
-void World::Integrate(btDiscreteDynamicsWorld* dynamicsWorld, float dt)
-{
-	dynamicsWorld->stepSimulation(dt, 1, dt);
-	for (size_t i = 0; i < PhysicalObjects.size(); i++)
-	{
-		PhysicalObjects[i]->Update();
-	}
 }
