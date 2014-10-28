@@ -100,6 +100,6 @@ void D3d9Renderer::Draw(Camera* camera)
 	}
 	else
 	{
-		d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, vertexCount);
+		d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, vertexCount / 3);
 	}
 }
