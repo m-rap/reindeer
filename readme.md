@@ -18,7 +18,6 @@ libxxf86vm-dev libgl1-mesa-dev libxrandr-dev xorg-dev libglu1-mesa-dev
 Progress sekarang: https://www.youtube.com/watch?v=ELnp_dx780g
 
 To do:
-- hasil render model object aneh di d3d9
 - port direct3d 11
 - lighting
 - texture
