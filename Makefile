@@ -6,7 +6,7 @@
 WRKDIR = `pwd`
 MAKE = make
 
-all: bullettest_bullettest_linux
+all: bullet glew glfw glm bullettest_bullettest_linux
 
 bullettest_bullettest_linux: 
 	$(MAKE) -C BulletTest all
@@ -21,15 +21,54 @@ clean_bullettest_bullettest_linux:
 bullet:
 	(test -d ./tmp || mkdir ./tmp)
 	cd ./tmp &&\
-	wget -O bullet-2.82-r2704.tgz -N "https://bullet.googlecode.com/files/bullet-2.82-r2704.tgz" &&\
+	(test -f bullet-2.82-r2704.tgz || wget "https://bullet.googlecode.com/files/bullet-2.82-r2704.tgz") &&\
 	tar zxvf bullet-2.82-r2704.tgz
 	cd ./tmp/bullet-2.82-r2704 &&\
 	(test -d Unix\ Makefiles || mkdir Unix\ Makefiles) &&\
 	cd Unix\ Makefiles &&\
 	cmake -G "Unix Makefiles" ../ &&\
 	make BulletCollision BulletDynamics LinearMath &&\
-	cd ./src &&\
-	rsync -arv --include '*/' --include '*.h' --exclude '*' . ../../../../include &&\
-	find . -name '*.a' -exec cp {} ../../../../lib/linux \;
+	find ./src -name '*.a' -exec cp {} ../../../lib/linux \; &&\
+    cd ../src &&\
+	rsync -arv --include '*/' --include '*.h' --exclude '*' . ../../../include
 	
 .PHONY: bullet
+
+glew:
+	(test -d ./tmp || mkdir ./tmp)
+	cd ./tmp &&\
+	wget --content-disposition -N "http://downloads.sourceforge.net/project/glew/glew/1.11.0/glew-1.11.0.tgz?r=&ts=1414547568&use_mirror=softlayer-sng" &&\
+	tar zxvf glew-1.11.0.tgz
+	cd ./tmp/glew-1.11.0 &&\
+	make lib/libGLEW.a &&\
+	find ./lib -name '*.a' -exec cp {} ../../lib/linux \; &&\
+	cd ./include &&\
+	rsync -arv --include '*/' --include '*.h' --exclude '*' . ../../../include
+
+.PHONY: glew
+
+glfw:
+	(test -d ./tmp || mkdir ./tmp)
+	cd ./tmp &&\
+	wget --content-disposition -N "http://downloads.sourceforge.net/project/glfw/glfw/3.0.4/glfw-3.0.4.zip?r=http%3A%2F%2Fwww.glfw.org%2Fdownload.html&ts=1414548419&use_mirror=cznic" &&\
+	unzip glfw-3.0.4.zip
+	cd ./tmp/glfw-3.0.4 &&\
+	(test -d Unix\ Makefiles || mkdir Unix\ Makefiles) &&\
+	cd Unix\ Makefiles &&\
+	cmake -G "Unix Makefiles" ../ &&\
+	make glfw &&\
+	find ./src -name '*.a' -exec cp {} ../../../lib/linux \; &&\
+	cd ../include &&\
+	rsync -arv --include '*/' --include '*.h' --exclude '*' . ../../../include
+
+.PHONY: glfw
+
+glm:
+	(test -d ./tmp || mkdir ./tmp)
+	cd ./tmp &&\
+	wget --content-disposition -N "http://downloads.sourceforge.net/project/ogl-math/glm-0.9.5.4/glm-0.9.5.4.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fogl-math%2Ffiles%2F&ts=1414549219&use_mirror=softlayer-sng" &&\
+	unzip glm-0.9.5.4.zip
+	cd ./tmp/glm/ &&\
+	cp -r ./glm ../../include
+
+.PHONY: glm
