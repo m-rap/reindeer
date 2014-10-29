@@ -52,10 +52,5 @@ Catatan
 - ide baru untuk pertimbangan, pake compositor pattern untuk object. sepertinya unity pake pendekatan ini juga.
 - referensi contoh misi sebuah game engine: [referensi](https://github.com/turbulenz/turbulenz_engine#what-are-the-design-goals-of-the-turbulenz-engine)
 
-License
-----
-
-MIT
-
 
 Terima kasih telah mengunjungi reindeer.
