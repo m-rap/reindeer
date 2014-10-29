@@ -26,7 +26,7 @@ bullet:
 	cd ./tmp/bullet-2.82-r2704 &&\
 	(test -d Unix\ Makefiles || mkdir Unix\ Makefiles) &&\
 	cd Unix\ Makefiles &&\
-	cmake -G "Unix Makefiles" ../ &&\
+	cmake -G "Unix Makefiles" . ../ &&\
 	make BulletCollision BulletDynamics LinearMath &&\
 	find ./src -name '*.a' -exec cp {} ../../../lib/linux \; &&\
     cd ../src &&\
@@ -55,7 +55,7 @@ glfw:
 	cd ./tmp/glfw-3.0.4 &&\
 	(test -d Unix\ Makefiles || mkdir Unix\ Makefiles) &&\
 	cd Unix\ Makefiles &&\
-	cmake -G "Unix Makefiles" ../ &&\
+	cmake -G "Unix Makefiles" . ../ &&\
 	make glfw &&\
 	find ./src -name '*.a' -exec cp {} ../../../lib/linux \; &&\
 	cd ../include &&\

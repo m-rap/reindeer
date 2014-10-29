@@ -8,9 +8,9 @@ Dependensi:
 - glm http://glm.g-truc.net/0.9.5/index.html (cuma header)
 - bullet physics http://bulletphysics.org/
 
-Sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
+Selain pengguna linux, sebelum mem-build reindeer, silakan download dependensi di atas terlebih dahulu dan build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform), lalu copy file binary-nya ke folder /lib dan file-file header ke folder /include.
 Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
-Untuk pengguna linux, setelah mem-build semua lib, reindeer dapat di-build dengan perintah make dari root directory.
+Untuk pengguna linux, pastikan package cmake dan rsync terinstall agar reindeer dapat di-build dengan perintah make dari root directory.
 
 Apabila Anda menggunakan linux distro keluarga debian, pastikan package-package ini sudah ter-install:
 libxxf86vm-dev libgl1-mesa-dev libxrandr-dev xorg-dev libglu1-mesa-dev
