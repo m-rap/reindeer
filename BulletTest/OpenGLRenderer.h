@@ -11,6 +11,7 @@ protected:
 	GLuint vertexBuffer;
 	GLuint normalBuffer;
 	GLuint indexBuffer;
+	GLuint uvBuffer;
 
 	GLuint programId;
 	GLuint positionId;
@@ -20,8 +21,12 @@ protected:
 	GLuint viewId;
 	GLuint viewInvId;
 	GLuint normalMatId;
+	GLuint textureId;
+	GLuint uvId;
+
+	GLuint texture;
 public:
-	OpenGLRenderer(BaseObject* parent, bool isIndexed = false);
+	OpenGLRenderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
 	virtual ~OpenGLRenderer(void);
 
 	virtual void SetProgramId(const GLuint& programId);

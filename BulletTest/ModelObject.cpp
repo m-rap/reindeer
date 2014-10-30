@@ -14,7 +14,7 @@ ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 #else
 	if (GLEW_VERSION_1_5)
 	{
-		renderer = new OpenGLRenderer(this);
+		renderer = new OpenGLRenderer(this, false, true);
 	}
 	else
 	{
@@ -25,8 +25,8 @@ ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 	LoadModel(modelPath);
 	BuildRigidBody();
 	renderer->BuildBuffers(
-		&vertices[0], &normals[0], NULL, NULL,
-		vertexCount, 0, 0
+		&vertices[0], &normals[0], NULL, &uvs[0],
+		vertexCount, 0, uvs.size()
 	);
 }
 

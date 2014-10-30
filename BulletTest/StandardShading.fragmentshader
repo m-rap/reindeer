@@ -1,30 +1,37 @@
 #version 120
 
+//reference http://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Multiple_Lights
+
 varying vec3 Position_worldspace;
 varying vec3 Normal_cameraspace;
 varying vec3 Normal_modelspace;
+varying vec2 UV;
 
 uniform vec3 LightPosition_worldspace;
 uniform mat4 M;
 uniform mat4 V;
 uniform mat4 V_inv;
 uniform mat3 N;
+uniform sampler2D texture;
 
 void main(){
 	gl_LightSourceParameters light0;
-	light0.diffuse = vec4(0.5, 0.5, 0.5, 1.0);
-	light0.specular = vec4(0.5, 0.5, 0.5, 1.0);
+	light0.diffuse = vec4(1.0, 1.0, 1.0, 1.0);
+	light0.specular = vec4(1.0, 1.0, 1.0, 1.0);
 	light0.constantAttenuation = 0.0;
 	light0.linearAttenuation = 0.125;
 	light0.quadraticAttenuation = 0.0;
 
 	gl_MaterialParameters frontMaterial;
-	frontMaterial.ambient = vec4(1.0, 1.0, 1.0, 1.0);
+	frontMaterial.ambient = vec4(0.2, 0.2, 0.2, 1.0);
 	frontMaterial.diffuse = vec4(1.0, 1.0, 1.0, 1.0);
 	frontMaterial.specular = vec4(0.5, 0.5, 0.5, 1.0);
 	frontMaterial.shininess = 128;
 
 	vec4 sceneAmbient = vec4(0.2, 0.2, 0.2, 1.0);
+
+	vec4 color = texture2D(texture, UV);
+	//color = vec4(1.0, 1.0, 1.0, 1.0);
 
 	vec3 lightDirection = LightPosition_worldspace - Position_worldspace;
 	float dist = length( lightDirection );
@@ -35,7 +42,7 @@ void main(){
 
 	vec3 viewDirection = normalize(vec3(V_inv * vec4(0.0, 0.0, 0.0, 1.0)) - Position_worldspace);
 
-	vec3 totalLighting = vec3(sceneAmbient) * vec3(frontMaterial.ambient);
+	vec3 ambient = vec3(sceneAmbient) * vec3(frontMaterial.ambient) * color;
 
 	float attenuation = 1 / (light0.constantAttenuation +
 	                         light0.linearAttenuation * dist +
@@ -44,7 +51,8 @@ void main(){
 	vec3 diffuseReflection = attenuation *
 	                         vec3(light0.diffuse) *
 	                         vec3(frontMaterial.diffuse) *
-	                         cosTheta;
+	                         cosTheta *
+							 color;
 
 	vec3 halfV = normalize(Position_worldspace + lightDirection);
 	vec3 specularReflection = attenuation *
@@ -52,7 +60,7 @@ void main(){
 	                          vec3(frontMaterial.specular) *
 	                          pow(max(dot(n, halfV), 0.0), frontMaterial.shininess);
 
-	totalLighting = totalLighting + diffuseReflection + specularReflection;
+	vec3 totalLighting = ambient + diffuseReflection + specularReflection;
 
 	gl_FragColor = vec4(totalLighting, 1.0);
 }

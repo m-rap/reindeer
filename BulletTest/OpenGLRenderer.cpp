@@ -1,19 +1,32 @@
 #include "OpenGLRenderer.h"
 #include "ModelObject.h"
 #include "objloader.h"
+#include "texture.h"
 
-OpenGLRenderer::OpenGLRenderer(BaseObject* parent, bool isIndexed) : BaseRenderer(parent, isIndexed)
+OpenGLRenderer::OpenGLRenderer(BaseObject* parent, bool isIndexed, bool useTexture) : BaseRenderer(parent, isIndexed, useTexture)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &normalBuffer);
-	glGenBuffers(1, &indexBuffer);
+	if (isIndexed)
+		glGenBuffers(1, &indexBuffer);
+	if (useTexture)
+	{
+		glGenBuffers(1, &uvBuffer);
+		texture = loadDDS("../uvmap.DDS");
+	}
 }
 
 OpenGLRenderer::~OpenGLRenderer(void)
 {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &normalBuffer);
-	glDeleteBuffers(1, &indexBuffer);
+	if (isIndexed)
+		glDeleteBuffers(1, &indexBuffer);
+	if (useTexture)
+	{
+		glDeleteBuffers(1, &uvBuffer);
+		glDeleteTextures(1, &texture);
+	}
 }
 
 void OpenGLRenderer::SetProgramId(const GLuint& programId)
@@ -21,11 +34,13 @@ void OpenGLRenderer::SetProgramId(const GLuint& programId)
 	this->programId = programId;
 	this->positionId = glGetAttribLocation(programId, "vertexPosition_modelspace");
 	this->normalId = glGetAttribLocation(programId, "vertexNormal_modelspace");
+	this->uvId = glGetAttribLocation(programId, "vertexUV");
 	this->mvpId = glGetUniformLocation(programId, "MVP");
 	this->matrixId = glGetUniformLocation(programId, "M");
 	this->viewId = glGetUniformLocation(programId, "V");
 	this->viewInvId = glGetUniformLocation(programId, "V_inv");
 	this->normalMatId = glGetUniformLocation(programId, "N");
+	this->textureId = glGetUniformLocation(programId, "texture");
 }
 
 void OpenGLRenderer::BuildBuffers(
@@ -35,6 +50,7 @@ void OpenGLRenderer::BuildBuffers(
 {
 	this->vertexCount = vertexCount;
 	this->indexCount = indexCount;
+	this->uvCount = uvCount;
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
@@ -42,10 +58,16 @@ void OpenGLRenderer::BuildBuffers(
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 
-	if (indexCount > 0)
+	if (isIndexed && indexCount > 0)
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
+	}
+
+	if (useTexture && uvCount > 0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+		glBufferData(GL_ARRAY_BUFFER, uvCount * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
 	}
 }
 
@@ -86,6 +108,25 @@ void OpenGLRenderer::Draw(Camera* camera)
 		0,//sizeof(GL_FLOAT) * 3,
 		(void*)0
 	);
+
+	if (useTexture)
+	{
+		glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(textureId, 0);
+
+		glEnableVertexAttribArray(uvId);
+        glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+        glVertexAttribPointer(
+                uvId,                   // The attribute we want to configure
+                2,                            // size : U+V => 2
+                GL_FLOAT,                     // type
+                GL_FALSE,                     // normalized?
+                0,                            // stride
+                (void*)0                      // array buffer offset
+        );
+
+	}
 
 	if (isIndexed)
 	{

@@ -24,9 +24,9 @@ void BaseObject::SetPosition(const RDRVEC3& position, bool silent) {
 }
 
 void BaseObject::SetEuler(const RDRVEC3& euler, bool silent) {
-	this->euler.x = fmod(euler.x, 360);
-	this->euler.y = fmod(euler.y, 360);
-	this->euler.z = fmod(euler.z, 360);
+	this->euler.x = fmod(euler.x, 360.0f);
+	this->euler.y = fmod(euler.y, 360.0f);
+	this->euler.z = fmod(euler.z, 360.0f);
 
 	RDRVEC3 rotRad;
 	RdrHelper::Vec3ToRadian(rotRad, this->euler);

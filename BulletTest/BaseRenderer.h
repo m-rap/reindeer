@@ -9,11 +9,13 @@ class BaseRenderer
 protected:
 	BaseObject* parent;
 	bool isIndexed;
+	bool useTexture;
 	size_t vertexCount;
 	size_t indexCount;
+	size_t uvCount;
 
 public:
-	BaseRenderer(BaseObject* parent, bool isIndexed = false);
+	BaseRenderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
 	virtual ~BaseRenderer(void);
 
 #ifdef USE_OPENGL
