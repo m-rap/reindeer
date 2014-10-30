@@ -42,7 +42,7 @@ void main(){
 
 	vec3 viewDirection = normalize(vec3(V_inv * vec4(0.0, 0.0, 0.0, 1.0)) - Position_worldspace);
 
-	vec3 ambient = vec3(sceneAmbient) * vec3(frontMaterial.ambient) * color;
+	vec3 ambient = vec3(sceneAmbient) * vec3(frontMaterial.ambient) * vec3(color);
 
 	float attenuation = 1 / (light0.constantAttenuation +
 	                         light0.linearAttenuation * dist +
@@ -52,7 +52,7 @@ void main(){
 	                         vec3(light0.diffuse) *
 	                         vec3(frontMaterial.diffuse) *
 	                         cosTheta *
-							 color;
+							 vec3(color);
 
 	vec3 halfV = normalize(Position_worldspace + lightDirection);
 	vec3 specularReflection = attenuation *

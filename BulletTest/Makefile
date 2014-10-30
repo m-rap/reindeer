@@ -40,9 +40,9 @@ OBJDIR_RELEASE = obj/linux/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/linux/Release/BulletTest
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLRenderer.o $(OBJDIR_DEBUG)/ModelObject.o $(OBJDIR_DEBUG)/OpenGLRenderer.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/texture.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLRenderer.o $(OBJDIR_DEBUG)/ModelObject.o $(OBJDIR_DEBUG)/OpenGLRenderer.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/World.o $(OBJDIR_RELEASE)/OpenGLWorld.o $(OBJDIR_RELEASE)/PhysicalObject.o $(OBJDIR_RELEASE)/RdrHelper.o $(OBJDIR_RELEASE)/config.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/objloader.o $(OBJDIR_RELEASE)/shader.o $(OBJDIR_RELEASE)/BaseRenderer.o $(OBJDIR_RELEASE)/BoxObject.o $(OBJDIR_RELEASE)/Camera.o $(OBJDIR_RELEASE)/Drawable.o $(OBJDIR_RELEASE)/BaseObject.o $(OBJDIR_RELEASE)/GLDebugDrawer.o $(OBJDIR_RELEASE)/LegacyOpenGLRenderer.o $(OBJDIR_RELEASE)/ModelObject.o $(OBJDIR_RELEASE)/OpenGLRenderer.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/config.o $(OBJDIR_RELEASE)/PhysicalObject.o $(OBJDIR_RELEASE)/RdrHelper.o $(OBJDIR_RELEASE)/World.o $(OBJDIR_RELEASE)/OpenGLWorld.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/objloader.o $(OBJDIR_RELEASE)/shader.o $(OBJDIR_RELEASE)/texture.o $(OBJDIR_RELEASE)/BaseRenderer.o $(OBJDIR_RELEASE)/BoxObject.o $(OBJDIR_RELEASE)/Camera.o $(OBJDIR_RELEASE)/Drawable.o $(OBJDIR_RELEASE)/BaseObject.o $(OBJDIR_RELEASE)/GLDebugDrawer.o $(OBJDIR_RELEASE)/LegacyOpenGLRenderer.o $(OBJDIR_RELEASE)/ModelObject.o $(OBJDIR_RELEASE)/OpenGLRenderer.o
 
 all: debug release
 
@@ -59,11 +59,8 @@ debug: before_debug out_debug after_debug
 out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
 
-$(OBJDIR_DEBUG)/World.o: World.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c World.cpp -o $(OBJDIR_DEBUG)/World.o
-
-$(OBJDIR_DEBUG)/OpenGLWorld.o: OpenGLWorld.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c OpenGLWorld.cpp -o $(OBJDIR_DEBUG)/OpenGLWorld.o
+$(OBJDIR_DEBUG)/config.o: config.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c config.cpp -o $(OBJDIR_DEBUG)/config.o
 
 $(OBJDIR_DEBUG)/PhysicalObject.o: PhysicalObject.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c PhysicalObject.cpp -o $(OBJDIR_DEBUG)/PhysicalObject.o
@@ -71,8 +68,11 @@ $(OBJDIR_DEBUG)/PhysicalObject.o: PhysicalObject.cpp
 $(OBJDIR_DEBUG)/RdrHelper.o: RdrHelper.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c RdrHelper.cpp -o $(OBJDIR_DEBUG)/RdrHelper.o
 
-$(OBJDIR_DEBUG)/config.o: config.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c config.cpp -o $(OBJDIR_DEBUG)/config.o
+$(OBJDIR_DEBUG)/World.o: World.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c World.cpp -o $(OBJDIR_DEBUG)/World.o
+
+$(OBJDIR_DEBUG)/OpenGLWorld.o: OpenGLWorld.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c OpenGLWorld.cpp -o $(OBJDIR_DEBUG)/OpenGLWorld.o
 
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c main.cpp -o $(OBJDIR_DEBUG)/main.o
@@ -82,6 +82,9 @@ $(OBJDIR_DEBUG)/objloader.o: objloader.cpp
 
 $(OBJDIR_DEBUG)/shader.o: shader.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c shader.cpp -o $(OBJDIR_DEBUG)/shader.o
+
+$(OBJDIR_DEBUG)/texture.o: texture.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c texture.cpp -o $(OBJDIR_DEBUG)/texture.o
 
 $(OBJDIR_DEBUG)/BaseRenderer.o: BaseRenderer.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c BaseRenderer.cpp -o $(OBJDIR_DEBUG)/BaseRenderer.o
@@ -126,11 +129,8 @@ release: before_release out_release after_release
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
 
-$(OBJDIR_RELEASE)/World.o: World.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c World.cpp -o $(OBJDIR_RELEASE)/World.o
-
-$(OBJDIR_RELEASE)/OpenGLWorld.o: OpenGLWorld.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c OpenGLWorld.cpp -o $(OBJDIR_RELEASE)/OpenGLWorld.o
+$(OBJDIR_RELEASE)/config.o: config.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c config.cpp -o $(OBJDIR_RELEASE)/config.o
 
 $(OBJDIR_RELEASE)/PhysicalObject.o: PhysicalObject.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c PhysicalObject.cpp -o $(OBJDIR_RELEASE)/PhysicalObject.o
@@ -138,8 +138,11 @@ $(OBJDIR_RELEASE)/PhysicalObject.o: PhysicalObject.cpp
 $(OBJDIR_RELEASE)/RdrHelper.o: RdrHelper.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c RdrHelper.cpp -o $(OBJDIR_RELEASE)/RdrHelper.o
 
-$(OBJDIR_RELEASE)/config.o: config.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c config.cpp -o $(OBJDIR_RELEASE)/config.o
+$(OBJDIR_RELEASE)/World.o: World.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c World.cpp -o $(OBJDIR_RELEASE)/World.o
+
+$(OBJDIR_RELEASE)/OpenGLWorld.o: OpenGLWorld.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c OpenGLWorld.cpp -o $(OBJDIR_RELEASE)/OpenGLWorld.o
 
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
@@ -149,6 +152,9 @@ $(OBJDIR_RELEASE)/objloader.o: objloader.cpp
 
 $(OBJDIR_RELEASE)/shader.o: shader.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c shader.cpp -o $(OBJDIR_RELEASE)/shader.o
+
+$(OBJDIR_RELEASE)/texture.o: texture.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c texture.cpp -o $(OBJDIR_RELEASE)/texture.o
 
 $(OBJDIR_RELEASE)/BaseRenderer.o: BaseRenderer.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c BaseRenderer.cpp -o $(OBJDIR_RELEASE)/BaseRenderer.o
