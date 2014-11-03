@@ -41,6 +41,7 @@ void OpenGLRenderer::SetProgramId(const GLuint& programId)
 	this->viewInvId = glGetUniformLocation(programId, "V_inv");
 	this->normalMatId = glGetUniformLocation(programId, "N");
 	this->textureId = glGetUniformLocation(programId, "texture");
+	this->useTextureId = glGetUniformLocation(programId, "useTexture");
 }
 
 void OpenGLRenderer::BuildBuffers(
@@ -109,6 +110,7 @@ void OpenGLRenderer::Draw(Camera* camera)
 		(void*)0
 	);
 
+	glUniform1i(useTextureId, useTexture ? 1 : 0);
 	if (useTexture)
 	{
 		glActiveTexture(GL_TEXTURE0);
@@ -125,7 +127,6 @@ void OpenGLRenderer::Draw(Camera* camera)
                 0,                            // stride
                 (void*)0                      // array buffer offset
         );
-
 	}
 
 	if (isIndexed)

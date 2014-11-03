@@ -23,6 +23,7 @@ protected:
 	GLuint normalMatId;
 	GLuint textureId;
 	GLuint uvId;
+	GLuint useTextureId;
 
 	GLuint texture;
 public:
