@@ -10,7 +10,7 @@ Camera::~Camera() {
 
 void Camera::BuildProjection() {
 #ifdef USE_D3D9
-	D3DXMatrixPerspectiveFovLH(&projection,
+	D3DXMatrixPerspectiveFovRH(&projection,
         D3DXToRadian(45),    // the horizontal field of view
         (FLOAT)SCREEN_WIDTH / (FLOAT)SCREEN_HEIGHT, // aspect ratio
         1.0f,    // the near view-plane
@@ -26,7 +26,7 @@ void Camera::BuildProjection() {
 void Camera::BuildView() {
 #ifdef USE_D3D9
 	D3DXVECTOR4 v4;
-	D3DXVECTOR3 up, lookAt(0, 0, 10);
+	D3DXVECTOR3 up, lookAt(0, 0, -10);
 	
 	D3DXVec3Transform(&v4, &lookAt, &rotationMatrix);
 	RdrHelper::Vec4ToVec3(lookAt, v4);

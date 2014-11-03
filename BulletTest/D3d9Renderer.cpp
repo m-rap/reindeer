@@ -33,14 +33,43 @@ void D3d9Renderer::BuildBuffers(
 
 	// create the vertices using the CUSTOMVERTEX struct
     CUSTOMVERTEX* tempVertices = new CUSTOMVERTEX[vertexCount];
-	for (size_t i = 0; i < vertexCount; i++)
+	if (!isIndexed)
 	{
-		tempVertices[i].X = vertices[i].x;
-		tempVertices[i].Y = vertices[i].y;
-		tempVertices[i].Z = vertices[i].z;
-		tempVertices[i].NORMAL.x = normals[i].x;
-		tempVertices[i].NORMAL.y = normals[i].y;
-		tempVertices[i].NORMAL.z = normals[i].z;
+		for (size_t i = 0; i < vertexCount; i += 3)
+		{
+			tempVertices[i].X = vertices[i].x;
+			tempVertices[i].Y = vertices[i].y;
+			tempVertices[i].Z = vertices[i].z;
+			tempVertices[i].NORMAL.x = normals[i].x;
+			tempVertices[i].NORMAL.y = normals[i].y;
+			tempVertices[i].NORMAL.z = normals[i].z;
+
+			tempVertices[i + 2].X = vertices[i + 1].x;
+			tempVertices[i + 2].Y = vertices[i + 1].y;
+			tempVertices[i + 2].Z = vertices[i + 1].z;
+			tempVertices[i + 2].NORMAL.x = normals[i + 1].x;
+			tempVertices[i + 2].NORMAL.y = normals[i + 1].y;
+			tempVertices[i + 2].NORMAL.z = normals[i + 1].z;
+
+			tempVertices[i + 1].X = vertices[i + 2].x;
+			tempVertices[i + 1].Y = vertices[i + 2].y;
+			tempVertices[i + 1].Z = vertices[i + 2].z;
+			tempVertices[i + 1].NORMAL.x = normals[i + 2].x;
+			tempVertices[i + 1].NORMAL.y = normals[i + 2].y;
+			tempVertices[i + 1].NORMAL.z = normals[i + 2].z;
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < vertexCount; i++)
+		{
+			tempVertices[i].X = vertices[i].x;
+			tempVertices[i].Y = vertices[i].y;
+			tempVertices[i].Z = vertices[i].z;
+			tempVertices[i].NORMAL.x = normals[i].x;
+			tempVertices[i].NORMAL.y = normals[i].y;
+			tempVertices[i].NORMAL.z = normals[i].z;
+		}
 	}
 
 	if (vertexBuffer == NULL)
@@ -61,8 +90,16 @@ void D3d9Renderer::BuildBuffers(
 
 	delete[] tempVertices;
 
-	if (indexCount > 0)
+	if (isIndexed && indexCount > 0)
 	{
+		unsigned short* tempIndices = new unsigned short[indexCount];
+		for (size_t i = 0; i < indexCount; i += 3)
+		{
+			tempIndices[i] = indices[i];
+			tempIndices[i + 2] = indices[i + 1];
+			tempIndices[i + 1] = indices[i + 2];
+		}
+
 		if (indexBuffer == NULL)
 		{
 			// create an index buffer interface called i_buffer
@@ -76,8 +113,10 @@ void D3d9Renderer::BuildBuffers(
 
 		// lock i_buffer and load the indices into it
 		indexBuffer->Lock(0, 0, (void**)&pVoid, 0);
-		memcpy(pVoid, indices, indexCount * sizeof(unsigned short));
+		memcpy(pVoid, tempIndices, indexCount * sizeof(unsigned short));
 		indexBuffer->Unlock();
+
+		delete[] tempIndices;
 	}
 }
 

@@ -74,7 +74,7 @@ void BaseObject::BuildWorld() {
 	D3DXMatrixMultiply(&world, &world, &rotationMatrix);
 
 	// position
-	D3DXMatrixTranslation(&tempMatrix, position.x * -1, position.y, position.z);
+	D3DXMatrixTranslation(&tempMatrix, position.x, position.y, position.z);
 	D3DXMatrixMultiply(&world, &world, &tempMatrix);
 
 #elif defined( USE_OPENGL )

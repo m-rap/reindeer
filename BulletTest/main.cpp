@@ -47,8 +47,8 @@ int main()
 #ifdef USE_OPENGL
 	obj.SetProgramId(world.programId);
 #endif
-	obj.SetPosition(RDRVEC3(-0.7, 1, 4.55), true);
-	obj.SetEuler(RDRVEC3(0, 180, 0), true);
+	obj.SetPosition(RDRVEC3(-0.7f, 1.0f, 4.55f), true);
+	obj.SetEuler(RDRVEC3(0.0f, 180.0f, 0.0f), true);
 	obj.BuildWorld();
 	world.DrawableObjects.push_back(&obj);
 	world.PhysicalObjects.push_back(&obj);
