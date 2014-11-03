@@ -1,11 +1,18 @@
 #include "LegacyOpenGLRenderer.h"
 #include "ModelObject.h"
+#include "texture.h"
 
-LegacyOpenGLRenderer::LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed) : BaseRenderer(parent, isIndexed)
+LegacyOpenGLRenderer::LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed, bool useTexture) : BaseRenderer(parent, isIndexed, useTexture)
 {
 	vertices = NULL;
 	normals = NULL;
 	indices = NULL;
+	uvs = NULL;
+
+	if (useTexture)
+	{
+		texture = loadDDS("../uvmap.DDS");
+	}
 }
 
 LegacyOpenGLRenderer::~LegacyOpenGLRenderer(void)
@@ -16,6 +23,13 @@ LegacyOpenGLRenderer::~LegacyOpenGLRenderer(void)
 		delete[] normals;
 	if (indices != NULL)
 		delete[] indices;
+	if (uvs != NULL)
+		delete[] uvs;
+
+	if (useTexture)
+	{
+		glDeleteTextures(1, &texture);
+	}
 }
 
 void LegacyOpenGLRenderer::BuildBuffers(
@@ -25,6 +39,7 @@ void LegacyOpenGLRenderer::BuildBuffers(
 {
 	this->vertexCount = vertexCount;
 	this->indexCount = indexCount;
+	this->uvCount = uvCount;
 
 	if (this->vertices != NULL)
 		delete[] this->vertices;
@@ -36,12 +51,20 @@ void LegacyOpenGLRenderer::BuildBuffers(
 	this->normals = new GLfloat[vertexCount * 3];
 	memcpy(this->normals, &normals[0].x, vertexCount * 3 * sizeof(GLfloat));
 
-	if (indexCount > 0)
+	if (isIndexed && indexCount > 0)
 	{
 		if (this->indices != NULL)
 			delete[] this->indices;
 		this->indices = new GLushort[indexCount];
 		memcpy(this->indices, indices, indexCount * sizeof(unsigned short));
+	}
+
+	if (useTexture && uvCount > 0)
+	{
+		if (this->uvs != NULL)
+			delete[] this->uvs;
+		this->uvs = new GLfloat[uvCount * 2];
+		memcpy(this->uvs, &uvs[0].x, uvCount * 2 * sizeof(GLfloat));
 	}
 }
 
@@ -64,6 +87,35 @@ void LegacyOpenGLRenderer::Draw(Camera* camera)
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 	glNormalPointer(GL_FLOAT, 0, normals);
 
+	float matAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
+
+	float matDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
+
+	float matSpecular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+
+	glMaterialf(GL_FRONT, GL_SHININESS, 128);
+
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColorMaterial(GL_FRONT, GL_SPECULAR);
+
+	if (useTexture)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+		glTexCoordPointer(2, GL_FLOAT, 0, uvs);
+	}
+	else
+	{
+		glColor3f(1.0f, 1.0f, 1.0f);
+	}
+
 	if (isIndexed)
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, indices);
 	else
@@ -71,4 +123,10 @@ void LegacyOpenGLRenderer::Draw(Camera* camera)
 
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_NORMAL_ARRAY);
+	glDisable(GL_TEXTURE_COORD_ARRAY);
+
+	if (useTexture)
+		glDisable(GL_TEXTURE_2D);
+	//else
+	//	glDisable(GL_COLOR_MATERIAL);
 }

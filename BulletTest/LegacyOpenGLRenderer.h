@@ -12,9 +12,12 @@ protected:
 	GLfloat* vertices;
 	GLfloat* normals;
 	GLushort* indices;
+	GLfloat* uvs;
+
+	GLuint texture;
 
 public:
-	LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed = false);
+	LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
 	virtual ~LegacyOpenGLRenderer(void);
 
 	virtual void BuildBuffers(

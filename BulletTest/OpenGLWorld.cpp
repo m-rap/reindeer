@@ -45,25 +45,24 @@ void OpenGLWorld::Init3d()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 
-		//float lightAmbient[] = { 50.0f/255.0f, 50.0f/255.0f, 50.0f/255.0f, 1.0f };
-		float lightDiffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
-		//glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
 		lightPosition[2] *= -1;
 		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+		float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+
+		float lightDiffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+
+		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
 		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
+
+		float lightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
+
 		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
 		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
 		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
-
-		float matAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		float matDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-
-		glEnable(GL_COLOR_MATERIAL);
-		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
