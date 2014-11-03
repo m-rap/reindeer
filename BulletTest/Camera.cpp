@@ -26,7 +26,7 @@ void Camera::BuildProjection() {
 void Camera::BuildView() {
 #ifdef USE_D3D9
 	D3DXVECTOR4 v4;
-	D3DXVECTOR3 up, lookAt(0, 0, -10);
+	D3DXVECTOR3 up, lookAt(0, 0, 10);
 	
 	D3DXVec3Transform(&v4, &lookAt, &rotationMatrix);
 	RdrHelper::Vec4ToVec3(lookAt, v4);
@@ -35,7 +35,7 @@ void Camera::BuildView() {
 	D3DXVec3Transform(&v4, &VECTOR_UP, &rotationMatrix);
 	RdrHelper::Vec4ToVec3(up, v4);
 
-	D3DXMatrixLookAtLH(
+	D3DXMatrixLookAtRH(
 		&view,
 		&position,    // the camera position
 		&lookAt,    // the look-at position
