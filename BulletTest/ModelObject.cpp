@@ -10,7 +10,7 @@
 ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 {
 #ifdef USE_D3D9
-	renderer = new D3d9Renderer(this);
+	renderer = new D3d9Renderer(this, false, true);
 #else
 	if (GLEW_VERSION_1_5)
 	{
@@ -24,9 +24,10 @@ ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 	this->modelPath = (char*)modelPath;
 	LoadModel(modelPath);
 	BuildRigidBody();
+	size_t uvCount = uvs.size();
 	renderer->BuildBuffers(
 		&vertices[0], &normals[0], NULL, &uvs[0],
-		vertexCount, 0, uvs.size()
+		vertexCount, 0, uvCount
 	);
 }
 

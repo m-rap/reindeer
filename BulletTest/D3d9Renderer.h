@@ -10,9 +10,10 @@ class D3d9Renderer :
 protected:
 	LPDIRECT3DVERTEXBUFFER9 vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9 indexBuffer;
+	LPDIRECT3DTEXTURE9 texture;
 
 public:
-	D3d9Renderer(BaseObject* parent, bool isIndexed = false);
+	D3d9Renderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
 	virtual ~D3d9Renderer(void);
 
 	virtual void BuildBuffers(

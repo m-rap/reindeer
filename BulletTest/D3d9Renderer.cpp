@@ -1,10 +1,15 @@
 #include "D3d9Renderer.h"
 #include "ModelObject.h"
 
-D3d9Renderer::D3d9Renderer(BaseObject* parent, bool isIndexed) : BaseRenderer(parent, isIndexed)
+D3d9Renderer::D3d9Renderer(BaseObject* parent, bool isIndexed, bool useTexture) : BaseRenderer(parent, isIndexed, useTexture)
 {
 	vertexBuffer = NULL;
 	indexBuffer = NULL;
+
+	if (useTexture)
+	{
+		D3DXCreateTextureFromFile(d3ddev, L"../uvmap.DDS", &texture);
+	}
 }
 
 D3d9Renderer::~D3d9Renderer(void)
@@ -19,6 +24,12 @@ D3d9Renderer::~D3d9Renderer(void)
 		indexBuffer->Release();
 		indexBuffer = NULL;
 	}
+
+	if (useTexture)
+	{
+		texture->Release();
+		texture = NULL;
+	}
 }
 
 void D3d9Renderer::BuildBuffers(
@@ -28,47 +39,35 @@ void D3d9Renderer::BuildBuffers(
 {	
 	this->vertexCount = vertexCount;
 	this->indexCount = indexCount;
+	this->uvCount = uvCount;
 
 	VOID* pVoid;    // a void pointer
 
 	// create the vertices using the CUSTOMVERTEX struct
     CUSTOMVERTEX* tempVertices = new CUSTOMVERTEX[vertexCount];
-	if (!isIndexed)
+	size_t j;
+	for (size_t i = 0; i < vertexCount; i++)
 	{
-		for (size_t i = 0; i < vertexCount; i += 3)
+		j = i;
+		if (!isIndexed)
 		{
-			tempVertices[i].X = vertices[i].x;
-			tempVertices[i].Y = vertices[i].y;
-			tempVertices[i].Z = vertices[i].z;
-			tempVertices[i].NORMAL.x = normals[i].x;
-			tempVertices[i].NORMAL.y = normals[i].y;
-			tempVertices[i].NORMAL.z = normals[i].z;
-
-			tempVertices[i + 2].X = vertices[i + 1].x;
-			tempVertices[i + 2].Y = vertices[i + 1].y;
-			tempVertices[i + 2].Z = vertices[i + 1].z;
-			tempVertices[i + 2].NORMAL.x = normals[i + 1].x;
-			tempVertices[i + 2].NORMAL.y = normals[i + 1].y;
-			tempVertices[i + 2].NORMAL.z = normals[i + 1].z;
-
-			tempVertices[i + 1].X = vertices[i + 2].x;
-			tempVertices[i + 1].Y = vertices[i + 2].y;
-			tempVertices[i + 1].Z = vertices[i + 2].z;
-			tempVertices[i + 1].NORMAL.x = normals[i + 2].x;
-			tempVertices[i + 1].NORMAL.y = normals[i + 2].y;
-			tempVertices[i + 1].NORMAL.z = normals[i + 2].z;
+			if (i % 3 == 1)
+				j++;
+			else if (i % 3 == 2)
+				j--;
 		}
-	}
-	else
-	{
-		for (size_t i = 0; i < vertexCount; i++)
+		
+		tempVertices[j].X = vertices[i].x;
+		tempVertices[j].Y = vertices[i].y;
+		tempVertices[j].Z = vertices[i].z;
+		tempVertices[j].NORMAL.x = normals[i].x;
+		tempVertices[j].NORMAL.y = normals[i].y;
+		tempVertices[j].NORMAL.z = normals[i].z;
+
+		if (useTexture)
 		{
-			tempVertices[i].X = vertices[i].x;
-			tempVertices[i].Y = vertices[i].y;
-			tempVertices[i].Z = vertices[i].z;
-			tempVertices[i].NORMAL.x = normals[i].x;
-			tempVertices[i].NORMAL.y = normals[i].y;
-			tempVertices[i].NORMAL.z = normals[i].z;
+			tempVertices[j].u = uvs[i].x;
+			tempVertices[j].v = uvs[i].y;
 		}
 	}
 
@@ -130,8 +129,28 @@ void D3d9Renderer::Draw(Camera* camera)
     d3ddev->SetTransform(D3DTS_PROJECTION, camera->GetProjection());    // set the projection
     d3ddev->SetTransform(D3DTS_WORLD, &world);    // set the world transform
 
-	d3ddev->SetStreamSource(0, vertexBuffer, 0, sizeof(CUSTOMVERTEX));
+	D3DMATERIAL9 material;
+	ZeroMemory(&material, sizeof(D3DMATERIAL9));
+    material.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
+    material.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+    material.Specular = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 
+	d3ddev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	if (useTexture)
+	{
+		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT);
+		
+		d3ddev->SetTexture(0, texture);
+	}
+	else
+	{
+		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
+		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT);
+	}
+    d3ddev->SetMaterial(&material);
+
+	d3ddev->SetStreamSource(0, vertexBuffer, 0, sizeof(CUSTOMVERTEX));
 	if (isIndexed)
 	{
 		d3ddev->SetIndices(indexBuffer);
