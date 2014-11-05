@@ -9,7 +9,7 @@ bool loadOBJ(
 ) {
 	printf("Loading OBJ file %s...\n", path);
 
-	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+	std::vector<int> vertexIndices, uvIndices, normalIndices;
 	std::vector<RDRVEC3> temp_vertices;
 	std::vector<RDRVEC2> temp_uvs;
 	std::vector<RDRVEC3> temp_normals;
@@ -131,25 +131,25 @@ bool loadOBJ(
 
 	// For each vertex of each triangle
 	for (unsigned int i=0; i<vertexIndices.size(); i++) {
-
+	
 		// Get the indices of its attributes
-		unsigned int vertexIndex = vertexIndices[i];
-
+		int vertexIndex = vertexIndices[i];
+	
 		// Get the attributes thanks to the index
 		RDRVEC3 vertex = temp_vertices[ vertexIndex-1 ];
-
+	
 		// Put the attributes in buffers
 		out_vertices.push_back(vertex);
 	}
 
 	for (unsigned int i = 0; i < uvIndices.size(); i++) {
-		unsigned int uvIndex = uvIndices[i];
+		int uvIndex = uvIndices[i];
 		RDRVEC2 uv = temp_uvs[ uvIndex-1 ];
 		out_uvs     .push_back(uv);
 	}
 
 	for (unsigned int i = 0; i < normalIndices.size(); i++) {
-		unsigned int normalIndex = normalIndices[i];
+		int normalIndex = normalIndices[i];
         RDRVEC3 normal = temp_normals[ normalIndex-1 ];
         out_normals .push_back(normal);
 	}
