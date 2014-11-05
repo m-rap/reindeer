@@ -1,7 +1,7 @@
 #pragma once
 
-#define ToRadian( degree ) ((degree) * (M_PI / 180.0f))
-#define ToDegree( radian ) ((radian) * (180.0f / M_PI))
+#define ToRadian( degree ) ((degree) * (M_PI / 180.0))
+#define ToDegree( radian ) ((radian) * (180.0 / M_PI))
 
 #ifndef RDRHELPER_H
 #define RDRHELPER_H

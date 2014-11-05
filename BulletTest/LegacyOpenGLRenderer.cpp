@@ -86,23 +86,6 @@ void LegacyOpenGLRenderer::Draw(Camera* camera)
 
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 	glNormalPointer(GL_FLOAT, 0, normals);
-
-	float matAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-
-	float matDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-
-	float matSpecular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
-
-	glMaterialf(GL_FRONT, GL_SHININESS, 128);
-
-	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT, GL_AMBIENT);
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	glColorMaterial(GL_FRONT, GL_SPECULAR);
-
 	if (useTexture)
 	{
 		glEnable(GL_TEXTURE_2D);
@@ -113,8 +96,22 @@ void LegacyOpenGLRenderer::Draw(Camera* camera)
 	}
 	else
 	{
-		glColor3f(1.0f, 1.0f, 1.0f);
+		glColor3f(1.0f, 1.0f, 1.0f); //diffuse and ambient
 	}
+
+	float matSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+
+	float matEmission[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
+
+	glMaterialf(GL_FRONT, GL_SHININESS, 128);
+
+	glColorMaterial(GL_FRONT, GL_AMBIENT);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColorMaterial(GL_FRONT, GL_SPECULAR);
+
+	glEnable(GL_COLOR_MATERIAL);
 
 	if (isIndexed)
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, indices);
@@ -127,6 +124,4 @@ void LegacyOpenGLRenderer::Draw(Camera* camera)
 
 	if (useTexture)
 		glDisable(GL_TEXTURE_2D);
-	//else
-	//	glDisable(GL_COLOR_MATERIAL);
 }

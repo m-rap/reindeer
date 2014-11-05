@@ -19,10 +19,10 @@ void OpenGLWorld::Init3d()
 		return;
 	}
 
-	/*if (!GLEW_VERSION_1_5) {
-		printf("glGenBuffers is not supported\n");
-		return;
-	}*/
+#ifdef USE_OPENGL
+	if (!GLEW_VERSION_1_5)
+		USE_LEGACY = true;
+#endif
 
 	printf("%s\n", glGetString(GL_VERSION));
 	printf("1.5 %d\n", GL_VERSION_1_5);
@@ -33,7 +33,7 @@ void OpenGLWorld::Init3d()
     lightPosition[2] = -3.0f;
     lightPosition[3] = 0.0f;
 
-    if (GLEW_VERSION_1_5)
+    if (!USE_LEGACY)
 	{
 		programId = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
 		lightPositionId = glGetUniformLocation(programId, "LightPosition_worldspace");
@@ -48,10 +48,10 @@ void OpenGLWorld::Init3d()
 		lightPosition[2] *= -1;
 		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
-		float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
 
-		float lightDiffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		float lightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
 
 		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
@@ -85,7 +85,7 @@ void OpenGLWorld::PostUpdate()
 
 void OpenGLWorld::PostRender()
 {
-	if (GLEW_VERSION_1_5)
+	if (!USE_LEGACY)
 	{
 		glDeleteProgram(programId);
 	}

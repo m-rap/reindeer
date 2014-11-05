@@ -131,20 +131,23 @@ void D3d9Renderer::Draw(Camera* camera)
 
 	D3DMATERIAL9 material;
 	ZeroMemory(&material, sizeof(D3DMATERIAL9));
-    material.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
-    material.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-    material.Specular = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
-
+	material.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+    material.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+	material.Power = 128;
+	
 	d3ddev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
 	if (useTexture)
 	{
+		d3ddev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
 		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT);
-		
 		d3ddev->SetTexture(0, texture);
 	}
 	else
 	{
+		d3ddev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
 		d3ddev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT);
 	}

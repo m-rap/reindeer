@@ -12,7 +12,7 @@ ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 #ifdef USE_D3D9
 	renderer = new D3d9Renderer(this, false, true);
 #else
-	if (GLEW_VERSION_1_5)
+	if (!USE_LEGACY)
 	{
 		renderer = new OpenGLRenderer(this, false, true);
 	}

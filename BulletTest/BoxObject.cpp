@@ -13,7 +13,7 @@ BoxObject::BoxObject() : PhysicalObject() {
 #ifdef USE_D3D9
 	boxRenderer = new D3d9Renderer(this, true);
 #else
-	if (GLEW_VERSION_1_5)
+	if (!USE_LEGACY)
 	{
 		boxRenderer = new OpenGLRenderer(this, true);
 	}

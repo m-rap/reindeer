@@ -118,9 +118,9 @@ void RdrHelper::Vec3ToRadian(RDRVEC3& output, const RDRVEC3& input)
 	output.y = D3DXToRadian(input.y);
 	output.z = D3DXToRadian(input.z);
 #elif defined( USE_OPENGL )
-	output.x = ToRadian(input.x);
-	output.y = ToRadian(input.y);
-	output.z = ToRadian(input.z);
+	output.x = (float)ToRadian(input.x);
+	output.y = (float)ToRadian(input.y);
+	output.z = (float)ToRadian(input.z);
 #endif
 }
 
@@ -131,8 +131,8 @@ void RdrHelper::Vec3ToDegree(RDRVEC3& output, const RDRVEC3& input)
 	output.y = D3DXToDegree(input.y);
 	output.z = D3DXToDegree(input.z);
 #elif defined( USE_OPENGL )
-	output.x = ToDegree(input.x);
-	output.y = ToDegree(input.y);
-	output.z = ToDegree(input.z);
+	output.x = (float)ToDegree(input.x);
+	output.y = (float)ToDegree(input.y);
+	output.z = (float)ToDegree(input.z);
 #endif
 }

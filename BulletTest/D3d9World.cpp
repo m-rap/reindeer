@@ -41,7 +41,7 @@ void D3d9World::Init3d()
 
     ZeroMemory(&light, sizeof(light));
     light.Type = D3DLIGHT_POINT;    // make the light type 'point light'
-	light.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
+	light.Ambient = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
     light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
     light.Position = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
@@ -62,7 +62,8 @@ void D3d9World::Init3d()
 
 	d3ddev->SetRenderState(D3DRS_LIGHTING, TRUE);    // turn on the 3D lighting
     d3ddev->SetRenderState(D3DRS_ZENABLE, TRUE);    // turn on the z-buffer
-    //d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(255 / 5, 255 / 5, 255 / 5));    // ambient light
+	d3ddev->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
+    d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(255 / 5, 255 / 5, 255 / 5));    // ambient light 0.2, 0.2, 0.2
     d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);    // handle normals in scaling
 }
 

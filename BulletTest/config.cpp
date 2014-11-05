@@ -1,5 +1,9 @@
 #include "reindeer.h"
 
+#ifdef USE_OPENGL
+bool USE_LEGACY = false;
+#endif
+
 int SCREEN_HEIGHT = 600;
 int SCREEN_WIDTH = 800;
 
