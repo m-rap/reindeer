@@ -7,10 +7,12 @@ Reindeer dapat di-render dengan Direct3D dan juga OpenGL. IDE yang digunakan ada
 
 Dependensi
 --------
-- [bullet physics](http://bulletphysics.org/)
+- [bullet physics](http://bulletphysics.org/)<br />
+Untuk render dengan OpenGL :
 - [glew](http://glew.sourceforge.net/)
 - [glfw3](http://www.glfw.org/)
-- [glm](http://glm.g-truc.net/0.9.5/index.html) (cuma header)
+- [glm](http://glm.g-truc.net/0.9.5/index.html) (cuma header)<br />
+Untuk render dengan Direct3D :
 - [directx sdk](http://www.microsoft.com/en-us/download/details.aspx?id=8109)
 
 
