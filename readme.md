@@ -21,6 +21,7 @@ Untuk non-linux user:
 - build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform)
 - copy file binary-nya ke folder /lib dan file-file header ke folder /include.
 - Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
+- Install directx SDK
 
 Untuk Distro keluarga debian:
 - pastikan package-package ini sudah ter-install:
