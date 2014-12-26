@@ -27,11 +27,9 @@ public:
 	std::vector<RDRVEC2> uvs;
 	std::vector<RDRVEC3> normals;
 
-#ifdef USE_OPENGL
-	void SetProgramId(GLuint programId);
-#endif
 	void LoadModel(const char* modelPath);
-	void Draw(Camera* camera);
+	virtual void RenderShadow(Light* light);
+	virtual void Draw(Camera* camera, Light* light);
 
 };
 

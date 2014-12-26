@@ -4,6 +4,7 @@
 
 #include "BaseRenderer.h"
 #include "Camera.h"
+#include "Light.h"
 
 class LegacyOpenGLRenderer :
 	public BaseRenderer
@@ -24,7 +25,8 @@ public:
 		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 		size_t vertexCount, size_t indexCount, size_t uvCount
 	);
-	virtual void Draw(Camera* camera);
+	virtual void RenderShadow(Light* light);
+	virtual void Draw(Camera* camera, Light* light);
 };
 
 #endif

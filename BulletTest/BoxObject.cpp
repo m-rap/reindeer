@@ -95,14 +95,13 @@ float BoxObject::GetLength()
 	return length;
 }
 
-#ifdef USE_OPENGL
-void BoxObject::SetProgramId(const GLuint& programId) {
-    boxRenderer->SetProgramId(programId);
+void BoxObject::RenderShadow(Light* light)
+{
+	boxRenderer->RenderShadow(light);
 }
-#endif
 
-void BoxObject::Draw(Camera* camera) {
-    boxRenderer->Draw(camera);
+void BoxObject::Draw(Camera* camera, Light* light) {
+    boxRenderer->Draw(camera, light);
 }
 
 void BoxObject::BuildWidthHeightLength() {

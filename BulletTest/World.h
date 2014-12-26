@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "BoxObject.h"
 #include "ModelObject.h"
+#include "Light.h"
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -31,16 +32,20 @@ protected:
 #endif
 	void InitWindow();
 	virtual void Init3d() = 0;
+	virtual void PreRender() = 0;
 	virtual void PreUpdate() = 0;
 	virtual void PostUpdate() = 0;
 	virtual void PostRender() = 0;
+	virtual void Draw();
 
 public:
     World();
     virtual ~World();
 
+	static World* Global;
+
     Camera camera;
-    GLuint programId;
+	Light* light;
 
     vector<Drawable*> DrawableObjects;
 	vector<PhysicalObject*> PhysicalObjects;

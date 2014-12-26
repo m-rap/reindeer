@@ -1,7 +1,6 @@
 #ifndef BOXOBJECT_H_
 #define BOXOBJECT_H_
 
-#include "Camera.h"
 #include "PhysicalObject.h"
 #include "Drawable.h"
 #include "BaseRenderer.h"
@@ -32,10 +31,8 @@ public:
     float GetHeight();
     float GetLength();
 
-#ifdef USE_OPENGL
-	void SetProgramId(const GLuint& programId);
-#endif
-	virtual void Draw(Camera* camera);
+	virtual void RenderShadow(Light* light);
+	virtual void Draw(Camera* camera, Light* light);
 };
 
 #endif /* BOXOBJECT_H_ */

@@ -9,18 +9,23 @@ class OpenGLWorld :
 	public World
 {
 private:
-    GLuint lightPositionId;
     float lightPosition[4];
 
 protected:
 	virtual void Init3d();
+	virtual void PreRender();
 	virtual void PreUpdate();
 	virtual void PostUpdate();
 	virtual void PostRender();
+	virtual void Draw();
 
 public:
 	OpenGLWorld(void);
 	virtual ~OpenGLWorld(void);
+	
+	GLuint standardShader;
+	GLuint depthShader;
+	GLuint textureViewerShader;
 };
 
 #endif

@@ -39,6 +39,7 @@ public:
 	static void Vec4ToVec3(RDRVEC3& result, RDRVEC4& v4);
 	static void Vec3ToRadian(RDRVEC3& output, const RDRVEC3& input);
 	static void Vec3ToDegree(RDRVEC3& output, const RDRVEC3& input);
+	static RDRQUAT RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest);
 };
 
 #endif

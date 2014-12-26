@@ -4,14 +4,16 @@ attribute vec3 vertexPosition_modelspace;
 attribute vec3 vertexNormal_modelspace;
 attribute vec2 vertexUV;
 uniform mat4 MVP;
-uniform mat4 V;
 uniform mat4 M;
+uniform mat4 V;
 uniform mat3 N;
+uniform mat4 DepthBiasMVP;
 
 varying vec3 Position_worldspace;
 varying vec3 Normal_cameraspace;
 varying vec3 Normal_modelspace;
 varying vec2 UV;
+varying vec4 ShadowCoord;
 
 void main(){
 	Normal_modelspace = vertexNormal_modelspace;
@@ -21,5 +23,7 @@ void main(){
 	Position_worldspace = vec3(M * vec4(vertexPosition_modelspace, 1));
 	Normal_cameraspace = N * vertexNormal_modelspace;
 	UV = vertexUV;
+
+	ShadowCoord = DepthBiasMVP * vec4(vertexPosition_modelspace,1);
 }
 

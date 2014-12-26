@@ -10,13 +10,15 @@ public:
 	Camera();
 	virtual ~Camera();
 
-	void BuildProjection();
-	void BuildView();
+	virtual void BuildProjection(bool perspective = true);
+	virtual void BuildView();
 
-	RDRMAT4* GetView();
-	RDRMAT4* GetProjection();
+	virtual RDRMAT4* GetView();
+	virtual RDRMAT4* GetProjection();
 
 	virtual void BuildWorld();
+
+	void SetLookAt(const RDRVEC3& lookAt, bool silent = false);
 };
 
 #endif /* CAMERA_H_ */

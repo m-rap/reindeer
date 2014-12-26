@@ -68,7 +68,11 @@ void LegacyOpenGLRenderer::BuildBuffers(
 	}
 }
 
-void LegacyOpenGLRenderer::Draw(Camera* camera)
+void LegacyOpenGLRenderer::RenderShadow(Light* light)
+{
+}
+
+void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 {
 	glm::mat4& projection = *camera->GetProjection();
 	glm::mat4& view = *camera->GetView();

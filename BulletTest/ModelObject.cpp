@@ -54,20 +54,18 @@ void ModelObject::BuildShape()
 	collisionShape = CollisionShapes[key];
 }
 
-#ifdef USE_OPENGL
-void ModelObject::SetProgramId(GLuint programId)
-{
-	renderer->SetProgramId(programId);
-}
-#endif
-
 void ModelObject::LoadModel(const char* modelPath)
 {
 	loadOBJ(modelPath, vertices, uvs, normals);
 	vertexCount = vertices.size();
 }
 
-void ModelObject::Draw(Camera* camera)
+void ModelObject::RenderShadow(Light* light)
 {
-	renderer->Draw(camera);
+	renderer->RenderShadow(light);
+}
+
+void ModelObject::Draw(Camera* camera, Light* light)
+{
+	renderer->Draw(camera, light);
 }

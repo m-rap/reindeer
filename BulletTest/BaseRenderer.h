@@ -3,6 +3,7 @@
 #define BASERENDERER_H
 
 #include "Camera.h"
+#include "Light.h"
 
 class BaseRenderer
 {
@@ -22,12 +23,17 @@ public:
 	virtual void SetProgramId(const GLuint& programId)
 	{
 	}
+
+	virtual void SetDepthShader(const GLuint& id)
+	{
+	}
 #endif
 	virtual void BuildBuffers(
 		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 		size_t vertexCount, size_t indexCount, size_t uvCount
 	) = 0;
-	virtual void Draw(Camera* camera) = 0;
+	virtual void RenderShadow(Light* light) = 0;
+	virtual void Draw(Camera* camera, Light* light) = 0;
 };
 
 #endif

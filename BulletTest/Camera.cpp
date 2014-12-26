@@ -8,7 +8,7 @@ Camera::Camera() : BaseObject() {
 Camera::~Camera() {
 }
 
-void Camera::BuildProjection() {
+void Camera::BuildProjection(bool perspective) {
 #ifdef USE_D3D9
 	D3DXMatrixPerspectiveFovRH(&projection,
         D3DXToRadian(45),    // the horizontal field of view
@@ -16,18 +16,26 @@ void Camera::BuildProjection() {
         1.0f,    // the near view-plane
         100.0f);    // the far view-plane
 #else
-	projection = glm::perspective(
-		(float)ToRadian(45),    // the horizontal field of view
-		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, // aspect ratio
-		1.0f,    // the near view-plane
-		100.0f);    // the far view-plane
+	if (perspective)
+	{
+		projection = glm::perspective(
+			(float)ToRadian(45),    // the horizontal field of view
+			(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, // aspect ratio
+			1.0f,    // the near view-plane
+			100.0f);    // the far view-plane
+	}
+	else
+	{
+		float s = 1.0f;
+		projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, -10*s, 20*s);
+	}
 #endif
 }
 void Camera::BuildView() {
 #ifdef USE_D3D9
 	D3DXVECTOR4 v4;
 	D3DXVECTOR3 up, lookAt(0, 0, 10);
-	
+
 	D3DXVec3Transform(&v4, &lookAt, &rotationMatrix);
 	RdrHelper::Vec4ToVec3(lookAt, v4);
 	D3DXVec3Add(&lookAt, &position, &lookAt);
@@ -62,4 +70,9 @@ RDRMAT4* Camera::GetProjection() {
 void Camera::BuildWorld() {
     BaseObject::BuildWorld();
     BuildView();
+}
+
+void Camera::SetLookAt(const RDRVEC3& lookAt, bool silent)
+{
+	view = glm::lookAt(position, glm::vec3(lookAt), glm::vec3(0,1,0));
 }

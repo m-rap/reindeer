@@ -1,11 +1,13 @@
 #version 120
 
 //reference http://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Multiple_Lights
+//          https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial16_shadowmaps/ShadowMapping_SimpleVersion.fragmentshader
 
 varying vec3 Position_worldspace;
 varying vec3 Normal_cameraspace;
 varying vec3 Normal_modelspace;
 varying vec2 UV;
+varying vec4 ShadowCoord;
 
 uniform vec3 LightPosition_worldspace;
 uniform mat4 M;
@@ -14,6 +16,7 @@ uniform mat4 V_inv;
 uniform mat3 N;
 uniform sampler2D texture;
 uniform int useTexture;
+uniform sampler2DShadow shadowMap;
 
 struct Light
 {
@@ -82,5 +85,7 @@ void main() {
 		totalLighting += (diffuseReflection + specularReflection);
 	}
 
-	gl_FragColor = vec4(totalLighting, 1.0);
+	float visibility = shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z)/ShadowCoord.w)).r;
+
+	gl_FragColor = visibility * vec4(totalLighting, 1.0);
 }

@@ -2,5 +2,6 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Reindeer">
 		<Project filename="BulletTest/BulletTest.win-mingw32.cbp" />
+		<Project filename="ShadowMapping/ShadowMapping.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

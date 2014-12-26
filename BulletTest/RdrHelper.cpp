@@ -136,3 +136,33 @@ void RdrHelper::Vec3ToDegree(RDRVEC3& output, const RDRVEC3& input)
 	output.z = (float)ToDegree(input.z);
 #endif
 }
+
+RDRQUAT RdrHelper::RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest) {
+#ifdef USE_OPENGL
+	start = glm::normalize(start);
+	dest = glm::normalize(dest);
+
+	float cosTheta = glm::dot(start, dest);
+	glm::vec3 rotationAxis;
+
+	if (cosTheta < -1 + 0.001f) {
+		rotationAxis = glm::cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
+		if (glm::length(rotationAxis) < 0.01 ) 
+			rotationAxis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
+		rotationAxis = glm::normalize(rotationAxis);
+		return glm::angleAxis(180.0f, rotationAxis);
+	}
+
+	rotationAxis = glm::cross(start, dest);
+
+	float s = sqrt( (1+cosTheta)*2 );
+	float invs = 1 / s;
+
+	return glm::quat(
+		s * 0.5f,
+		rotationAxis.x * invs,
+		rotationAxis.y * invs,
+		rotationAxis.z * invs
+	);
+#endif
+}

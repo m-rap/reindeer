@@ -16,6 +16,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 }
 #endif
 
+World* World::Global = NULL;
+
 World::World()
 {
 }
@@ -143,12 +145,9 @@ void World::Render()
 			PhysicalObjects[i]->Update();
 		}
 
-		PreUpdate();
+		//PreUpdate();
 
-		for (size_t i = 0; i < DrawableObjects.size(); i++)
-        {
-            DrawableObjects[i]->Draw(&camera);
-        }
+		Draw();
 
 		PostUpdate();
 
@@ -191,4 +190,12 @@ void World::Render()
 #else
 	glfwTerminate();
 #endif
+}
+
+void World::Draw()
+{
+	for (size_t i = 0; i < DrawableObjects.size(); i++)
+    {
+		DrawableObjects[i]->Draw(&camera, light);
+    }
 }
