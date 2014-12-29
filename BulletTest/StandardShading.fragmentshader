@@ -55,15 +55,12 @@ void main() {
 		frontMaterial.diffuse = frontMaterial.ambient = vec4(1.0, 1.0, 1.0, 1.0);
 
 	vec3 viewDirection = normalize(vec3(V_inv * vec4(0.0, 0.0, 0.0, 1.0)) - Position_worldspace);
+	vec3 n = normalize(Normal_cameraspace);
 
-	vec3 ambient = vec3(sceneAmbient) * vec3(frontMaterial.ambient);
-
-	vec3 totalLighting = ambient;
+	vec3 totalLighting = vec3(0);
 	for (int i = 0; i < lightCount; i++) {
 		vec3 lightDirection = lights[i].position - Position_worldspace;
 		float dist = length( lightDirection );
-
-		vec3 n = normalize(Normal_cameraspace);
 		vec3 l = normalize(lightDirection);
 		float cosTheta = clamp(dot(n, l), 0.1, 1.0);
 
@@ -82,10 +79,22 @@ void main() {
 								  vec3(frontMaterial.specular) *
 								  pow(max(dot(n, halfV), 0.0), frontMaterial.shininess);
 
-		totalLighting += (diffuseReflection + specularReflection);
+		//float bias = 0.005;
+		float bias = 0.005*tan(acos(cosTheta));
+		bias = clamp(bias, 0, 0.005); //0.01);
+
+		float visibility = shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
+		//float visibility = 0.0;
+		//visibility += shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
+		//visibility += shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
+		//visibility += shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
+
+		//visibility = 1.0;
+
+		totalLighting += (visibility * (diffuseReflection + specularReflection));
 	}
+	
+	vec4 ambient = sceneAmbient * frontMaterial.ambient;
 
-	float visibility = shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z)/ShadowCoord.w)).r;
-
-	gl_FragColor = visibility * vec4(totalLighting, 1.0);
+	gl_FragColor = ambient + vec4(totalLighting, 1.0);
 }
