@@ -7,13 +7,9 @@ Light::Light(void)
 	depthFrameBuffer = 0;
 	depthTexture = 0;
 
-	float s = 1.0f;
-	projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, -10*s, 20*s);
+	float s = 0.25f;
+	projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, -10, 20);
 	glGenBuffers(1, &quadVertexBuffer);
-
-	SetStandardShader(((OpenGLWorld*)World::Global)->standardShader);
-	SetDepthShader(((OpenGLWorld*)World::Global)->depthShader);
-	SetTextureViewerShader(((OpenGLWorld*)World::Global)->textureViewerShader);
 #endif
 }
 
@@ -57,35 +53,65 @@ GLuint Light::GetDepthFrameBuffer()
 }
 #endif
 
-void Light::InitQuad()
+void Light::Init()
 {
-	static const GLfloat g_quad_vertex_buffer_data[] = {
-		-1.0f, -1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		-1.0f,  1.0f, 0.0f,
-		-1.0f,  1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,
-	};
+	if (!USE_LEGACY)
+	{
+		SetStandardShader(((OpenGLWorld*)World::Global)->standardShader);
+		SetDepthShader(((OpenGLWorld*)World::Global)->depthShader);
+		SetTextureViewerShader(((OpenGLWorld*)World::Global)->textureViewerShader);
 
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
+		static const GLfloat g_quad_vertex_buffer_data[] = {
+			-1.0f, -1.0f, 0.0f,
+			 1.0f, -1.0f, 0.0f,
+			-1.0f,  1.0f, 0.0f,
+			-1.0f,  1.0f, 0.0f,
+			 1.0f, -1.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f,
+		};
+
+		glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
+	}
+	else
+	{
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+
+		//lightPosition[2] *= -1;
+		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
+
+		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+
+		float lightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+
+		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
+		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
+
+		float lightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
+
+		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
+		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
+		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
+	}
+
+	InitShadowMap();
 }
 
-void Light::InitShadow()
+bool Light::InitShadowMap()
 {
 	glGenFramebuffers(1, &depthFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
 
 	// Depth texture. Slower than a depth buffer, but you can sample it later in your shader
 	glGenTextures(1, &depthTexture);
-}
 
-bool Light::PreShadow()
-{
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT16, SCREEN_WIDTH,SCREEN_HEIGHT, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -146,21 +172,90 @@ RDRMAT4 Light::GetDepthBiasMVP(const glm::mat4& depthMVP)
 #endif
 }
 
-void Light::DrawShadowTexture()
+void Light::DrawShadowMapTexture()
 {
-	glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, depthTexture);
-    glUniform1i(textureViewerTextureId, 0);
-	glEnableVertexAttribArray(textureViewerVertexId);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
-    glVertexAttribPointer(
-		textureViewerVertexId,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,//sizeof(GL_FLOAT) * 3,
-		(void*)0
-	);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDisableVertexAttribArray(textureViewerVertexId);
+	if (!USE_LEGACY)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, depthTexture);
+		glUniform1i(textureViewerTextureId, 0);
+		glEnableVertexAttribArray(textureViewerVertexId);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+		glVertexAttribPointer(
+			textureViewerVertexId,
+			3,
+			GL_FLOAT,
+			GL_FALSE,
+			0,//sizeof(GL_FLOAT) * 3,
+			(void*)0
+		);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDisableVertexAttribArray(textureViewerVertexId);
+	}
+	else
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, depthTexture);
+		static GLfloat uvs[] = {
+			-1.0f, -1.0f,
+			 1.0f, -1.0f,
+			-1.0f,  1.0f,
+			-1.0f,  1.0f,
+			 1.0f, -1.0f,
+			 1.0f,  1.0f
+		};
+		glTexCoordPointer(2, GL_FLOAT, 0, uvs);
+		static GLfloat quadVertices[] = {
+			-1.0f, -1.0f, 0.0f,
+			 1.0f, -1.0f, 0.0f,
+			-1.0f,  1.0f, 0.0f,
+			-1.0f,  1.0f, 0.0f,
+			 1.0f, -1.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f
+		};
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDisable(GL_VERTEX_ARRAY);
+		glDisable(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
+	}
+}
+
+void Light::RenderLighting()
+{
+	if (!USE_LEGACY)
+	{
+	}
+	else
+	{
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+
+		//lightPosition[2] *= -1;
+		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
+
+		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+
+		float lightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+
+		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
+		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
+
+		float lightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
+
+		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
+		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
+		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
+	}
 }

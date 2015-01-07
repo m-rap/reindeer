@@ -56,6 +56,8 @@ extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
 extern float PHYSICS_WORLD_SCALE;
 extern unordered_map<string, btCollisionShape*> CollisionShapes;
+extern int DEPTHTEX_HEIGHT;
+extern int DEPTHTEX_WIDTH;
 
 #include "RdrHelper.h"
 

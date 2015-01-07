@@ -70,6 +70,33 @@ void LegacyOpenGLRenderer::BuildBuffers(
 
 void LegacyOpenGLRenderer::RenderShadow(Light* light)
 {
+	glm::mat4& projection = *light->GetProjection();
+	glm::mat4& view = *light->GetView();
+	glm::mat4& world = *parent->GetWorld();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(projection));
+
+	glMatrixMode(GL_MODELVIEW);
+	glm::mat4 modelview = view * world;
+	glLoadMatrixf(glm::value_ptr(modelview));
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glNormalPointer(GL_FLOAT, 0, normals);
+
+	if (isIndexed)
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, indices);
+	else
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_NORMAL_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
+	//glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT);
 }
 
 void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
@@ -124,8 +151,10 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_NORMAL_ARRAY);
-	glDisable(GL_TEXTURE_COORD_ARRAY);
 
 	if (useTexture)
+	{
+		glDisable(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
+	}
 }

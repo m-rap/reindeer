@@ -23,7 +23,7 @@ void OpenGLWorld::Init3d()
 	}
 
 #ifdef USE_OPENGL
-	if (!GLEW_VERSION_1_5)
+	//if (!GLEW_VERSION_1_5)
 		USE_LEGACY = true;
 #endif
 
@@ -37,53 +37,17 @@ void OpenGLWorld::Init3d()
 	//glClearDepth(1.0f);
 	glEnable(GL_CULL_FACE);
 
-    lightPosition[0] = -3.0f;
-    lightPosition[1] = 3.0f;
-    lightPosition[2] = -3.0f;
-    lightPosition[3] = 0.0f;
-
-    if (!USE_LEGACY)
+	if (!USE_LEGACY)
 	{
 		standardShader = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
 		depthShader = LoadShaders("DepthRTT.vertexshader", "DepthRTT.fragmentshader");
 		textureViewerShader = LoadShaders("Passthrough.vertexshader", "SimpleTexture.fragmentshader");
-
-		light = new Light();
-		//camera.BuildProjection(false);
-		//camera.SetPosition(RDRVEC3(lightPosition[0], lightPosition[1], lightPosition[2]));
-		//camera.SetLookAt(RDRVEC3(-0.7f, 0.0f, 5.0f));
-		light->SetPosition(RDRVEC3(lightPosition[0], lightPosition[1], lightPosition[2]));
-		light->SetLookAt(RDRVEC3(-0.7f, 0.0f, 5.0f));
-		light->InitShadow();
-		light->InitQuad();
-		light->PreShadow();
-		//glUseProgram(standardShader);
-		//glUniform3f(lightPositionId, lightPosition[0], lightPosition[1], lightPosition[2]);
 	}
-	else
-	{
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
 
-		lightPosition[2] *= -1;
-		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-
-		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-
-		float lightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-
-		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
-		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
-
-		float lightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
-
-		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
-		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
-		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
-	}
+	light = new Light();
+	light->SetPosition(RDRVEC3(-3.0f, 3.0f, -3.0f));
+	light->SetLookAt(RDRVEC3(-0.7f, 0.0f, 5.0f));
+	light->Init();
 }
 
 void OpenGLWorld::PreRender()
@@ -133,11 +97,19 @@ void OpenGLWorld::Draw()
 	PreUpdate();
 
 	glUseProgram(standardShader);
+
+	light->RenderLighting();
 	World::Draw();
 
+	if (USE_LEGACY)
+	{
+		glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);
+	}
+
 	// for debug shadow map texture
-	glViewport(0, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4);
+	glViewport(0, 0, DEPTHTEX_WIDTH / 4, DEPTHTEX_HEIGHT / 4);
 
 	glUseProgram(textureViewerShader);
-	light->DrawShadowTexture();
+	light->DrawShadowMapTexture();
 }
