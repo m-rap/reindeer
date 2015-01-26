@@ -11,10 +11,12 @@ int main()
 {
 	int nBox;
 	printf("nBox: ");
-	scanf("%d", &nBox);
+	nBox = 10;
+	//scanf("%d", &nBox);
 
 	printf("scale: ");
-	scanf("%f", &PHYSICS_WORLD_SCALE);
+	PHYSICS_WORLD_SCALE = 1;
+	//scanf("%f", &PHYSICS_WORLD_SCALE);
 
 #ifdef USE_D3D9
 	D3d9World world;

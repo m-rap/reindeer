@@ -103,27 +103,31 @@ void Light::Init()
 
 bool Light::InitShadowMap()
 {
-	glGenFramebuffers(1, &depthFrameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
+	if (!USE_LEGACY)
+		glGenFramebuffers(1, &depthFrameBuffer);
+	glGenTextures(1, &depthTexture); // Depth texture. Slower than a depth buffer, but you can sample it later in your shader
 
-	// Depth texture. Slower than a depth buffer, but you can sample it later in your shader
-	glGenTextures(1, &depthTexture);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
+	if (!USE_LEGACY)
+		glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+	if (!USE_LEGACY)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
-	// No color output in the bound framebuffer, only depth.
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
+		// No color output in the bound framebuffer, only depth.
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+	}
 
 	// Always check that our framebuffer is ok
 	GLuint error = glCheckFramebufferStatus(GL_FRAMEBUFFER);

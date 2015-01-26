@@ -94,9 +94,6 @@ void LegacyOpenGLRenderer::RenderShadow(Light* light)
 
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_NORMAL_ARRAY);
-
-	glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
-	//glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT);
 }
 
 void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
