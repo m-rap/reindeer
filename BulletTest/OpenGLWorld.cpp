@@ -22,13 +22,10 @@ void OpenGLWorld::Init3d()
 		return;
 	}
 
-#ifdef USE_OPENGL
-	//if (!GLEW_VERSION_1_5)
+	if (!GLEW_VERSION_1_5)
 		USE_LEGACY = true;
-#endif
 
 	printf("%s\n", glGetString(GL_VERSION));
-	printf("1.5 %d\n", GL_VERSION_1_5);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glDepthMask(GL_TRUE);
@@ -52,8 +49,7 @@ void OpenGLWorld::Init3d()
 
 void OpenGLWorld::PreRender()
 {
-	for (size_t i = 0; i < DrawableObjects.size(); i++)
-	{
+	for (size_t i = 0; i < DrawableObjects.size(); i++) {
 
 	}
 }
@@ -83,27 +79,19 @@ void OpenGLWorld::Draw()
 	//// Render to our framebuffer
 	if (!USE_LEGACY)
 		glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthFrameBuffer());
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
-	
-	//if (USE_LEGACY)
-	//{
-	//	glEnable(GL_CULL_FACE);
-	//	glCullFace(GL_FRONT);
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//}
-	//else
-		PreUpdate();
+	glViewport(0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+
+	PreUpdate();
 
 	if (!USE_LEGACY)
 		glUseProgram(depthShader);
-	for (size_t i = 0; i < DrawableObjects.size(); i++)
-    {
+	for (size_t i = 0; i < DrawableObjects.size(); i++) {
 		DrawableObjects[i]->RenderShadow(light);
     }
-	if (USE_LEGACY)
-	{
+	if (USE_LEGACY) {
 		glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
 		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT);
+		//glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, 0);
 	}
 
 	// Render to our screen
@@ -117,9 +105,8 @@ void OpenGLWorld::Draw()
 
 	light->RenderLighting();
 	World::Draw();
-	
-	if (USE_LEGACY)
-	{
+
+	if (USE_LEGACY) {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
 	}

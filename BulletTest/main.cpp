@@ -9,12 +9,14 @@ using namespace std;
 
 int main()
 {
+    CollisionShapes["0"] = NULL;
+
 	int nBox;
-	printf("nBox: ");
+	//printf("nBox: ");
 	nBox = 10;
 	//scanf("%d", &nBox);
 
-	printf("scale: ");
+	//printf("scale: ");
 	PHYSICS_WORLD_SCALE = 1;
 	//scanf("%f", &PHYSICS_WORLD_SCALE);
 

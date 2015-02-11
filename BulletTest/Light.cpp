@@ -9,7 +9,8 @@ Light::Light(void)
 
 	float s = 0.25f;
 	projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, -10, 20);
-	glGenBuffers(1, &quadVertexBuffer);
+	if (!USE_LEGACY)
+        glGenBuffers(1, &quadVertexBuffer);
 #endif
 }
 
@@ -103,36 +104,43 @@ void Light::Init()
 
 bool Light::InitShadowMap()
 {
-	if (!USE_LEGACY)
-		glGenFramebuffers(1, &depthFrameBuffer);
-	glGenTextures(1, &depthTexture); // Depth texture. Slower than a depth buffer, but you can sample it later in your shader
-
-	if (!USE_LEGACY)
+	if (!USE_LEGACY) {
+        glGenFramebuffers(1, &depthFrameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
+    }
+
+    glGenTextures(1, &depthTexture); // Depth texture. Slower than a depth buffer, but you can sample it later in your shader
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
-	if (!USE_LEGACY)
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	if (!USE_LEGACY) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 
 		// No color output in the bound framebuffer, only depth.
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
+	} else {
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        //glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 	}
 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, GL_DEPTH_COMPONENT24, GL_UNSIGNED_BYTE, 0);
+
 	// Always check that our framebuffer is ok
-	GLuint error = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if(error != GL_FRAMEBUFFER_COMPLETE)
-		return false;
+	if (!USE_LEGACY) {
+        GLuint error = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(error != GL_FRAMEBUFFER_COMPLETE)
+            return false;
+    }
 
 	return true;
 }
@@ -208,12 +216,12 @@ void Light::DrawShadowMapTexture()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthTexture);
 		static GLfloat uvs[] = {
-			-1.0f, -1.0f,
-			 1.0f, -1.0f,
-			-1.0f,  1.0f,
-			-1.0f,  1.0f,
-			 1.0f, -1.0f,
-			 1.0f,  1.0f
+			0.0f, 0.0f,
+            1.0f, 0.0f,
+			0.0f, 1.0f,
+			0.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f
 		};
 		glTexCoordPointer(2, GL_FLOAT, 0, uvs);
 		static GLfloat quadVertices[] = {
@@ -222,7 +230,7 @@ void Light::DrawShadowMapTexture()
 			-1.0f,  1.0f, 0.0f,
 			-1.0f,  1.0f, 0.0f,
 			 1.0f, -1.0f, 0.0f,
-			 1.0f,  1.0f, 0.0f
+			 1.0f,  1.0f, 0.0f,
 		};
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, quadVertices);
