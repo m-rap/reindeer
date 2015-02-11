@@ -71,10 +71,12 @@
 		<Unit filename="OpenGLRenderer.h" />
 		<Unit filename="OpenGLWorld.cpp" />
 		<Unit filename="OpenGLWorld.h" />
+		<Unit filename="Passthrough.vertexshader" />
 		<Unit filename="PhysicalObject.cpp" />
 		<Unit filename="PhysicalObject.h" />
 		<Unit filename="RdrHelper.cpp" />
 		<Unit filename="RdrHelper.h" />
+		<Unit filename="SimpleTexture.fragmentshader" />
 		<Unit filename="StandardShading.fragmentshader" />
 		<Unit filename="StandardShading.vertexshader" />
 		<Unit filename="World.cpp" />
