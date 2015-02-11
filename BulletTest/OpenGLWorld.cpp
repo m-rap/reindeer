@@ -22,7 +22,7 @@ void OpenGLWorld::Init3d()
 		return;
 	}
 
-	if (!GLEW_VERSION_1_5)
+	//if (!GLEW_VERSION_1_5)
 		USE_LEGACY = true;
 
 	printf("%s\n", glGetString(GL_VERSION));

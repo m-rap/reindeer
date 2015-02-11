@@ -174,7 +174,7 @@ RDRMAT4 Light::GetDepthMVP(const glm::mat4& world)
 RDRMAT4 Light::GetDepthBiasMVP(const glm::mat4& depthMVP)
 {
 #ifdef USE_OPENGL
-	glm::mat4 biasMatrix(
+	static glm::mat4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,
 		0.0, 0.5, 0.0, 0.0,
 		0.0, 0.0, 0.5, 0.0,
