@@ -98,51 +98,88 @@ void LegacyOpenGLRenderer::RenderShadow(Light* light)
 
 void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 {
-    static glm::mat4 biasMatrix(
+	glEnable(GL_TEXTURE_2D);
+
+	glm::mat4& world = *parent->GetWorld();
+	glm::mat4& projection = *camera->GetProjection();
+	glm::mat4& view = *camera->GetView();
+
+
+	// shadow related
+	glm::mat4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,
 		0.0, 0.5, 0.0, 0.0,
 		0.0, 0.0, 0.5, 0.0,
 		0.5, 0.5, 0.5, 1.0
 	);
-    glm::mat4& lightProjection = *light->GetProjection();
-	glm::mat4& lightView = *light->GetView();
-    glm::mat4 textureMatrix = biasMatrix * lightProjection * lightView;
+    
+	glm::mat4 depthMVP = light->GetDepthMVP(world);
+	glm::mat4 textureMatrix = light->GetDepthBiasMVP(depthMVP);
+	//glm::mat4 lightProjection = *light->GetProjection();
+	//glm::mat4 lightView = *light->GetView();
+	//glm::mat4 textureMatrix = biasMatrix * lightProjection * lightView * world;
 
-    //glEnable(GL_TEXTURE_GEN_S);
+	//glEnable(GL_TEXTURE_GEN_S);
     //glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    //glTexGenfv(GL_S, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][0], textureMatrix[1][0], textureMatrix[2][0], textureMatrix[3][0])));// textureMatrix[0]));// Vector4f(textureMatrix[0], textureMatrix[4], textureMatrix[8], textureMatrix[12])/*textureMatrix.GetRow(0)*/);
-
+    //glTexGenfv(GL_S, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][0], textureMatrix[1][0], textureMatrix[2][0], textureMatrix[3][0])));
+	//
     //glEnable(GL_TEXTURE_GEN_T);
     //glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    //glTexGenfv(GL_T, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][1], textureMatrix[1][1], textureMatrix[2][1], textureMatrix[3][1])));//textureMatrix[1]));// Vector4f(textureMatrix[1], textureMatrix[5], textureMatrix[9], textureMatrix[13])/*textureMatrix.GetRow(1)*/);
-
+    //glTexGenfv(GL_T, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][1], textureMatrix[1][1], textureMatrix[2][1], textureMatrix[3][1])));
+	//
     //glEnable(GL_TEXTURE_GEN_R);
     //glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    //glTexGenfv(GL_R, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][2], textureMatrix[1][2], textureMatrix[2][2], textureMatrix[3][2])));//textureMatrix[2]));// Vector4f(textureMatrix[2], textureMatrix[6], textureMatrix[10], textureMatrix[14])/*textureMatrix.GetRow(2)*/);
-
+	//glTexGenfv(GL_R, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][2], textureMatrix[1][2], textureMatrix[2][2], textureMatrix[3][2])));
+	//
     //glEnable(GL_TEXTURE_GEN_Q);
     //glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    //glTexGenfv(GL_Q, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][3], textureMatrix[1][3], textureMatrix[2][3], textureMatrix[3][3])));//textureMatrix[3]));// Vector4f(textureMatrix[3], textureMatrix[7], textureMatrix[11], textureMatrix[15])/*textureMatrix.GetRow(3)*/);
+    //glTexGenfv(GL_Q, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][3], textureMatrix[1][3], textureMatrix[2][3], textureMatrix[3][3])));
 
-    glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_GEN_S);
+    //glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    //glTexGenfv(GL_S, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[0][0], textureMatrix[0][1], textureMatrix[0][2], textureMatrix[0][3])));
+	//
+    //glEnable(GL_TEXTURE_GEN_T);
+    //glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    //glTexGenfv(GL_T, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[1][0], textureMatrix[1][1], textureMatrix[1][2], textureMatrix[1][3])));
+	//
+    //glEnable(GL_TEXTURE_GEN_R);
+    //glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	//glTexGenfv(GL_R, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[2][0], textureMatrix[2][1], textureMatrix[2][2], textureMatrix[2][3])));
+	//
+    //glEnable(GL_TEXTURE_GEN_Q);
+    //glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    //glTexGenfv(GL_Q, GL_EYE_PLANE, glm::value_ptr(glm::vec4(textureMatrix[3][0], textureMatrix[3][1], textureMatrix[3][2], textureMatrix[3][3])));
+
+    glEnable(GL_TEXTURE_GEN_S);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    glTexGenfv(GL_S, GL_EYE_PLANE, glm::value_ptr(textureMatrix[0]));
+	
+    glEnable(GL_TEXTURE_GEN_T);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    glTexGenfv(GL_T, GL_EYE_PLANE, glm::value_ptr(textureMatrix[1]));
+	
+    glEnable(GL_TEXTURE_GEN_R);
+    glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	glTexGenfv(GL_R, GL_EYE_PLANE, glm::value_ptr(textureMatrix[2]));
+	
+    glEnable(GL_TEXTURE_GEN_Q);
+    glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    glTexGenfv(GL_Q, GL_EYE_PLANE, glm::value_ptr(textureMatrix[3]));
+	
     //glActiveTexture(GL_TEXTURE1);
-    //glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
-
-    //Enable shadow comparison
+    glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
+	
+    ////Enable shadow comparison
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
     //Shadow comparison should be true (ie not in shadow) if r<=texture
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
     //Shadow comparison should generate an INTENSITY result
-    //glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+	
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GEQUAL, 0.99f);
 
-    //glEnable(GL_ALPHA_TEST);
-    //glAlphaFunc(GL_GEQUAL, 0.99f);
-
-
-
-	glm::mat4& projection = *camera->GetProjection();
-	glm::mat4& view = *camera->GetView();
-	glm::mat4& world = *parent->GetWorld();
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(projection));
@@ -176,11 +213,10 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 
 	glMaterialf(GL_FRONT, GL_SHININESS, 128);
 
+	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_AMBIENT);
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	glColorMaterial(GL_FRONT, GL_SPECULAR);
-
-	glEnable(GL_COLOR_MATERIAL);
 
 	if (isIndexed)
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, indices);
@@ -195,7 +231,7 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 		glDisable(GL_TEXTURE_COORD_ARRAY);
 	}
 	glDisable(GL_TEXTURE_2D);
-	//glDisable(GL_ALPHA_TEST);
+	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
     glDisable(GL_TEXTURE_GEN_R);

@@ -18,7 +18,7 @@ ModelObject::ModelObject(const char* modelPath) : PhysicalObject()
 	}
 	else
 	{
-		renderer = new LegacyOpenGLRenderer(this, false, true);
+		renderer = new LegacyOpenGLRenderer(this, false);//, true);
 	}
 #endif
 	this->modelPath = (char*)modelPath;

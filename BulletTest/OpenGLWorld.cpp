@@ -56,9 +56,10 @@ void OpenGLWorld::PreRender()
 
 void OpenGLWorld::PreUpdate()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColorMask(1, 1, 1, 1);
 }
 
 void OpenGLWorld::PostUpdate()
@@ -81,7 +82,14 @@ void OpenGLWorld::Draw()
 		glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthFrameBuffer());
 	glViewport(0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
-	PreUpdate();
+	if (!USE_LEGACY)
+		PreUpdate();
+	else {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glCullFace(GL_FRONT);
+		glShadeModel(GL_SMOOTH);
+		glColorMask(0, 0, 0, 0);
+	}
 
 	if (!USE_LEGACY)
 		glUseProgram(depthShader);
