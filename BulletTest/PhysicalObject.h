@@ -12,6 +12,8 @@ class PhysicalObject :
 	public BaseObject
 {
 protected:
+    float mass;
+
 	virtual void BuildShape() = 0;
 	void BuildRigidBody();
 	void DeleteRigidBody();
@@ -33,12 +35,14 @@ public:
 		BaseObject::SetPosition(position, silent);
 		SetRigidBodyTransform();
 	}
-	
+
 	virtual void SetEuler(const RDRVEC3& euler, bool silent = false)
 	{
 		BaseObject::SetEuler(euler, silent);
 		SetRigidBodyTransform();
 	}
+
+	void SetMass(const float& mass);
 };
 
 #endif

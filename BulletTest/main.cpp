@@ -59,8 +59,8 @@ int main()
 
 
 	Camera& camera = world.camera;
-	camera.SetPosition(RDRVEC3(0.0f, 1.0f, -3.0f), true);
-	camera.SetEuler(glm::vec3(0, 0, 0), true);
+	camera.SetPosition(RDRVEC3(0.0f, 10.0f, 0.0f), true);
+	camera.SetEuler(glm::vec3(90.0f, 0.0f, 0.0f), true);
 	camera.BuildWorld();
 
 	world.Render();

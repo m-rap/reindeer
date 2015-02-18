@@ -38,6 +38,8 @@ protected:
 	virtual void PostRender() = 0;
 	virtual void Draw();
 
+	BoxObject* ground;
+
 public:
     World();
     virtual ~World();
@@ -49,7 +51,7 @@ public:
 
     vector<Drawable*> DrawableObjects;
 	vector<PhysicalObject*> PhysicalObjects;
-	
+
     void Init();
     void Render();
 };

@@ -114,27 +114,27 @@ void BoxObject::BuildWidthHeightLength() {
 		RDRVEC3( width / 2, -height / 2,  length / 2),
 		RDRVEC3(-width / 2,  height / 2,  length / 2),
 		RDRVEC3( width / 2,  height / 2,  length / 2),
-		
+
 		RDRVEC3(-width / 2, -height / 2, -length / 2),    // side 2
 		RDRVEC3(-width / 2,  height / 2, -length / 2),
 		RDRVEC3( width / 2, -height / 2, -length / 2),
 		RDRVEC3( width / 2,  height / 2, -length / 2),
-		
+
 		RDRVEC3(-width / 2,  height / 2, -length / 2),    // side 3
 		RDRVEC3(-width / 2,  height / 2,  length / 2),
 		RDRVEC3( width / 2,  height / 2, -length / 2),
 		RDRVEC3( width / 2,  height / 2,  length / 2),
-		
+
 		RDRVEC3(-width / 2, -height / 2, -length / 2),    // side 4
 		RDRVEC3( width / 2, -height / 2, -length / 2),
 		RDRVEC3(-width / 2, -height / 2,  length / 2),
 		RDRVEC3( width / 2, -height / 2,  length / 2),
-		
+
 		RDRVEC3( width / 2, -height / 2, -length / 2),    // side 5
 		RDRVEC3( width / 2,  height / 2, -length / 2),
 		RDRVEC3( width / 2, -height / 2,  length / 2),
 		RDRVEC3( width / 2,  height / 2,  length / 2),
-		
+
 		RDRVEC3(-width / 2, -height / 2, -length / 2),    // side 6
 		RDRVEC3(-width / 2, -height / 2,  length / 2),
 		RDRVEC3(-width / 2,  height / 2, -length / 2),

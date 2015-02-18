@@ -100,15 +100,21 @@ void World::Render()
 	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0.0f * PHYSICS_WORLD_SCALE, -10.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
 
-	//btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 10.0f * PHYSICS_WORLD_SCALE);
-	btCollisionShape* groundShape = new btBoxShape(btVector3(50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE));
-	btTransform groundTransform;
-	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(0.0f * PHYSICS_WORLD_SCALE, -50.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
-	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0.0f, 0.0f, 0.0f));
-	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-	dynamicsWorld->addRigidBody(groundRigidBody);
+	ground = new BoxObject();
+	ground->SetMinMax(RDRVEC3(-25.0f, -25.0f, -25.0f), RDRVEC3(25.0f, 25.0f, 25.0f));
+	ground->SetPosition(RDRVEC3(0.0f, -25.0f, 0.0f));
+	ground->SetMass(0.0f);
+	dynamicsWorld->addRigidBody(ground->rigidBody);
+
+	////btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 10.0f * PHYSICS_WORLD_SCALE);
+	//btCollisionShape* groundShape = new btBoxShape(btVector3(50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE));
+	//btTransform groundTransform;
+	//groundTransform.setIdentity();
+	//groundTransform.setOrigin(btVector3(0.0f * PHYSICS_WORLD_SCALE, -50.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
+	//btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
+	//btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0.0f, 0.0f, 0.0f));
+	//btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+	//dynamicsWorld->addRigidBody(groundRigidBody);
 
 	for (size_t i = 0; i < PhysicalObjects.size(); i++)
 	{
@@ -163,14 +169,16 @@ void World::Render()
 	{
 		dynamicsWorld->removeRigidBody(PhysicalObjects[i]->rigidBody);
 	}
-	dynamicsWorld->removeRigidBody(groundRigidBody);
+	dynamicsWorld->removeRigidBody(ground->rigidBody);
+	//dynamicsWorld->removeRigidBody(groundRigidBody);
 
 	DrawableObjects.clear();
 	PhysicalObjects.clear();
 
-	delete groundRigidBody->getMotionState();
-	delete groundRigidBody;
-	delete groundShape;
+    delete ground;
+	//delete groundRigidBody->getMotionState();
+	//delete groundRigidBody;
+	//delete groundShape;
 
 	delete dynamicsWorld;
 	delete solver;
@@ -196,6 +204,7 @@ void World::Draw()
 {
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
     {
-		DrawableObjects[i]->Draw(&camera, light);
+		//DrawableObjects[i]->Draw(&camera, light);
     }
+    ground->Draw(&camera, light);
 }

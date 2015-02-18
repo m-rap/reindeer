@@ -2,10 +2,11 @@
 
 
 PhysicalObject::PhysicalObject(void)
-{	
+{
 	rigidBody = NULL;
 	collisionShape = NULL;
 	dynamicsWorld = NULL;
+	mass = 1.0f;
 }
 
 PhysicalObject::~PhysicalObject(void)
@@ -26,7 +27,6 @@ void PhysicalObject::BuildRigidBody()
 
 	BuildShape();
 
-    float mass = 1.0f;
     btVector3 inertia;
     collisionShape->calculateLocalInertia(mass, inertia);
 
@@ -78,4 +78,16 @@ void PhysicalObject::Update()
     this->position.z = origin.getZ() / PHYSICS_WORLD_SCALE;
 
     BuildWorld();
+}
+
+void PhysicalObject::SetMass(const float& mass)
+{
+    this->mass = mass;
+    if (rigidBody != NULL) {
+        btVector3 inertia;
+        rigidBody->getCollisionShape()->calculateLocalInertia(mass, inertia);
+        rigidBody->setMassProps(mass, inertia);
+    } else {
+        BuildRigidBody();
+    }
 }
