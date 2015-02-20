@@ -117,7 +117,7 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 	if (useTexture)
 	{
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);glEnable(GL_TEXTURE_2D); // enables texture 0
         glBindTexture(GL_TEXTURE_2D, texture);
 		glTexCoordPointer(2, GL_FLOAT, 0, uvs);
 	}
@@ -150,5 +150,6 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 	if (useTexture)
 	{
 		glDisable(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D); // disables texture 0
 	}
 }

@@ -96,8 +96,7 @@ void OpenGLRenderer::Draw(Camera* camera, Light* light)
 	glm::mat4 viewInv = glm::inverse(view);
 	glm::mat3 normalMat = glm::inverseTranspose(glm::mat3(world));
 
-	glm::mat4 depthMVP = light->GetDepthMVP(world);
-	glm::mat4 depthBiasMat = light->GetDepthBiasMVP(depthMVP);
+	glm::mat4 depthBiasMat = light->GetDepthBiasMVP(world);
 
 	glUniform3f(lightPositionId, lightPosition.x, lightPosition.y, lightPosition.z);
 	glUniformMatrix4fv(mvpId, 1, GL_FALSE, &mvp[0][0]);

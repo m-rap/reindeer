@@ -24,7 +24,7 @@ private:
 	GLuint quadVertexBuffer;
 #endif
 	RDRVEC3 lookAt;
-	
+
 	bool InitShadowMap();
 
 public:
@@ -48,7 +48,9 @@ public:
 	RDRMAT4 GetDepthMVP(const glm::mat4& world);
 	RDRMAT4 GetDepthBiasMVP(const glm::mat4& depthMVP);
 	void DrawShadowMapTexture();
-	void RenderLighting();
+	void ApplyShadowMap(Camera& camera);
+	void RenderLight();
+	void RenderDimLight();
 };
 
 #endif

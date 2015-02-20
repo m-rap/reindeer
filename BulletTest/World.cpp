@@ -204,7 +204,7 @@ void World::Draw()
 {
 	for (size_t i = 0; i < DrawableObjects.size(); i++)
     {
-		//DrawableObjects[i]->Draw(&camera, light);
+		DrawableObjects[i]->Draw(&camera, light);
     }
     ground->Draw(&camera, light);
 }
