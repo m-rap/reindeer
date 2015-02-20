@@ -8,29 +8,33 @@ Reindeer dapat di-render dengan Direct3D dan juga OpenGL. IDE yang digunakan ada
 Dependensi
 --------
 
+Library (library berikut akan di-download secara automatis apabila mem-build menggunakan perintah make):
 - [glew](http://glew.sourceforge.net/)
 - [glfw3](http://www.glfw.org/)
 - [glm](http://glm.g-truc.net/0.9.5/index.html) (cuma header)
 - [bullet physics](http://bulletphysics.org/)
 
-Instalasi:
--------
-
-Untuk non-linux user:
-- download dependensi di atas terlebih dahulu 
-- build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform)
-- copy file binary-nya ke folder /lib dan file-file header ke folder /include.
-- Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
+Untuk Linux secara umum:
+- wget
+- cmake
+- rsync
+- unzip
 
 Untuk Distro keluarga debian:
-- pastikan package-package ini sudah ter-install:
-    1. libxxf86vm-dev 
-    2. libgl1-mesa-dev 
-    3. libxrandr-dev xorg-dev 
-    4. libglu1-mesa-dev
+- libxxf86vm-dev
+- libgl1-mesa-dev
+- libxrandr-dev
+- xorg-dev
+- libglu1-mesa-dev
 
-Untuk linux user:
-- pastikan package cmake dan rsync terinstall agar reindeer dapat di-build dengan perintah make dari root directory.
+Building:
+-------
+
+Di Linux Anda dapat langsung mem-build dengan menjalankan perintah make dari root directory. Namun apabila tidak memungkinkan (misal karena Anda menggunakan Windows) lakukan langkah berikut sebelum mem-build:
+- download dependensi library di atas terlebih dahulu 
+- build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform)
+- copy file binary-nya ke folder /lib dan file-file header ke folder /include.
+*) Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
 
 Progress kami
 --------
@@ -49,8 +53,8 @@ To do
 
 Catatan
 ------
-- ide baru untuk pertimbangan, pake compositor pattern untuk object. sepertinya unity pake pendekatan ini juga.
-- referensi contoh misi sebuah game engine: [referensi](https://github.com/turbulenz/turbulenz_engine#what-are-the-design-goals-of-the-turbulenz-engine)
+- Ide baru untuk pertimbangan, menggunakan compositor pattern untuk object, sepertinya Unity pake pendekatan ini juga.
+- Referensi contoh misi sebuah game engine: [referensi](https://github.com/turbulenz/turbulenz_engine#what-are-the-design-goals-of-the-turbulenz-engine)
 
 
 Terima kasih telah mengunjungi reindeer.
