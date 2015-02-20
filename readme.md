@@ -27,14 +27,15 @@ Untuk Distro keluarga debian:
 - xorg-dev
 - libglu1-mesa-dev
 
-Building:
+Building
 -------
 
 Di Linux Anda dapat langsung mem-build dengan menjalankan perintah make dari root directory. Namun apabila tidak memungkinkan (misal karena Anda menggunakan Windows) lakukan langkah berikut sebelum mem-build:
 - download dependensi library di atas terlebih dahulu 
 - build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform)
 - copy file binary-nya ke folder /lib dan file-file header ke folder /include.
-*) Untuk sementara lib bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
+
+*) Untuk sementara library bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
 
 Progress kami
 --------
