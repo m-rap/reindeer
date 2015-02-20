@@ -8,11 +8,16 @@ Reindeer dapat di-render dengan Direct3D dan juga OpenGL. IDE yang digunakan ada
 Dependensi
 --------
 
-Library (library berikut akan di-download secara automatis apabila mem-build menggunakan perintah make):
+Library:
+- [bullet physics](http://bulletphysics.org/)
+Untuk render dengan OpenGL :
 - [glew](http://glew.sourceforge.net/)
 - [glfw3](http://www.glfw.org/)
 - [glm](http://glm.g-truc.net/0.9.5/index.html) (cuma header)
-- [bullet physics](http://bulletphysics.org/)
+Untuk render dengan Direct3D :
+- [directx sdk](http://www.microsoft.com/en-us/download/details.aspx?id=8109)
+
+*) Library di atas (selain direct3d) akan di-download secara automatis apabila mem-build menggunakan perintah make
 
 Untuk Linux secara umum:
 - wget
@@ -34,6 +39,7 @@ Di Linux Anda dapat langsung mem-build dengan menjalankan perintah make dari roo
 - download dependensi library di atas terlebih dahulu 
 - build sebagai static library (tidak perlu build apabila sudah disediakan pre-compiled binary sesuai platform)
 - copy file binary-nya ke folder /lib dan file-file header ke folder /include.
+- install DirectX SDK apabila Anda menggunakan Direct3D
 
 *) Untuk sementara library bullet physics yang dibutuhkan hanya BulletCollision, BulletDynamics, dan LinearMath.
 
