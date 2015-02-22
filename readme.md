@@ -10,12 +10,12 @@ Dependensi
 
 Library:
 - [bullet physics](http://bulletphysics.org/)
-Untuk render dengan OpenGL :
-- [glew](http://glew.sourceforge.net/)
-- [glfw3](http://www.glfw.org/)
-- [glm](http://glm.g-truc.net/0.9.5/index.html) (cuma header)
-Untuk render dengan Direct3D :
-- [directx sdk](http://www.microsoft.com/en-us/download/details.aspx?id=8109)
+- Untuk render dengan OpenGL :
+  - [glew](http://glew.sourceforge.net/)
+  - [glfw3](http://www.glfw.org/)
+  - [glm](http://glm.g-truc.net/0.9.5/index.html) (cuma header)
+- Untuk render dengan Direct3D :
+  - [directx sdk](http://www.microsoft.com/en-us/download/details.aspx?id=8109)
 
 *) Library di atas (selain direct3d) akan di-download secara automatis apabila mem-build menggunakan perintah make
 
