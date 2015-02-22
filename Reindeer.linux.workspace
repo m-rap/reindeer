@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeBlocks_workspace_file>
   <Workspace title="Reindeer">
-    <Project filename="BulletTest/BulletTest.linux.cbp"/>
+    <Project filename="Reindeer/Reindeer.linux.cbp"/>
   </Workspace>
 </CodeBlocks_workspace_file>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="Reindeer">
-		<Project filename="BulletTest/BulletTest.win-mingw32.cbp" />
-		<Project filename="ShadowMapping/ShadowMapping.cbp" />
+		<Project filename="Reindeer/Reindeer.win-mingw32.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

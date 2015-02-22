@@ -6,17 +6,17 @@
 WRKDIR = `pwd`
 MAKE = make
 
-all: bullet glew glfw glm bullettest_bullettest_linux
+all: bullet glew glfw glm reindeer_reindeer_linux
 
-bullettest_bullettest_linux: 
-	$(MAKE) -C BulletTest all
+reindeer_reindeer_linux: 
+	$(MAKE) -C Reinder all
 
-clean: clean_bullettest_bullettest_linux
+clean: clean_reindeer_reindeer_linux
 
-clean_bullettest_bullettest_linux: 
-	$(MAKE) -C BulletTest clean
+clean_reindeer_reindeer_linux: 
+	$(MAKE) -C Reinder clean
 
-.PHONY: clean_bullettest_bullettest_linux
+.PHONY: clean_reindeer_reindeer_linux
 
 bullet:
 	(test -d ./tmp || mkdir ./tmp)
