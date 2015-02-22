@@ -56,8 +56,7 @@ GLuint Light::GetDepthFrameBuffer()
 
 void Light::Init()
 {
-	if (!USE_LEGACY)
-	{
+	if (!USE_LEGACY) {
 		SetStandardShader(((OpenGLWorld*)World::Global)->standardShader);
 		SetDepthShader(((OpenGLWorld*)World::Global)->depthShader);
 		SetTextureViewerShader(((OpenGLWorld*)World::Global)->textureViewerShader);
@@ -73,30 +72,7 @@ void Light::Init()
 
 		glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
-	}
-	else
-	{
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-
-		//lightPosition[2] *= -1;
-		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
-
-		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-
-		float lightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-
-		//float lightDirection[] = { -2.0f, -2.0f, -3.0f };
-		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
-
-		float lightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
-
-		glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0f);
-		glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.125f);
-		glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
+	} else {
 	}
 
 	InitShadowMap();
@@ -127,7 +103,6 @@ bool Light::InitShadowMap()
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
 	} else {
-
 	}
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
@@ -240,19 +215,17 @@ void Light::DrawShadowMapTexture()
 
 void Light::RenderLight()
 {
-	if (!USE_LEGACY)
-	{
-	}
-	else
-	{
+	if (!USE_LEGACY) {
+	} else {
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 
 		//lightPosition[2] *= -1;
 		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
 
-		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+		float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		//glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lightAmbient); // we use scene ambient instead of per light ambient
 
 		float lightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
@@ -279,10 +252,10 @@ void Light::RenderDimLight()
 		//lightPosition[2] *= -1;
 		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
 
-		float lightAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+		float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lightAmbient);
 
-		float lightDiffuse[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+		float lightDiffuse[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
     }
 }

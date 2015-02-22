@@ -126,6 +126,15 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 		glColor3f(1.0f, 1.0f, 1.0f); //diffuse and ambient
 	}
 
+	glEnable(GL_COLOR_MATERIAL);
+	//glColorMaterial(GL_FRONT, GL_AMBIENT); // the diffuse and ambient of material has been represented on color or texture
+	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColorMaterial(GL_FRONT, GL_SPECULAR);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+	//float matAmbientAndDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, matAmbientAndDiffuse); // the diffuse and ambient of material has been represented on color or texture
+
 	float matSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 
@@ -133,11 +142,6 @@ void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
 	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
 
 	glMaterialf(GL_FRONT, GL_SHININESS, 128);
-
-	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT, GL_AMBIENT);
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	glColorMaterial(GL_FRONT, GL_SPECULAR);
 
 	if (isIndexed)
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, indices);
