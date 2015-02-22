@@ -27,7 +27,7 @@ LIB_DEBUG = $(LIB)
 LDFLAGS_DEBUG = $(LDFLAGS)
 OBJDIR_DEBUG = obj/linux/Debug
 DEP_DEBUG = 
-OUT_DEBUG = bin/linux/Debug/BulletTest
+OUT_DEBUG = bin/linux/Debug/Reinder
 
 INC_RELEASE = $(INC)
 CFLAGS_RELEASE = $(CFLAGS) -O2
@@ -38,7 +38,7 @@ LIB_RELEASE = $(LIB)
 LDFLAGS_RELEASE = $(LDFLAGS) -s
 OBJDIR_RELEASE = obj/linux/Release
 DEP_RELEASE = 
-OUT_RELEASE = bin/linux/Release/BulletTest
+OUT_RELEASE = bin/linux/Release/Reinder
 
 OBJ_DEBUG = $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/texture.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLRenderer.o $(OBJDIR_DEBUG)/ModelObject.o $(OBJDIR_DEBUG)/OpenGLRenderer.o
 
