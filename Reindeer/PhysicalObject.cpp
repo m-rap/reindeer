@@ -18,7 +18,7 @@ void PhysicalObject::BuildRigidBody()
 {
 	btTransform tr;
     tr.setIdentity();
-    tr.setRotation(btQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w));
+	tr.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
     tr.setOrigin(btVector3(position.x * PHYSICS_WORLD_SCALE, position.y * PHYSICS_WORLD_SCALE, position.z * PHYSICS_WORLD_SCALE));
 
     btDefaultMotionState* motionState = new btDefaultMotionState(tr);
@@ -36,11 +36,11 @@ void PhysicalObject::BuildRigidBody()
     rigidBody = new btRigidBody(constructionInfo);
 }
 
-void PhysicalObject::SetRigidBodyTransform()
+void PhysicalObject::SetRigidBodyTransformation()
 {
 	btTransform tr;
 	tr.setIdentity();
-    tr.setRotation(btQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w));
+	tr.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
     tr.setOrigin(btVector3(position.x * PHYSICS_WORLD_SCALE, position.y * PHYSICS_WORLD_SCALE, position.z * PHYSICS_WORLD_SCALE));
     rigidBody->setCenterOfMassTransform(tr);
 }
@@ -67,9 +67,9 @@ void PhysicalObject::Update()
 
     btQuaternion rot = trans.getRotation();
 #ifdef USE_D3D9
-    this->quaternion = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+    this->rotation = RDRQUAT(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
 #else
-	this->quaternion = RDRQUAT(rot.getW(), rot.getX(), rot.getY(), rot.getZ());
+	this->rotation = RDRQUAT(rot.getW(), rot.getX(), rot.getY(), rot.getZ());
 #endif
 
     btVector3 origin = trans.getOrigin();

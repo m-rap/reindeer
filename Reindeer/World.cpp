@@ -151,7 +151,9 @@ void World::Render()
 			PhysicalObjects[i]->Update();
 		}
 
-		//PreUpdate();
+		PreUpdate();
+
+		
 
 		Draw();
 

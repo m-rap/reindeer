@@ -1,12 +1,17 @@
 #include "reindeer.h"
 #include "RdrHelper.h"
 
-const RDRVEC3 VECTOR_UP       (0.0f,  1.0f,  0.0f);
-const RDRVEC3 VECTOR_RIGHT    (1.0f,  0.0f,  0.0f);
-const RDRVEC3 VECTOR_LEFT     (1.0f,  0.0f,  0.0f);
-const RDRVEC3 VECTOR_DOWN     (0.0f, -1.0f,  0.0f);
-const RDRVEC3 VECTOR_BACKWARD (0.0f,  0.0f,  1.0f);
-const RDRVEC3 VECTOR_FORWARD  (0.0f,  0.0f, -1.0f);
+const RDRVEC3 VECTOR_UP       ( 0.0f,  1.0f,  0.0f);
+const RDRVEC3 VECTOR_RIGHT    ( 1.0f,  0.0f,  0.0f);
+const RDRVEC3 VECTOR_LEFT     (-1.0f,  0.0f,  0.0f);
+const RDRVEC3 VECTOR_DOWN     ( 0.0f, -1.0f,  0.0f);
+const RDRVEC3 VECTOR_BACKWARD ( 0.0f,  0.0f,  1.0f);
+const RDRVEC3 VECTOR_FORWARD  ( 0.0f,  0.0f, -1.0f);
+
+const RDRVEC3 AXIS_X(1.0f, 0.0f,  0.0f);
+const RDRVEC3 AXIS_Y(0.0f, 1.0f,  0.0f);
+const RDRVEC3 AXIS_Z(0.0f, 0.0f, -1.0f);
+
 #ifdef USE_D3D9
 const float PIOVER2 = D3DX_PI / 2;
 #endif
@@ -20,7 +25,18 @@ RdrHelper::~RdrHelper()
 {
 }
 
-void RdrHelper::EulerToQuaternion(RDRQUAT& quaternion, RDRVEC3& euler)
+void RdrHelper::EulerDegreeToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler)
+{
+	RDRVEC3 tempEuler;
+	tempEuler.x = fmod(euler.x, 360.0f);
+	tempEuler.y = fmod(euler.y, 360.0f);
+	tempEuler.z = fmod(euler.z, 360.0f);
+
+	tempEuler = RdrHelper::Vec3ToRadian(tempEuler);
+	RdrHelper::EulerToQuaternion(quaternion, tempEuler);
+}
+
+void RdrHelper::EulerToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler)
 {
 #ifdef USE_D3D9
 	D3DXQuaternionRotationYawPitchRoll(&quaternion, euler.y, euler.x, euler.z);
@@ -111,30 +127,22 @@ void RdrHelper::Vec4ToVec3(RDRVEC3& result, RDRVEC4& v4)
 	result.x = v4.x / v4.w; result.y = v4.y / v4.w; result.z = v4.z / v4.w;
 }
 
-void RdrHelper::Vec3ToRadian(RDRVEC3& output, const RDRVEC3& input)
+RDRVEC3 RdrHelper::Vec3ToRadian(const RDRVEC3& input)
 {
-#ifdef USE_D3D9
-	output.x = D3DXToRadian(input.x);
-	output.y = D3DXToRadian(input.y);
-	output.z = D3DXToRadian(input.z);
-#elif defined( USE_OPENGL )
+	RDRVEC3 output;
 	output.x = (float)ToRadian(input.x);
 	output.y = (float)ToRadian(input.y);
 	output.z = (float)ToRadian(input.z);
-#endif
+	return output;
 }
 
-void RdrHelper::Vec3ToDegree(RDRVEC3& output, const RDRVEC3& input)
+RDRVEC3 RdrHelper::Vec3ToDegree(const RDRVEC3& input)
 {
-#ifdef USE_D3D9
-	output.x = D3DXToDegree(input.x);
-	output.y = D3DXToDegree(input.y);
-	output.z = D3DXToDegree(input.z);
-#elif defined( USE_OPENGL )
+	RDRVEC3 output;
 	output.x = (float)ToDegree(input.x);
 	output.y = (float)ToDegree(input.y);
 	output.z = (float)ToDegree(input.z);
-#endif
+	return output;
 }
 
 RDRQUAT RdrHelper::RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest) {

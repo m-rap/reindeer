@@ -17,7 +17,9 @@ protected:
 	virtual void BuildShape() = 0;
 	void BuildRigidBody();
 	void DeleteRigidBody();
-	void SetRigidBodyTransform();
+	void SetRigidBodyTransformation();
+
+	virtual void TransformationChanged() { SetRigidBodyTransformation(); }
 
 public:
 	PhysicalObject(void);
@@ -29,18 +31,6 @@ public:
 
 	void SetDynamicsWorld(btDiscreteDynamicsWorld* dynamicsWorld);
 	void Update();
-
-	virtual void SetPosition(const RDRVEC3& position, bool silent = false)
-	{
-		BaseObject::SetPosition(position, silent);
-		SetRigidBodyTransform();
-	}
-
-	virtual void SetEuler(const RDRVEC3& euler, bool silent = false)
-	{
-		BaseObject::SetEuler(euler, silent);
-		SetRigidBodyTransform();
-	}
 
 	void SetMass(const float& mass);
 };
