@@ -1,6 +1,6 @@
 #include "World.h"
 
-#ifdef _MSC_VER
+#ifndef USE_OPENGL
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -35,7 +35,7 @@ void World::Init()
 
 void World::InitWindow()
 {
-#ifdef _MSC_VER
+#ifndef USE_OPENGL
     WNDCLASSEX wc;
 
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -51,26 +51,6 @@ void World::InitWindow()
 	RegisterClassEx(&wc);
 	hWnd = CreateWindowEx(NULL, L"WindowClass", L"Reindeer", WS_OVERLAPPEDWINDOW, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, GetModuleHandle(0), NULL);
 	hDC = GetDC(hWnd);
-
-#ifdef USE_OPENGL
-	PIXELFORMATDESCRIPTOR pfd;
-	HGLRC hRC;
-	int pixelformat;
-	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
-	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-	pfd.nVersion = 1;
-	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-	pfd.iPixelType = PFD_TYPE_RGBA;
-	pfd.cColorBits = 32;
-	pfd.cDepthBits = 16;
-	pfd.iLayerType = PFD_MAIN_PLANE;
-
-	pixelformat = ChoosePixelFormat(hDC, &pfd);
-	SetPixelFormat(hDC, pixelformat, &pfd);
-
-	hRC = wglCreateContext(hDC);
-	wglMakeCurrent(hDC,hRC);
-#endif
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 #else
@@ -159,7 +139,7 @@ void World::Render()
 
 		PostUpdate();
 
-#ifdef _MSC_VER
+#ifndef USE_OPENGL
 		SwapBuffers(hDC);
 #else
 		glfwSwapBuffers(window);

@@ -8,10 +8,15 @@
 #include "ModelObject.h"
 #include "Light.h"
 
-#ifdef _MSC_VER
+#ifndef USE_OPENGL
 #include <windows.h>
 #include <windowsx.h>
 #else
+#ifdef _MSC_VER
+#define _GLFW_WIN32
+#define _GLFW_WGL
+#define _GLFW_USE_OPENGL
+#endif
 #include <GLFW/glfw3.h>
 #endif
 
@@ -24,7 +29,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 class World
 {
 protected:
-#ifdef _MSC_VER
+#ifndef USE_OPENGL
 	HWND hWnd;
 	HDC hDC;		// Private GDI Device Context
 #else
