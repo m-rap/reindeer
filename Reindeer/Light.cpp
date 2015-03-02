@@ -8,7 +8,7 @@ Light::Light(void)
 	depthTexture = 0;
 
 	float s = 0.25f;
-	projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, -10, 20);
+	projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, 0, 20);
 	if (!USE_LEGACY)
         glGenBuffers(1, &quadVertexBuffer);
 #endif
@@ -120,7 +120,7 @@ bool Light::InitShadowMap()
 void Light::BuildDepthMVP()
 {
 #ifdef USE_OPENGL
-	view = glm::lookAt(position, lookAt, glm::vec3(0,1,0));
+	view = glm::lookAt(position, lookAt, VECTOR_UP);
 #endif
 }
 
@@ -220,8 +220,13 @@ void Light::RenderLight()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 
-		//lightPosition[2] *= -1;
-		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
+		float lightPosition[4];
+		lightPosition[0] = position.x;
+		lightPosition[1] = position.y;
+		lightPosition[2] = -position.z;
+		lightPosition[3] = 0.0f;
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		//glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
 
 		float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 		//glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
@@ -249,8 +254,13 @@ void Light::RenderDimLight()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 
-		//lightPosition[2] *= -1;
-		glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
+		float lightPosition[4];
+		lightPosition[0] = position.x;
+		lightPosition[1] = position.y;
+		lightPosition[2] = -position.z;
+		lightPosition[3] = 0.0f;
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		//glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
 
 		float lightAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lightAmbient);

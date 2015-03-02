@@ -42,8 +42,8 @@ void OpenGLWorld::Init3d()
 	}
 
 	light = new Light();
-	light->SetPosition(RDRVEC3(-3.0f, 3.0f, -3.0f));
-	light->SetLookAt(RDRVEC3(-0.7f, 0.0f, 5.0f));
+	light->SetPosition(RDRVEC3(3.0f, 3.0f, 7.0f));
+	light->SetLookAt(RDRVEC3(0.0f, 0.0f, 0.0f));
 	light->Init();
 }
 

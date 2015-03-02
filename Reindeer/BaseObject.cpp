@@ -35,7 +35,7 @@ void BaseObject::SetRotation(const RDRQUAT& rotation, bool silent) {
 
 void BaseObject::Rotate(const float& angle, const RDRVEC3& axis, bool silent)
 {
-	rotation = rotation * glm::angleAxis(angle, axis);
+	rotation = glm::angleAxis(angle, axis) * rotation;
 
 	if (!silent)
 		BuildWorld();

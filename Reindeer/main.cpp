@@ -39,7 +39,7 @@ int main()
 		//box[i].SetProgramId(world.programId);
 #endif
 		box[i].SetMinMax(boxmin, boxmax);
-		box[i].SetPosition(RDRVEC3(-1.0f + i*0.1f, 10.0f + i*1.0f, 5.0f), true);
+		box[i].SetPosition(RDRVEC3(-1.0f + i*0.1f, 10.0f + i*1.0f, 0.0f), true);
 		box[i].RotateGlobalX(ToRadian(44.0f), true);
 		box[i].RotateGlobalY(ToRadian(10.0f), true);
 		box[i].RotateGlobalZ(ToRadian(30.0f), true);
@@ -53,15 +53,16 @@ int main()
 #ifdef USE_OPENGL
 	//obj.SetProgramId(world.programId);
 #endif
-	obj.SetPosition(RDRVEC3(-0.7f, 1.0f, 4.5f), true);
-	obj.RotateGlobalY(ToRadian(180.0f), true);
+	obj.SetPosition(RDRVEC3(-0.7f, 1.0f, 0.5f), true);
+	//obj.RotateGlobalY(ToRadian(180.0f), true);
 	obj.BuildWorld();
 	world.DrawableObjects.push_back(&obj);
 	world.PhysicalObjects.push_back(&obj);
 
 
 	Camera& camera = world.camera;
-	camera.SetPosition(RDRVEC3(0.0f, 1.0f, -3.0f), true);
+	camera.SetPosition(RDRVEC3(0.0f, 3.0f, 7.0f), true);
+	//camera.RotateLocalY(ToRadian(180.0f), true);
 	//camera.RotateLocalX(ToRadian(10), true);
 	camera.BuildWorld();
 

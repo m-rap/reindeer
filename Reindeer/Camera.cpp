@@ -27,7 +27,7 @@ void Camera::BuildProjection(bool perspective) {
 	else
 	{
 		float s = 1.0f;
-		projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, -10*s, 20*s);
+		projection = glm::ortho<float>(-10*s, 10*s, -10*s, 10*s, 0*s, 20*s);
 	}
 #endif
 }
@@ -50,12 +50,12 @@ void Camera::BuildView() {
 		&up     // the up direction
 	);
 #else
-	glm::vec4 up, lookAt(0, 0, 10, 0);
-	lookAt = rotationMatrix * lookAt;
-	lookAt = glm::vec4(position, 0) + lookAt;
-	up = rotationMatrix * glm::vec4(VECTOR_UP, 0.0f);
+	glm::vec3 lookAt, up;
+	lookAt = rotation * VECTOR_FORWARD;
+	lookAt = position + lookAt;
+	up = rotation * VECTOR_UP;
 
-	view = glm::lookAt(position, glm::vec3(lookAt), glm::vec3(up));
+	view = glm::lookAt(position, glm::vec3(lookAt), up);
 #endif
 }
 
@@ -68,8 +68,9 @@ RDRMAT4* Camera::GetProjection() {
 }
 
 void Camera::BuildWorld() {
-    BaseObject::BuildWorld();
     BuildView();
+	//rotation = glm::quat_cast(view);
+	BaseObject::BuildWorld();
 }
 
 void Camera::SetLookAt(const RDRVEC3& lookAt, bool silent)

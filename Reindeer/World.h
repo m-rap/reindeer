@@ -29,6 +29,13 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 class World
 {
 protected:
+
+	BoxObject* ground;
+
+	bool mouseRightButtonDown, mouseMiddleButtonDown;
+	unsigned long lastTimeMiddleMousePressed;
+	double mouseX, mouseY;
+
 #ifndef USE_OPENGL
 	HWND hWnd;
 	HDC hDC;		// Private GDI Device Context
@@ -42,8 +49,6 @@ protected:
 	virtual void PostUpdate() = 0;
 	virtual void PostRender() = 0;
 	virtual void Draw();
-
-	BoxObject* ground;
 
 public:
     World();
@@ -59,6 +64,10 @@ public:
 
     void Init();
     void Render();
+
+#ifdef USE_OPENGL
+	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+#endif
 };
 
 #endif // WORLD_H

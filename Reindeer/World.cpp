@@ -14,12 +14,21 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
     return DefWindowProc (hWnd, message, wParam, lParam);
 }
+#else
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	World::Global->ScrollCallback(window, xoffset, yoffset);
+}
 #endif
 
 World* World::Global = NULL;
 
 World::World()
 {
+	mouseRightButtonDown = false;
+	mouseMiddleButtonDown = false;
+	btClock cl;
+	lastTimeMiddleMousePressed = cl.getTimeMilliseconds();
 }
 
 World::~World()
@@ -67,6 +76,8 @@ void World::InitWindow()
 		return;
 	}
 	glfwMakeContextCurrent(window);
+
+	glfwSetScrollCallback(window, scroll_callback);
 #endif
 }
 
@@ -86,16 +97,6 @@ void World::Render()
 	ground->SetMass(0.0f);
 	dynamicsWorld->addRigidBody(ground->rigidBody);
 
-	////btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0.0f, 1.0f, 0.0f), 10.0f * PHYSICS_WORLD_SCALE);
-	//btCollisionShape* groundShape = new btBoxShape(btVector3(50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE, 50.0f * PHYSICS_WORLD_SCALE));
-	//btTransform groundTransform;
-	//groundTransform.setIdentity();
-	//groundTransform.setOrigin(btVector3(0.0f * PHYSICS_WORLD_SCALE, -50.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
-	//btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
-	//btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0.0f, 0.0f, 0.0f));
-	//btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-	//dynamicsWorld->addRigidBody(groundRigidBody);
-
 	for (size_t i = 0; i < PhysicalObjects.size(); i++)
 	{
 		PhysicalObjects[i]->SetDynamicsWorld(dynamicsWorld);
@@ -105,7 +106,7 @@ void World::Render()
 	btClock cl;
 	btScalar currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 
-#ifdef _MSC_VER
+#ifndef USE_OPENGL
 	MSG msg;
 	while(TRUE)
     {
@@ -119,7 +120,64 @@ void World::Render()
             break;
 #else
 	while (!glfwWindowShouldClose(window)) {
-#endif
+#endif		
+		
+		int mouseRightButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+		if (mouseRightButtonState == GLFW_PRESS && !mouseRightButtonDown) {
+			mouseRightButtonDown = true;
+			glfwGetCursorPos(window, &mouseX, &mouseY);
+		}
+		else if (mouseRightButtonState == GLFW_RELEASE) {
+			mouseRightButtonDown = false;
+		}
+
+		int mouseMiddleButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
+		if (mouseMiddleButtonState == GLFW_PRESS) {
+			lastTimeMiddleMousePressed = cl.getTimeMilliseconds();
+			if (!mouseMiddleButtonDown) {
+				mouseMiddleButtonDown = true;
+				glfwGetCursorPos(window, &mouseX, &mouseY);
+			}
+		}
+
+		unsigned long tempMid = cl.getTimeMilliseconds() - lastTimeMiddleMousePressed;
+		if (tempMid > 50 && mouseRightButtonState == GLFW_RELEASE) {
+			mouseMiddleButtonDown = false;
+		}
+
+		if (mouseRightButtonDown) {
+			double newMouseX, newMouseY;
+			glfwGetCursorPos(window, &newMouseX, &newMouseY);
+			camera.RotateLocalX(ToRadian((mouseY - newMouseY) * 0.1f), true);
+			camera.RotateGlobalY(ToRadian((mouseX - newMouseX) * 0.1f), true);
+			camera.BuildWorld();
+			mouseX = newMouseX;
+			mouseY = newMouseY;
+		}
+
+		if (mouseMiddleButtonDown) {
+			double newMouseX, newMouseY;
+			glfwGetCursorPos(window, &newMouseX, &newMouseY);
+			RDRVEC3 pos = *camera.GetPosition();
+			RDRVEC3 delta = (float)(mouseX - newMouseX) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_X);
+			delta += (float)(newMouseY - mouseY) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_Y);
+			camera.SetPosition(pos + delta);
+			mouseX = newMouseX;
+			mouseY = newMouseY;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			camera.RotateGlobalY(ToRadian(0.01f));
+
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			camera.RotateGlobalY(ToRadian(-0.01f));
+		
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+			camera.RotateLocalX(ToRadian(0.01f));
+
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			camera.RotateLocalX(ToRadian(-0.01f));
+
 		btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 		btScalar frameTime = newTime - currentTime;
 		currentTime = newTime;
@@ -128,12 +186,14 @@ void World::Render()
 
 		for (size_t i = 0; i < PhysicalObjects.size(); i++)
 		{
+			//PhysicalObject& obj = *PhysicalObjects[i];
+			//RDRQUAT& rot = *obj.GetRotation();
+			//RDRVEC3 delta = rot * glm::vec3(0.0f, 0.0f, 0.001f);
+			//obj.SetPosition(*obj.GetPosition() + delta);
 			PhysicalObjects[i]->Update();
 		}
 
 		PreUpdate();
-
-		
 
 		Draw();
 
@@ -189,4 +249,11 @@ void World::Draw()
 		DrawableObjects[i]->Draw(&camera, light);
     }
     ground->Draw(&camera, light);
+}
+
+void World::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	RDRVEC3 pos = *camera.GetPosition();
+	RDRVEC3 delta = (float)yoffset * glm::normalize(*camera.GetRotation() * AXIS_Z);
+	camera.SetPosition(pos + delta);
 }
