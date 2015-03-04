@@ -1,14 +1,17 @@
 #include "Camera.h"
 
-Camera::Camera() : BaseObject() {
+Camera::Camera() : BaseObject()
+{
 	BuildProjection();
 	BuildView();
 }
 
-Camera::~Camera() {
+Camera::~Camera()
+{
 }
 
-void Camera::BuildProjection(bool perspective) {
+void Camera::BuildProjection(bool perspective)
+{
 #ifdef USE_D3D9
 	D3DXMatrixPerspectiveFovRH(&projection,
         D3DXToRadian(45),    // the horizontal field of view
@@ -71,9 +74,4 @@ void Camera::BuildWorld() {
     BuildView();
 	//rotation = glm::quat_cast(view);
 	BaseObject::BuildWorld();
-}
-
-void Camera::SetLookAt(const RDRVEC3& lookAt, bool silent)
-{
-	view = glm::lookAt(position, glm::vec3(lookAt), glm::vec3(0,1,0));
 }

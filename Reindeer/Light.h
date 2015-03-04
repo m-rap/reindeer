@@ -7,7 +7,7 @@
 class Light :
 	public Camera
 {
-private:
+protected:
 #ifdef USE_OPENGL
 	GLuint depthShader;
 	GLuint standardShader;
@@ -23,16 +23,12 @@ private:
 	GLuint depthTexture;
 	GLuint quadVertexBuffer;
 #endif
-	RDRVEC3 lookAt;
 
 	bool InitShadowMap();
 
 public:
 	Light(void);
 	virtual ~Light(void);
-
-	//virtual void BuildProjection(bool perspective = true);
-	//virtual void BuildView();
 
 #ifdef USE_OPENGL
 	void SetDepthShader(const GLuint& id);
@@ -42,11 +38,10 @@ public:
 	GLuint GetDepthFrameBuffer();
 #endif
 	void Init();
-	void BuildDepthMVP();
-	virtual void SetPosition(const RDRVEC3& position, bool silent = false);
-	void SetLookAt(const RDRVEC3& lookAt, bool silent = false);
+
 	RDRMAT4 GetDepthMVP(const glm::mat4& world);
 	RDRMAT4 GetDepthBiasMVP(const glm::mat4& depthMVP);
+
 	void DrawShadowMapTexture();
 	void ApplyShadowMap(Camera& camera);
 	void RenderLight();

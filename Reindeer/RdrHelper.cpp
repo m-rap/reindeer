@@ -40,7 +40,7 @@ void RdrHelper::EulerToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler)
 {
 #ifdef USE_D3D9
 	D3DXQuaternionRotationYawPitchRoll(&quaternion, euler.y, euler.x, euler.z);
-	/* 
+	/*
 	 * command di bawah ini sama saja dengan D3DXQuaternionRotationYawPitchRoll
 	 *
 
@@ -52,10 +52,10 @@ void RdrHelper::EulerToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler)
 
 	D3DXQuaternionRotationAxis(&tempQuaternion, &VECTOR_RIGHT, pitch);
 	D3DXQuaternionMultiply(&quaternion, &quaternion, &tempQuaternion);
-	
+
 	D3DXQuaternionRotationAxis(&tempQuaternion, &VECTOR_UP, yaw);
 	D3DXQuaternionMultiply(&quaternion, &quaternion, &tempQuaternion);
-	 
+
 	 */
 #elif defined(USE_OPENGL)
 	quaternion = glm::quat(euler);
@@ -70,7 +70,7 @@ void RdrHelper::QuaternionToEuler(RDRVEC3& euler, RDRQUAT& q)
 	 * http://xboxforums.create.msdn.com/forums/p/4574/23766.aspx#23766
 	 * post by ed022 at 9/8/2007 1:54 AM
 	 */
-	
+
 	D3DXMATRIX tempMat;
 	D3DXMatrixRotationQuaternion(&tempMat, &q);
 
@@ -101,11 +101,11 @@ void RdrHelper::QuaternionToEuler(RDRVEC3& euler, RDRQUAT& q)
 		D3DXMatrixRotationY(&tempMat, -euler.y);
         D3DXVec3Transform(&up, &up3, &tempMat);
 		Vec4ToVec3(up3, up);
-		
+
 		D3DXMatrixRotationX(&tempMat, -euler.x);
         D3DXVec3Transform(&up, &up3, &tempMat);
 		Vec4ToVec3(up3, up);
-        
+
 		euler.z = atan2(-up.x, up.y);
     }
 #endif
@@ -147,15 +147,17 @@ RDRVEC3 RdrHelper::Vec3ToDegree(const RDRVEC3& input)
 
 RDRQUAT RdrHelper::RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest) {
 #ifdef USE_OPENGL
-	start = glm::normalize(start);
-	dest = glm::normalize(dest);
+    if (!(start.x == 0 && start.y == 0 && start.z == 0))
+        start = glm::normalize(start);
+    if (!(dest.x == 0 && dest.y == 0 && dest.z == 0))
+        dest = glm::normalize(dest);
 
 	float cosTheta = glm::dot(start, dest);
 	glm::vec3 rotationAxis;
 
 	if (cosTheta < -1 + 0.001f) {
 		rotationAxis = glm::cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
-		if (glm::length(rotationAxis) < 0.01 ) 
+		if (glm::length(rotationAxis) < 0.01 )
 			rotationAxis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
 		rotationAxis = glm::normalize(rotationAxis);
 		return glm::angleAxis(180.0f, rotationAxis);
@@ -172,5 +174,23 @@ RDRQUAT RdrHelper::RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest) {
 		rotationAxis.y * invs,
 		rotationAxis.z * invs
 	);
+#endif
+}
+
+RDRQUAT RdrHelper::LookAt(const RDRVEC3& position, const RDRVEC3& target, const RDRVEC3& up)
+{
+#ifdef USE_OPENGL
+    RDRVEC3 forwardVec = glm::normalize(target - position);
+    float dot = glm::dot(VECTOR_FORWARD, forwardVec);
+    if (glm::abs(dot - (-1.0f) < 0.000001f)) {
+        return glm::quat(M_PI, up.x, up.y, up.z);
+    }
+    if (glm::abs(dot - 1.0f) < 0.000001f) {
+        return glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+    }
+
+    float angle = acosf(dot);
+    RDRVEC3 axis = glm::normalize(glm::cross(VECTOR_FORWARD, forwardVec));
+    return glm::angleAxis(angle, axis);
 #endif
 }

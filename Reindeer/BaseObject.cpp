@@ -4,9 +4,7 @@
 BaseObject::BaseObject() {
 	position.x = position.y = position.z = 0.0f;
 	scale.x = scale.y = scale.z = 1.0f;
-
-	RDRVEC3 euler(0.0f);
-	RdrHelper::EulerDegreeToQuaternion(rotation, euler);
+	rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 
 	BuildWorld();
 }
@@ -17,7 +15,7 @@ BaseObject::~BaseObject() {
 
 void BaseObject::SetPosition(const RDRVEC3& position, bool silent) {
 	this->position = position;
-	
+
 	if (!silent)
 		BuildWorld();
 
@@ -74,6 +72,11 @@ void BaseObject::RotateGlobalY(const float& angle, bool silent)
 void BaseObject::RotateGlobalZ(const float& angle, bool silent)
 {
 	Rotate(angle, AXIS_Z, silent);
+}
+
+void BaseObject::LookAt(const RDRVEC3& target, bool silent)
+{
+    SetRotation(RdrHelper::LookAt(position, target, rotation * VECTOR_UP), silent);
 }
 
 void BaseObject::SetScale(const RDRVEC3& scale, bool silent) {

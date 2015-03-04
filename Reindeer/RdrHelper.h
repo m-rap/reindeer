@@ -46,6 +46,7 @@ public:
 	static RDRVEC3 Vec3ToRadian(const RDRVEC3& input);
 	static RDRVEC3 Vec3ToDegree(const RDRVEC3& input);
 	static RDRQUAT RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest);
+	static RDRQUAT LookAt(const RDRVEC3& position, const RDRVEC3& target, const RDRVEC3& up);
 };
 
 #endif

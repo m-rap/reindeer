@@ -1,7 +1,7 @@
 #include "Light.h"
 #include "OpenGLWorld.h"
 
-Light::Light(void)
+Light::Light(void) : Camera()
 {
 #ifdef USE_OPENGL
 	depthFrameBuffer = 0;
@@ -115,27 +115,6 @@ bool Light::InitShadowMap()
     }
 
 	return true;
-}
-
-void Light::BuildDepthMVP()
-{
-#ifdef USE_OPENGL
-	view = glm::lookAt(position, lookAt, VECTOR_UP);
-#endif
-}
-
-void Light::SetPosition(const RDRVEC3& position, bool silent)
-{
-	BaseObject::SetPosition(position, silent);
-	if (!silent)
-		BuildDepthMVP();
-}
-
-void Light::SetLookAt(const RDRVEC3& lookAt, bool silent)
-{
-	this->lookAt = lookAt;
-	if (!silent)
-		BuildDepthMVP();
 }
 
 RDRMAT4 Light::GetDepthMVP(const glm::mat4& world)

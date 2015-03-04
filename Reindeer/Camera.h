@@ -17,8 +17,6 @@ public:
 	virtual RDRMAT4* GetProjection();
 
 	virtual void BuildWorld();
-
-	void SetLookAt(const RDRVEC3& lookAt, bool silent = false);
 };
 
 #endif /* CAMERA_H_ */

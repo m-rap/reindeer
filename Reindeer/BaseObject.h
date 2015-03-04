@@ -32,6 +32,8 @@ public:
 	void RotateGlobalY(const float& angle, bool silent = false);
 	void RotateGlobalZ(const float& angle, bool silent = false);
 
+	virtual void LookAt(const RDRVEC3& target, bool silent = false);
+
 	virtual RDRVEC3* GetPosition();
 	virtual RDRVEC3* GetScale();
 	virtual RDRQUAT* GetRotation();

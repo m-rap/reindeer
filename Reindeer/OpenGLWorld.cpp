@@ -22,7 +22,7 @@ void OpenGLWorld::Init3d()
 		return;
 	}
 
-	if (!GLEW_VERSION_1_5)
+	//if (!GLEW_VERSION_1_5)
 		USE_LEGACY = true;
 
 	printf("%s\n", glGetString(GL_VERSION));
@@ -43,7 +43,7 @@ void OpenGLWorld::Init3d()
 
 	light = new Light();
 	light->SetPosition(RDRVEC3(3.0f, 3.0f, 7.0f));
-	light->SetLookAt(RDRVEC3(0.0f, 0.0f, 0.0f));
+	light->LookAt(RDRVEC3(0.0f, 0.0f, 0.0f));
 	light->Init();
 }
 
