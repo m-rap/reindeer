@@ -4,6 +4,7 @@
 #include "OpenGLWorld.h"
 #endif
 #include "BoxObject.h"
+#include "GlfwContainer.h"
 
 using namespace std;
 
@@ -23,7 +24,8 @@ int main()
 #ifdef USE_D3D9
 	D3d9World world;
 #else
-	OpenGLWorld world;
+    GlfwContainer container;
+	OpenGLWorld world(&container);
 #endif
     World::Global = &world;
 	world.Init();

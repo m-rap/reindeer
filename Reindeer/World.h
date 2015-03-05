@@ -19,6 +19,7 @@
 #endif
 #include <GLFW/glfw3.h>
 #endif
+#include "Container.h"
 
 using namespace std;
 
@@ -26,7 +27,8 @@ using namespace std;
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // the WindowProc function prototype
 #endif
 
-class World
+class World :
+    public ContainerEventListener
 {
 protected:
 
@@ -36,11 +38,12 @@ protected:
 	unsigned long lastTimeMiddleMousePressed;
 	double mouseX, mouseY;
 
+	Container* container;
+
 #ifndef USE_OPENGL
 	HWND hWnd;
 	HDC hDC;		// Private GDI Device Context
 #else
-    GLFWwindow* window;
 #endif
 	void InitWindow();
 	virtual void Init3d() = 0;
@@ -51,7 +54,7 @@ protected:
 	virtual void Draw();
 
 public:
-    World();
+    World(Container* container);
     virtual ~World();
 
 	static World* Global;
@@ -65,9 +68,16 @@ public:
     void Init();
     void Render();
 
-#ifdef USE_OPENGL
-	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-#endif
+    virtual void Scrolled(double xoffset, double yoffset);
+    virtual void MouseLeftButtonPressed  (double x, double y);
+    virtual void MouseLeftButtonReleased (double x, double y);
+    virtual void MouseRightButtonPressed (double x, double y);
+    virtual void MouseRightButtonReleased(double x, double y);
+    virtual void MouseMiddleButtonPressed (double x, double y);
+    virtual void MouseMiddleButtonReleased(double x, double y);
+    virtual void KeyPressed(int keyCode);
+    virtual void KeyReleased(int keyCode);
+    virtual void MouseMoved(double x, double y);
 };
 
 #endif // WORLD_H

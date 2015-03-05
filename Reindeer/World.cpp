@@ -15,20 +15,18 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
     return DefWindowProc (hWnd, message, wParam, lParam);
 }
 #else
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	World::Global->ScrollCallback(window, xoffset, yoffset);
-}
 #endif
 
 World* World::Global = NULL;
 
-World::World()
+World::World(Container* container)
 {
 	mouseRightButtonDown = false;
 	mouseMiddleButtonDown = false;
 	btClock cl;
 	lastTimeMiddleMousePressed = cl.getTimeMilliseconds();
+	this->container = container;
+	container->AddListener(this);
 }
 
 World::~World()
@@ -63,21 +61,7 @@ void World::InitWindow()
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 #else
-    int init = glfwInit();
-	if (init == GL_FALSE) {
-		printf("glfw init failed\n");
-		return;
-	}
-
-	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Reindeer", NULL, NULL);
-	if (!window) {
-		printf("glfw create window failed\n");
-		glfwTerminate();
-		return;
-	}
-	glfwMakeContextCurrent(window);
-
-	glfwSetScrollCallback(window, scroll_callback);
+    container->Init();
 #endif
 }
 
@@ -119,64 +103,9 @@ void World::Render()
         if(msg.message == WM_QUIT)
             break;
 #else
-	while (!glfwWindowShouldClose(window)) {
-#endif		
-		
-		int mouseRightButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-		if (mouseRightButtonState == GLFW_PRESS && !mouseRightButtonDown) {
-			mouseRightButtonDown = true;
-			glfwGetCursorPos(window, &mouseX, &mouseY);
-		}
-		else if (mouseRightButtonState == GLFW_RELEASE) {
-			mouseRightButtonDown = false;
-		}
-
-		int mouseMiddleButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
-		if (mouseMiddleButtonState == GLFW_PRESS) {
-			lastTimeMiddleMousePressed = cl.getTimeMilliseconds();
-			if (!mouseMiddleButtonDown) {
-				mouseMiddleButtonDown = true;
-				glfwGetCursorPos(window, &mouseX, &mouseY);
-			}
-		}
-
-		unsigned long tempMid = cl.getTimeMilliseconds() - lastTimeMiddleMousePressed;
-		if (tempMid > 50 && mouseRightButtonState == GLFW_RELEASE) {
-			mouseMiddleButtonDown = false;
-		}
-
-		if (mouseRightButtonDown) {
-			double newMouseX, newMouseY;
-			glfwGetCursorPos(window, &newMouseX, &newMouseY);
-			camera.RotateLocalX(ToRadian((mouseY - newMouseY) * 0.1f), true);
-			camera.RotateGlobalY(ToRadian((mouseX - newMouseX) * 0.1f), true);
-			camera.BuildWorld();
-			mouseX = newMouseX;
-			mouseY = newMouseY;
-		}
-
-		if (mouseMiddleButtonDown) {
-			double newMouseX, newMouseY;
-			glfwGetCursorPos(window, &newMouseX, &newMouseY);
-			RDRVEC3 pos = *camera.GetPosition();
-			RDRVEC3 delta = (float)(mouseX - newMouseX) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_X);
-			delta += (float)(newMouseY - mouseY) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_Y);
-			camera.SetPosition(pos + delta);
-			mouseX = newMouseX;
-			mouseY = newMouseY;
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-			camera.RotateGlobalY(ToRadian(0.01f));
-
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			camera.RotateGlobalY(ToRadian(-0.01f));
-		
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-			camera.RotateLocalX(ToRadian(0.01f));
-
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-			camera.RotateLocalX(ToRadian(-0.01f));
+	while (!container->ShouldClose()) {
+#endif
+        container->ReadInput();
 
 		btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 		btScalar frameTime = newTime - currentTime;
@@ -186,10 +115,6 @@ void World::Render()
 
 		for (size_t i = 0; i < PhysicalObjects.size(); i++)
 		{
-			//PhysicalObject& obj = *PhysicalObjects[i];
-			//RDRQUAT& rot = *obj.GetRotation();
-			//RDRVEC3 delta = rot * glm::vec3(0.0f, 0.0f, 0.001f);
-			//obj.SetPosition(*obj.GetPosition() + delta);
 			PhysicalObjects[i]->Update();
 		}
 
@@ -202,8 +127,7 @@ void World::Render()
 #ifndef USE_OPENGL
 		SwapBuffers(hDC);
 #else
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+        container->PostUpdate();
 #endif
 	}
 
@@ -212,15 +136,11 @@ void World::Render()
 		dynamicsWorld->removeRigidBody(PhysicalObjects[i]->rigidBody);
 	}
 	dynamicsWorld->removeRigidBody(ground->rigidBody);
-	//dynamicsWorld->removeRigidBody(groundRigidBody);
 
 	DrawableObjects.clear();
 	PhysicalObjects.clear();
 
     delete ground;
-	//delete groundRigidBody->getMotionState();
-	//delete groundRigidBody;
-	//delete groundShape;
 
 	delete dynamicsWorld;
 	delete solver;
@@ -251,9 +171,80 @@ void World::Draw()
     ground->Draw(&camera, light);
 }
 
-void World::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+void World::Scrolled(double xoffset, double yoffset)
 {
-	RDRVEC3 pos = *camera.GetPosition();
+    RDRVEC3 pos = *camera.GetPosition();
 	RDRVEC3 delta = (float)yoffset * glm::normalize(*camera.GetRotation() * AXIS_Z);
 	camera.SetPosition(pos + delta);
+}
+
+void World::MouseLeftButtonPressed  (double x, double y)
+{
+}
+
+void World::MouseLeftButtonReleased (double x, double y)
+{
+}
+
+void World::MouseRightButtonPressed (double x, double y)
+{
+    mouseRightButtonDown = true;
+    mouseX = x;
+    mouseY = y;
+}
+
+void World::MouseRightButtonReleased(double x, double y)
+{
+    mouseRightButtonDown = false;
+}
+
+void World::MouseMiddleButtonPressed (double x, double y)
+{
+    mouseMiddleButtonDown = true;
+    mouseX = x;
+    mouseY = y;
+}
+
+void World::MouseMiddleButtonReleased(double x, double y)
+{
+    mouseMiddleButtonDown = false;
+}
+
+void World::MouseMoved(double x, double y)
+{
+    if (mouseRightButtonDown) {
+        camera.RotateLocalX(ToRadian((mouseY - y) * 0.1f), true);
+        camera.RotateGlobalY(ToRadian((mouseX - x) * 0.1f), true);
+        camera.BuildWorld();
+        mouseX = x;
+        mouseY = y;
+    }
+
+    if (mouseMiddleButtonDown) {
+        RDRVEC3 pos = *camera.GetPosition();
+        RDRVEC3 delta = (float)(mouseX - x) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_X);
+        delta += (float)(y - mouseY) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_Y);
+        camera.SetPosition(pos + delta);
+        mouseX = x;
+        mouseY = y;
+    }
+}
+
+void World::KeyPressed(int keyCode)
+{
+    if (keyCode == GLFW_KEY_LEFT)
+        camera.RotateGlobalY(ToRadian(0.01f));
+
+    if (keyCode == GLFW_KEY_RIGHT)
+        camera.RotateGlobalY(ToRadian(-0.01f));
+
+    if (keyCode == GLFW_KEY_UP)
+        camera.RotateLocalX(ToRadian(0.01f));
+
+    if (keyCode == GLFW_KEY_DOWN)
+        camera.RotateLocalX(ToRadian(-0.01f));
+}
+
+void World::KeyReleased(int keyCode)
+{
 }

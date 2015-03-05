@@ -20,9 +20,9 @@ protected:
 	virtual void Draw();
 
 public:
-	OpenGLWorld(void);
+	OpenGLWorld(Container* container);
 	virtual ~OpenGLWorld(void);
-	
+
 	GLuint standardShader;
 	GLuint depthShader;
 	GLuint textureViewerShader;

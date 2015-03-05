@@ -1,7 +1,7 @@
 #include "OpenGLWorld.h"
 
 
-OpenGLWorld::OpenGLWorld(void) : World()
+OpenGLWorld::OpenGLWorld(Container* container) : World(container)
 {
 	light = NULL;
 }
