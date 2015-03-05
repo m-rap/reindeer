@@ -59,10 +59,10 @@
 		<Unit filename="Camera.h" />
 		<Unit filename="Container.cpp" />
 		<Unit filename="Container.h" />
+		<Unit filename="DepthRTT.fragmentshader" />
+		<Unit filename="DepthRTT.vertexshader" />
 		<Unit filename="Drawable.cpp" />
 		<Unit filename="Drawable.h" />
-		<Unit filename="GLDebugDrawer.cpp" />
-		<Unit filename="GLDebugDrawer.h" />
 		<Unit filename="GlfwContainer.cpp" />
 		<Unit filename="GlfwContainer.h" />
 		<Unit filename="LegacyOpenGLRenderer.cpp" />
