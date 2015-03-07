@@ -113,6 +113,12 @@ $(OBJDIR_DEBUG)/ModelObject.o: ModelObject.cpp
 $(OBJDIR_DEBUG)/OpenGLRenderer.o: OpenGLRenderer.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c OpenGLRenderer.cpp -o $(OBJDIR_DEBUG)/OpenGLRenderer.o
 
+$(OBJDIR_DEBUG)/OpenGLLight.o: OpenGLLight.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c OpenGLLight.cpp -o $(OBJDIR_DEBUG)/OpenGLLight.o
+
+$(OBJDIR_DEBUG)/LegacyOpenGLLight.o: LegacyOpenGLLight.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c LegacyOpenGLLight.cpp -o $(OBJDIR_DEBUG)/LegacyOpenGLLight.o
+
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
 	rm -rf bin/linux/Debug
@@ -182,6 +188,12 @@ $(OBJDIR_RELEASE)/ModelObject.o: ModelObject.cpp
 
 $(OBJDIR_RELEASE)/OpenGLRenderer.o: OpenGLRenderer.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c OpenGLRenderer.cpp -o $(OBJDIR_RELEASE)/OpenGLRenderer.o
+
+$(OBJDIR_RELEASE)/OpenGLLight.o: OpenGLLight.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c OpenGLLight.cpp -o $(OBJDIR_RELEASE)/OpenGLLight.o
+
+$(OBJDIR_RELEASE)/LegacyOpenGLLight.o: LegacyOpenGLLight.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c LegacyOpenGLLight.cpp -o $(OBJDIR_RELEASE)/LegacyOpenGLLight.o
 
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
