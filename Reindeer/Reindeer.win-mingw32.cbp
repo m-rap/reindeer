@@ -61,12 +61,16 @@
 		<Unit filename="Drawable.h" />
 		<Unit filename="GlfwContainer.cpp" />
 		<Unit filename="GlfwContainer.h" />
+		<Unit filename="LegacyOpenGLLight.cpp" />
+		<Unit filename="LegacyOpenGLLight.h" />
 		<Unit filename="LegacyOpenGLRenderer.cpp" />
 		<Unit filename="LegacyOpenGLRenderer.h" />
 		<Unit filename="Light.cpp" />
 		<Unit filename="Light.h" />
 		<Unit filename="ModelObject.cpp" />
 		<Unit filename="ModelObject.h" />
+		<Unit filename="OpenGLLight.cpp" />
+		<Unit filename="OpenGLLight.h" />
 		<Unit filename="OpenGLRenderer.cpp" />
 		<Unit filename="OpenGLRenderer.h" />
 		<Unit filename="OpenGLWorld.cpp" />

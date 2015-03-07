@@ -8,44 +8,28 @@ class Light :
 	public Camera
 {
 protected:
-#ifdef USE_OPENGL
-	GLuint depthShader;
-	GLuint standardShader;
-	GLuint textureViewerShader;
-
-	GLuint depthMVPId;
-	GLuint lightPositionId;
-
-	GLuint textureViewerVertexId;
-	GLuint textureViewerTextureId;
-
-	GLuint depthFrameBuffer;
-	GLuint depthTexture;
-	GLuint quadVertexBuffer;
-#endif
-
-	bool InitShadowMap();
+	virtual bool InitShadowMap() = 0;
 
 public:
 	Light(void);
 	virtual ~Light(void);
 
 #ifdef USE_OPENGL
-	void SetDepthShader(const GLuint& id);
-	void SetStandardShader(const GLuint& id);
-	void SetTextureViewerShader(const GLuint& id);
-	GLuint GetDepthTexture();
-	GLuint GetDepthFrameBuffer();
+	virtual void SetDepthShader(const GLuint& id) = 0;
+	virtual void SetStandardShader(const GLuint& id) = 0;
+	virtual void SetTextureViewerShader(const GLuint& id) = 0;
+	virtual GLuint GetDepthTexture() = 0;
+	virtual GLuint GetDepthFrameBuffer() = 0;
 #endif
-	void Init();
+	virtual void Init();
 
 	RDRMAT4 GetDepthMVP(const glm::mat4& world);
 	RDRMAT4 GetDepthBiasMVP(const glm::mat4& depthMVP);
 
-	void DrawShadowMapTexture();
-	void ApplyShadowMap(Camera& camera);
-	void RenderLight();
-	void RenderDimLight();
+	virtual void DrawShadowMapTexture() = 0;
+	virtual void ApplyShadowMap(Camera& camera) = 0;
+	virtual void RenderLight() = 0;
+	virtual void RenderDimLight() = 0;
 };
 
 #endif

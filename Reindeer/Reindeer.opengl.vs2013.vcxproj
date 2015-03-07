@@ -99,11 +99,13 @@
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="GlfwContainer.cpp" />
+    <ClCompile Include="LegacyOpenGLLight.cpp" />
     <ClCompile Include="LegacyOpenGLRenderer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="objloader.cpp" />
+    <ClCompile Include="OpenGLLight.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="OpenGLWorld.cpp" />
     <ClCompile Include="PhysicalObject.cpp" />
@@ -120,10 +122,12 @@
     <ClCompile Include="Container.h" />
     <ClInclude Include="Drawable.h" />
     <ClCompile Include="GlfwContainer.h" />
+    <ClInclude Include="LegacyOpenGLLight.h" />
     <ClInclude Include="LegacyOpenGLRenderer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModelObject.h" />
     <ClInclude Include="objloader.h" />
+    <ClInclude Include="OpenGLLight.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="OpenGLWorld.h" />
     <ClInclude Include="PhysicalObject.h" />

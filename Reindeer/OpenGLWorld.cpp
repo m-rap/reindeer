@@ -1,5 +1,6 @@
 #include "OpenGLWorld.h"
-
+#include "LegacyOpenGLLight.h"
+#include "OpenGLLight.h"
 
 OpenGLWorld::OpenGLWorld(Container* container) : World(container)
 {
@@ -22,7 +23,7 @@ void OpenGLWorld::Init3d()
 		return;
 	}
 
-	//if (!GLEW_VERSION_1_5)
+	if (!GLEW_VERSION_1_5)
 		USE_LEGACY = true;
 
 	printf("%s\n", glGetString(GL_VERSION));
@@ -34,14 +35,16 @@ void OpenGLWorld::Init3d()
 	//glClearDepth(1.0f);
 	glEnable(GL_CULL_FACE);
 
-	if (!USE_LEGACY)
-	{
+	if (!USE_LEGACY) {
 		standardShader = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
 		depthShader = LoadShaders("DepthRTT.vertexshader", "DepthRTT.fragmentshader");
 		textureViewerShader = LoadShaders("Passthrough.vertexshader", "SimpleTexture.fragmentshader");
+		light = new OpenGLLight();
+	}
+	else {
+		light = new LegacyOpenGLLight();
 	}
 
-	light = new Light();
 	light->SetPosition(RDRVEC3(3.0f, 3.0f, 7.0f));
 	light->LookAt(RDRVEC3(0.0f, 0.0f, 0.0f));
 	light->Init();
