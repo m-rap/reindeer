@@ -1,22 +1,5 @@
 #include "World.h"
 
-#ifndef USE_OPENGL
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch(message)
-    {
-        case WM_DESTROY:
-            {
-                PostQuitMessage(0);
-                return 0;
-            } break;
-    }
-
-    return DefWindowProc (hWnd, message, wParam, lParam);
-}
-#else
-#endif
-
 World* World::Global = NULL;
 
 World::World(Container* container)
@@ -42,27 +25,7 @@ void World::Init()
 
 void World::InitWindow()
 {
-#ifndef USE_OPENGL
-    WNDCLASSEX wc;
-
-	ZeroMemory(&wc, sizeof(WNDCLASSEX));
-
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = GetModuleHandle(0);
-	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.lpszClassName = L"WindowClass";
-
-	RegisterClassEx(&wc);
-	hWnd = CreateWindowEx(NULL, L"WindowClass", L"Reindeer", WS_OVERLAPPEDWINDOW, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, GetModuleHandle(0), NULL);
-	hDC = GetDC(hWnd);
-
-	ShowWindow(hWnd, SW_SHOWDEFAULT);
-#else
     container->Init();
-#endif
 }
 
 void World::Render()
@@ -90,22 +53,10 @@ void World::Render()
 	btClock cl;
 	btScalar currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 
-#ifndef USE_OPENGL
-	MSG msg;
-	while(TRUE)
-    {
-        while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-
-        if(msg.message == WM_QUIT)
-            break;
-#else
-	while (!container->ShouldClose()) {
-#endif
+	while (true) {
         container->ReadInput();
+		if (container->ShouldClose())
+			break;
 
 		btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 		btScalar frameTime = newTime - currentTime;
@@ -119,16 +70,9 @@ void World::Render()
 		}
 
 		PreUpdate();
-
 		Draw();
-
 		PostUpdate();
-
-#ifndef USE_OPENGL
-		SwapBuffers(hDC);
-#else
         container->PostUpdate();
-#endif
 	}
 
 	for (size_t i = 0; i < PhysicalObjects.size(); i++)
@@ -155,11 +99,6 @@ void World::Render()
 	CollisionShapes.clear();
 
 	PostRender();
-
-#ifdef _MSC_VER
-#else
-	glfwTerminate();
-#endif
 }
 
 void World::Draw()
@@ -174,7 +113,7 @@ void World::Draw()
 void World::Scrolled(double xoffset, double yoffset)
 {
     RDRVEC3 pos = *camera.GetPosition();
-	RDRVEC3 delta = (float)yoffset * glm::normalize(*camera.GetRotation() * AXIS_Z);
+	RDRVEC3 delta = (float)yoffset * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_Z));
 	camera.SetPosition(pos + delta);
 }
 
@@ -222,8 +161,8 @@ void World::MouseMoved(double x, double y)
 
     if (mouseMiddleButtonDown) {
         RDRVEC3 pos = *camera.GetPosition();
-        RDRVEC3 delta = (float)(mouseX - x) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_X);
-        delta += (float)(y - mouseY) * 0.01f * glm::normalize(*camera.GetRotation() * AXIS_Y);
+        RDRVEC3 delta = (float)(mouseX - x) * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_X));
+		delta += (float)(y - mouseY) * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_Y));
         camera.SetPosition(pos + delta);
         mouseX = x;
         mouseY = y;
@@ -232,16 +171,16 @@ void World::MouseMoved(double x, double y)
 
 void World::KeyPressed(int keyCode)
 {
-    if (keyCode == GLFW_KEY_LEFT)
+    if (keyCode == container->KEY_LEFT())
         camera.RotateGlobalY(ToRadian(0.01f));
 
-    if (keyCode == GLFW_KEY_RIGHT)
+    if (keyCode == container->KEY_RIGHT())
         camera.RotateGlobalY(ToRadian(-0.01f));
 
-    if (keyCode == GLFW_KEY_UP)
+    if (keyCode == container->KEY_UP())
         camera.RotateLocalX(ToRadian(0.01f));
 
-    if (keyCode == GLFW_KEY_DOWN)
+    if (keyCode == container->KEY_DOWN())
         camera.RotateLocalX(ToRadian(-0.01f));
 }
 

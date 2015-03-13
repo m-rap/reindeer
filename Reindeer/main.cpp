@@ -5,6 +5,9 @@
 #endif
 #include "BoxObject.h"
 #include "GlfwContainer.h"
+#ifdef _WIN32
+#include "WglContainer.h"
+#endif
 
 using namespace std;
 
@@ -22,9 +25,11 @@ int main()
 	//scanf("%f", &PHYSICS_WORLD_SCALE);
 
 #ifdef USE_D3D9
-	D3d9World world;
+	Win32Container container;
+	D3d9World world(&container);
 #else
     GlfwContainer container;
+	//WglContainer container;
 	OpenGLWorld world(&container);
 #endif
     World::Global = &world;

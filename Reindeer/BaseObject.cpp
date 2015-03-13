@@ -4,7 +4,11 @@
 BaseObject::BaseObject() {
 	position.x = position.y = position.z = 0.0f;
 	scale.x = scale.y = scale.z = 1.0f;
-	rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+#ifdef USE_OPENGL
+	rotation = RDRQUAT(1.0f, 0.0f, 0.0f, 0.0f);
+#else
+	rotation = RDRQUAT(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 	BuildWorld();
 }
@@ -33,7 +37,7 @@ void BaseObject::SetRotation(const RDRQUAT& rotation, bool silent) {
 
 void BaseObject::Rotate(const float& angle, const RDRVEC3& axis, bool silent)
 {
-	rotation = glm::angleAxis(angle, axis) * rotation;
+	rotation = RdrHelper::QuatMultiply(RdrHelper::AngleAxis(angle, axis), rotation);
 
 	if (!silent)
 		BuildWorld();
@@ -43,19 +47,19 @@ void BaseObject::Rotate(const float& angle, const RDRVEC3& axis, bool silent)
 
 void BaseObject::RotateLocalX(const float& angle, bool silent)
 {
-	RDRVEC3 worldAxis = rotation * AXIS_X;
+	RDRVEC3 worldAxis = RdrHelper::Vec3Transform(rotation, AXIS_X);
 	Rotate(angle, worldAxis, silent);
 }
 
 void BaseObject::RotateLocalY(const float& angle, bool silent)
 {
-	RDRVEC3 worldAxis = rotation * AXIS_Y;
+	RDRVEC3 worldAxis = RdrHelper::Vec3Transform(rotation, AXIS_Y);
 	Rotate(angle, worldAxis, silent);
 }
 
 void BaseObject::RotateLocalZ(const float& angle, bool silent)
 {
-	RDRVEC3 worldAxis = rotation * AXIS_Z;
+	RDRVEC3 worldAxis = RdrHelper::Vec3Transform(rotation, AXIS_Z);
 	Rotate(angle, worldAxis, silent);
 }
 
@@ -76,7 +80,7 @@ void BaseObject::RotateGlobalZ(const float& angle, bool silent)
 
 void BaseObject::LookAt(const RDRVEC3& target, bool silent)
 {
-    SetRotation(RdrHelper::LookAt(position, target, rotation * VECTOR_UP), silent);
+	SetRotation(RdrHelper::LookAt(position, target, RdrHelper::Vec3Transform(rotation, VECTOR_UP)), silent);
 }
 
 void BaseObject::SetScale(const RDRVEC3& scale, bool silent) {
@@ -104,25 +108,7 @@ RDRMAT4* BaseObject::GetWorld()
 	return &world;
 }
 
-void BaseObject::BuildWorld() {
-#ifdef USE_D3D9
-	D3DXMATRIX tempMatrix;
-	D3DXMatrixIdentity(&world);
-
-	// scale
-	D3DXMatrixScaling(&tempMatrix, scale.x, scale.y, scale.z);
-	D3DXMatrixMultiply(&world, &world, &tempMatrix);
-
-	// rotation
-	D3DXMatrixRotationQuaternion(&rotationMatrix, &quaternion);
-	D3DXMatrixMultiply(&world, &world, &rotationMatrix);
-
-	// position
-	D3DXMatrixTranslation(&tempMatrix, position.x, position.y, position.z);
-	D3DXMatrixMultiply(&world, &world, &tempMatrix);
-
-#elif defined( USE_OPENGL )
-	rotationMatrix = glm::toMat4(rotation);
-	world = glm::translate(glm::mat4(1.0f), position) * rotationMatrix * glm::scale(glm::mat4(1.0f), scale);
-#endif
+void BaseObject::BuildWorld()
+{
+	RdrHelper::BuildWorld(world, position, rotation, scale);
 }

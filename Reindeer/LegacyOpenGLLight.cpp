@@ -3,6 +3,9 @@
 LegacyOpenGLLight::LegacyOpenGLLight(void) : Light()
 {
 	depthTexture = 0;
+
+	float s = 0.25f;
+	projection = glm::ortho<float>(-10 * s, 10 * s, -10 * s, 10 * s, 0, 20);
 }
 
 LegacyOpenGLLight::~LegacyOpenGLLight(void)

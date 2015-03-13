@@ -3,8 +3,6 @@
 
 Light::Light(void) : Camera()
 {
-	float s = 0.25f;
-	projection = glm::ortho<float>(-10 * s, 10 * s, -10 * s, 10 * s, 0, 20);
 }
 
 Light::~Light(void)
@@ -16,20 +14,22 @@ void Light::Init()
 	InitShadowMap();
 }
 
-RDRMAT4 Light::GetDepthMVP(const glm::mat4& world)
+RDRMAT4 Light::GetDepthMVP(const RDRMAT4& world)
 {
-	return projection * view * world;
+	RDRMAT4 mvp;
+	RdrHelper::Mat4Multiply(mvp, projection, view, world);
+	return mvp;
 }
 
-RDRMAT4 Light::GetDepthBiasMVP(const glm::mat4& world)
+RDRMAT4 Light::GetDepthBiasMVP(const RDRMAT4& world)
 {
-#ifdef USE_OPENGL
-	static glm::mat4 biasMatrix(
+	static RDRMAT4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,
 		0.0, 0.5, 0.0, 0.0,
 		0.0, 0.0, 0.5, 0.0,
 		0.5, 0.5, 0.5, 1.0
 	);
-    return biasMatrix * GetDepthMVP(world);
-#endif
+	RDRMAT4 mvp;
+    RdrHelper::Mat4Multiply(mvp, biasMatrix, GetDepthMVP(world));
+	return mvp;
 }

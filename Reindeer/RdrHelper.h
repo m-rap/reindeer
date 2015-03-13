@@ -38,15 +38,25 @@ public:
 	RdrHelper();
 	~RdrHelper();
 
+	static void Mat4Multiply(RDRMAT4& output, const RDRMAT4& a, const RDRMAT4& b);
+	static void Mat4Multiply(RDRMAT4& output, const RDRMAT4& a, const RDRMAT4& b, const RDRMAT4& c);
+	static RDRQUAT QuatMultiply(const RDRQUAT& a, const RDRQUAT& b);
+	
+	static void BuildWorld(RDRMAT4& world, const RDRVEC3& position, const RDRQUAT& rotation, const RDRVEC3& scale);
 	static void EulerDegreeToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler);
 	static void EulerToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler);
 	static void QuaternionToEuler(RDRVEC3& euler, RDRQUAT& quaternion);
 	static void AngleTo(RDRVEC3& result, const RDRVEC3& from, const RDRVEC3& location);
-	static void Vec4ToVec3(RDRVEC3& result, RDRVEC4& v4);
+	
+	static RDRVEC3 Vec4ToVec3(RDRVEC4& v4);
 	static RDRVEC3 Vec3ToRadian(const RDRVEC3& input);
 	static RDRVEC3 Vec3ToDegree(const RDRVEC3& input);
+	static RDRVEC3 Vec3Normalize(const RDRVEC3& input);
+	static RDRVEC3 Vec3Transform(const RDRQUAT& rotation, const RDRVEC3& vec);
+
 	static RDRQUAT RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest);
 	static RDRQUAT LookAt(const RDRVEC3& position, const RDRVEC3& target, const RDRVEC3& up);
+	static RDRQUAT AngleAxis(const float& angle, const RDRVEC3& axis);
 };
 
 #endif

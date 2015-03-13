@@ -27,8 +27,14 @@ GlfwContainer::GlfwContainer()
 
 GlfwContainer::~GlfwContainer()
 {
-    //dtor
+	if (window)
+		glfwTerminate();
 }
+
+int GlfwContainer::KEY_LEFT() { return GLFW_KEY_LEFT; }
+int GlfwContainer::KEY_RIGHT() { return GLFW_KEY_RIGHT; }
+int GlfwContainer::KEY_UP() { return GLFW_KEY_UP; }
+int GlfwContainer::KEY_DOWN() { return GLFW_KEY_DOWN; }
 
 void GlfwContainer::Init()
 {

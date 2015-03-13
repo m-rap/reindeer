@@ -1,8 +1,9 @@
 #include "D3d9World.h"
+#include "Win32Container.h"
 
 LPDIRECT3DDEVICE9 d3ddev;
 
-D3d9World::D3d9World(void) : World()
+D3d9World::D3d9World(Container* container) : World(container)
 {
 }
 
@@ -16,6 +17,8 @@ void D3d9World::Init3d()
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
 
     D3DPRESENT_PARAMETERS d3dpp;
+
+	HWND hWnd = ((Win32Container*)container)->hWnd;
 
     ZeroMemory(&d3dpp, sizeof(d3dpp));
     d3dpp.Windowed = TRUE;
@@ -65,6 +68,10 @@ void D3d9World::Init3d()
 	d3ddev->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
     d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(255 / 5, 255 / 5, 255 / 5));    // ambient light 0.2, 0.2, 0.2
     d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);    // handle normals in scaling
+}
+
+void D3d9World::PreRender()
+{
 }
 
 void D3d9World::PreUpdate()

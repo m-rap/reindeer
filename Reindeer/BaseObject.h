@@ -9,7 +9,6 @@ protected:
 	RDRVEC3 scale;
 	RDRQUAT rotation;
 
-	RDRMAT4 rotationMatrix;
 	RDRMAT4 world;
 
 	virtual void TransformationChanged() {}

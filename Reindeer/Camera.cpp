@@ -36,15 +36,12 @@ void Camera::BuildProjection(bool perspective)
 }
 void Camera::BuildView() {
 #ifdef USE_D3D9
-	D3DXVECTOR4 v4;
 	D3DXVECTOR3 up, lookAt(0, 0, 10);
 
-	D3DXVec3Transform(&v4, &lookAt, &rotationMatrix);
-	RdrHelper::Vec4ToVec3(lookAt, v4);
+	lookAt = RdrHelper::Vec3Transform(rotation, lookAt);
 	D3DXVec3Add(&lookAt, &position, &lookAt);
 
-	D3DXVec3Transform(&v4, &VECTOR_UP, &rotationMatrix);
-	RdrHelper::Vec4ToVec3(up, v4);
+	up = RdrHelper::Vec3Transform(rotation, VECTOR_UP);
 
 	D3DXMatrixLookAtRH(
 		&view,

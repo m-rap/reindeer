@@ -8,24 +8,9 @@
 #include "ModelObject.h"
 #include "Light.h"
 
-#ifndef USE_OPENGL
-#include <windows.h>
-#include <windowsx.h>
-#else
-#ifdef _MSC_VER
-#define _GLFW_WIN32
-#define _GLFW_WGL
-#define _GLFW_USE_OPENGL
-#endif
-#include <GLFW/glfw3.h>
-#endif
 #include "Container.h"
 
 using namespace std;
-
-#ifdef _MSC_VER
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // the WindowProc function prototype
-#endif
 
 class World :
     public ContainerEventListener
@@ -40,11 +25,6 @@ protected:
 
 	Container* container;
 
-#ifndef USE_OPENGL
-	HWND hWnd;
-	HDC hDC;		// Private GDI Device Context
-#else
-#endif
 	void InitWindow();
 	virtual void Init3d() = 0;
 	virtual void PreRender() = 0;

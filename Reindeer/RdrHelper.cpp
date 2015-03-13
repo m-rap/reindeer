@@ -25,6 +25,61 @@ RdrHelper::~RdrHelper()
 {
 }
 
+void RdrHelper::Mat4Multiply(RDRMAT4& output, const RDRMAT4& a, const RDRMAT4& b)
+{
+#ifdef USE_D3D9
+	D3DXMatrixMultiply(&output, &b, &a);
+#else
+	output = a * b;
+#endif
+}
+
+void RdrHelper::Mat4Multiply(RDRMAT4& output, const RDRMAT4& a, const RDRMAT4& b, const RDRMAT4& c)
+{
+#ifdef USE_D3D9
+	D3DXMatrixIdentity(&output);
+	D3DXMatrixMultiply(&output, &output, &c);
+	D3DXMatrixMultiply(&output, &output, &b);
+	D3DXMatrixMultiply(&output, &output, &a);
+#else
+	output = a * b * c;
+#endif
+}
+
+RDRQUAT RdrHelper::QuatMultiply(const RDRQUAT& a, const RDRQUAT& b)
+{
+#ifdef USE_D3D9
+	RDRQUAT quat;
+	D3DXQuaternionMultiply(&quat, &b, &a);
+	return quat;
+#else
+	return a * b;
+#endif
+}
+
+void RdrHelper::BuildWorld(RDRMAT4& world, const RDRVEC3& position, const RDRQUAT& rotation, const RDRVEC3& scale)
+{
+#ifdef USE_D3D9
+	D3DXMATRIX tempMatrix;
+	D3DXMatrixIdentity(&world);
+
+	// scale
+	D3DXMatrixScaling(&tempMatrix, scale.x, scale.y, scale.z);
+	D3DXMatrixMultiply(&world, &world, &tempMatrix);
+
+	// rotation
+	D3DXMatrixRotationQuaternion(&tempMatrix, &rotation);
+	D3DXMatrixMultiply(&world, &world, &tempMatrix);
+
+	// position
+	D3DXMatrixTranslation(&tempMatrix, position.x, position.y, position.z);
+	D3DXMatrixMultiply(&world, &world, &tempMatrix);
+
+#elif defined( USE_OPENGL )
+	world = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(rotation) * glm::scale(glm::mat4(1.0f), scale);
+#endif
+}
+
 void RdrHelper::EulerDegreeToQuaternion(RDRQUAT& quaternion, const RDRVEC3& euler)
 {
 	RDRVEC3 tempEuler;
@@ -77,12 +132,12 @@ void RdrHelper::QuaternionToEuler(RDRVEC3& euler, RDRQUAT& q)
 	D3DXVECTOR4 forward;
 	D3DXVECTOR3 forward3;
 	D3DXVec3Transform(&forward, &VECTOR_FORWARD, &tempMat);
-	Vec4ToVec3(forward3, forward);
+	forward3 = Vec4ToVec3(forward);
 
     D3DXVECTOR4 up;
 	D3DXVECTOR3 up3;
 	D3DXVec3Transform(&up, &VECTOR_UP, &tempMat);
-	Vec4ToVec3(up3, up);
+	up3 = Vec4ToVec3(up);
 
 	D3DXVECTOR3 zeroV(0, 0, 0);
 	AngleTo(euler, zeroV, forward3);
@@ -100,11 +155,11 @@ void RdrHelper::QuaternionToEuler(RDRVEC3& euler, RDRQUAT& q)
     {
 		D3DXMatrixRotationY(&tempMat, -euler.y);
         D3DXVec3Transform(&up, &up3, &tempMat);
-		Vec4ToVec3(up3, up);
+		up3 = Vec4ToVec3(up);
 
 		D3DXMatrixRotationX(&tempMat, -euler.x);
         D3DXVec3Transform(&up, &up3, &tempMat);
-		Vec4ToVec3(up3, up);
+		up3 = Vec4ToVec3(up);
 
 		euler.z = atan2(-up.x, up.y);
     }
@@ -122,9 +177,11 @@ void RdrHelper::AngleTo(RDRVEC3& angle, const RDRVEC3& from, const RDRVEC3& loca
 #endif
 }
 
-void RdrHelper::Vec4ToVec3(RDRVEC3& result, RDRVEC4& v4)
+RDRVEC3 RdrHelper::Vec4ToVec3(RDRVEC4& v4)
 {
+	RDRVEC3 result;
 	result.x = v4.x / v4.w; result.y = v4.y / v4.w; result.z = v4.z / v4.w;
+	return result;
 }
 
 RDRVEC3 RdrHelper::Vec3ToRadian(const RDRVEC3& input)
@@ -143,6 +200,30 @@ RDRVEC3 RdrHelper::Vec3ToDegree(const RDRVEC3& input)
 	output.y = (float)ToDegree(input.y);
 	output.z = (float)ToDegree(input.z);
 	return output;
+}
+
+RDRVEC3 RdrHelper::Vec3Normalize(const RDRVEC3& input)
+{
+#ifdef USE_D3D9
+	RDRVEC3 res;
+	D3DXVec3Normalize(&res, &input);
+	return res;
+#else
+	return glm::normalize(input);
+#endif
+}
+
+RDRVEC3 RdrHelper::Vec3Transform(const RDRQUAT& rotation, const RDRVEC3& vec)
+{
+#ifdef USE_D3D9
+	D3DXMATRIX tempMat;
+	D3DXMatrixRotationQuaternion(&tempMat, &rotation);
+	D3DXVECTOR4 res;
+	D3DXVec3Transform(&res, &vec, &tempMat);
+	return Vec4ToVec3(res);
+#else
+	return rotation * vec;
+#endif
 }
 
 RDRQUAT RdrHelper::RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest) {
@@ -174,6 +255,8 @@ RDRQUAT RdrHelper::RotationBetweenVectors(RDRVEC3 start, RDRVEC3 dest) {
 		rotationAxis.y * invs,
 		rotationAxis.z * invs
 	);
+#else
+	return RDRQUAT(0.0f, 0.0f, 0.0f, 1.0f);
 #endif
 }
 
@@ -191,6 +274,32 @@ RDRQUAT RdrHelper::LookAt(const RDRVEC3& position, const RDRVEC3& target, const 
 
     float angle = acosf(dot);
     RDRVEC3 axis = glm::normalize(glm::cross(VECTOR_FORWARD, forwardVec));
-    return glm::angleAxis(angle, axis);
+#else
+	RDRVEC3 forwardVec = Vec3Normalize(target - position);
+	float dot = D3DXVec3Dot(&VECTOR_FORWARD, &forwardVec);
+	if (abs(dot - (-1.0f) < 0.000001f)) {
+		return RDRQUAT(up.x, up.y, up.z, M_PI);
+	}
+	if (abs(dot - 1.0f) < 0.000001f) {
+		return RDRQUAT(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	float angle = acosf(dot);
+	RDRVEC3 axis;
+	D3DXVec3Cross(&axis, &VECTOR_FORWARD, &forwardVec);
+	axis = Vec3Normalize(axis);
+#endif
+
+	return AngleAxis(angle, axis);
+}
+
+RDRQUAT RdrHelper::AngleAxis(const float& angle, const RDRVEC3& axis)
+{
+#ifdef USE_OPENGL
+	return glm::angleAxis(angle, axis);
+#else
+	RDRQUAT quat;
+	D3DXQuaternionRotationAxis(&quat, &axis, angle);
+	return quat;
 #endif
 }

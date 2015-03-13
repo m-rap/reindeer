@@ -2,6 +2,7 @@
 #define CONTAINER_H
 
 #include <deque>
+#include "reindeer.h"
 
 using namespace std;
 
@@ -22,11 +23,16 @@ public:
 
 class Container
 {
-private:
+protected:
     deque<ContainerEventListener*> listeners;
 public:
     Container();
     virtual ~Container();
+
+	virtual int KEY_LEFT() = 0;
+	virtual int KEY_RIGHT() = 0;
+	virtual int KEY_UP() = 0;
+	virtual int KEY_DOWN() = 0;
 
     void AddListener(ContainerEventListener* listener);
 
@@ -48,4 +54,4 @@ public:
     void KeyReleased(int keyCode);
 };
 
-#endif // ICONTAINER_H
+#endif // CONTAINER_H

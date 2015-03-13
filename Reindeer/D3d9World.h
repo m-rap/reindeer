@@ -15,12 +15,13 @@ private:
 
 protected:
 	virtual void Init3d();
+	virtual void PreRender();
 	virtual void PreUpdate();
 	virtual void PostUpdate();
 	virtual void PostRender();
 
 public:
-	D3d9World(void);
+	D3d9World(Container* container);
 	virtual ~D3d9World(void);
 };
 

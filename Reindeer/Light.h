@@ -23,8 +23,8 @@ public:
 #endif
 	virtual void Init();
 
-	RDRMAT4 GetDepthMVP(const glm::mat4& world);
-	RDRMAT4 GetDepthBiasMVP(const glm::mat4& depthMVP);
+	RDRMAT4 GetDepthMVP(const RDRMAT4& world);
+	RDRMAT4 GetDepthBiasMVP(const RDRMAT4& depthMVP);
 
 	virtual void DrawShadowMapTexture() = 0;
 	virtual void ApplyShadowMap(Camera& camera) = 0;

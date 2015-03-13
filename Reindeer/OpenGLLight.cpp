@@ -6,6 +6,9 @@ OpenGLLight::OpenGLLight(void) : Light()
 	depthFrameBuffer = 0;
 	depthTexture = 0;
 	
+	float s = 0.25f;
+	projection = glm::ortho<float>(-10 * s, 10 * s, -10 * s, 10 * s, 0, 20);
+	
 	glGenBuffers(1, &quadVertexBuffer);
 }
 

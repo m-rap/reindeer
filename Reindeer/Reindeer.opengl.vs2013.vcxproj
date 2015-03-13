@@ -112,6 +112,8 @@
     <ClCompile Include="RdrHelper.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="WglContainer.cpp" />
+    <ClCompile Include="Win32Container.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +121,9 @@
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
-    <ClCompile Include="Container.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="Drawable.h" />
-    <ClCompile Include="GlfwContainer.h" />
+    <ClInclude Include="GlfwContainer.h" />
     <ClInclude Include="LegacyOpenGLLight.h" />
     <ClInclude Include="LegacyOpenGLRenderer.h" />
     <ClInclude Include="Light.h" />
@@ -135,6 +137,8 @@
     <ClInclude Include="reindeer.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="WglContainer.h" />
+    <ClInclude Include="Win32Container.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

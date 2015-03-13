@@ -119,7 +119,7 @@ void D3d9Renderer::BuildBuffers(
 	}
 }
 
-void D3d9Renderer::Draw(Camera* camera)
+void D3d9Renderer::Draw(Camera* camera, Light* light)
 {
 	RDRMAT4& world = *parent->GetWorld();
 

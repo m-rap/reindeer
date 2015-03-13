@@ -60,7 +60,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DXSDK_DIR)Lib\x86;..\lib\vs2013;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DXSDK_DIR)Lib\x86;..\lib\vs2013\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>BulletDynamics_vs2013_Debug.lib;BulletCollision_vs2013_Debug.lib;LinearMath_vs2013_Debug.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRTD.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -92,14 +92,18 @@
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="Container.cpp" />
+    <ClCompile Include="D3d9Light.cpp" />
     <ClCompile Include="D3d9Renderer.cpp" />
     <ClCompile Include="D3d9World.cpp" />
     <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="PhysicalObject.cpp" />
     <ClCompile Include="RdrHelper.cpp" />
+    <ClCompile Include="Win32Container.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,14 +111,18 @@
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Container.h" />
+    <ClInclude Include="D3d9Light.h" />
     <ClInclude Include="D3d9Renderer.h" />
     <ClInclude Include="D3d9World.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="ModelObject.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="RdrHelper.h" />
     <ClInclude Include="reindeer.h" />
+    <ClInclude Include="Win32Container.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
