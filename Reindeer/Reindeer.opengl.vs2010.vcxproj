@@ -112,9 +112,9 @@
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
-    <ClCompile Include="Container.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="Drawable.h" />
-    <ClCompile Include="GlfwContainer.h" />
+    <ClInclude Include="GlfwContainer.h" />
     <ClInclude Include="LegacyOpenGLLight.h" />
     <ClInclude Include="LegacyOpenGLRenderer.h" />
     <ClInclude Include="Light.h" />
