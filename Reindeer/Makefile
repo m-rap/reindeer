@@ -40,9 +40,9 @@ OBJDIR_RELEASE = obj/linux/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/linux/Release/Reinder
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/texture.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLRenderer.o $(OBJDIR_DEBUG)/ModelObject.o $(OBJDIR_DEBUG)/OpenGLRenderer.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/config.o $(OBJDIR_DEBUG)/PhysicalObject.o $(OBJDIR_DEBUG)/RdrHelper.o $(OBJDIR_DEBUG)/World.o $(OBJDIR_DEBUG)/OpenGLWorld.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/objloader.o $(OBJDIR_DEBUG)/shader.o $(OBJDIR_DEBUG)/texture.o $(OBJDIR_DEBUG)/BaseRenderer.o $(OBJDIR_DEBUG)/BoxObject.o $(OBJDIR_DEBUG)/Camera.o $(OBJDIR_DEBUG)/Drawable.o $(OBJDIR_DEBUG)/BaseObject.o $(OBJDIR_DEBUG)/GLDebugDrawer.o $(OBJDIR_DEBUG)/LegacyOpenGLRenderer.o $(OBJDIR_DEBUG)/ModelObject.o $(OBJDIR_DEBUG)/OpenGLRenderer.o $(OBJDIR_DEBUG)/LegacyOpenGLLight.o $(OBJDIR_DEBUG)/Container.o $(OBJDIR_DEBUG)/GlfwContainer.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/config.o $(OBJDIR_RELEASE)/PhysicalObject.o $(OBJDIR_RELEASE)/RdrHelper.o $(OBJDIR_RELEASE)/World.o $(OBJDIR_RELEASE)/OpenGLWorld.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/objloader.o $(OBJDIR_RELEASE)/shader.o $(OBJDIR_RELEASE)/texture.o $(OBJDIR_RELEASE)/BaseRenderer.o $(OBJDIR_RELEASE)/BoxObject.o $(OBJDIR_RELEASE)/Camera.o $(OBJDIR_RELEASE)/Drawable.o $(OBJDIR_RELEASE)/BaseObject.o $(OBJDIR_RELEASE)/GLDebugDrawer.o $(OBJDIR_RELEASE)/LegacyOpenGLRenderer.o $(OBJDIR_RELEASE)/ModelObject.o $(OBJDIR_RELEASE)/OpenGLRenderer.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/config.o $(OBJDIR_RELEASE)/PhysicalObject.o $(OBJDIR_RELEASE)/RdrHelper.o $(OBJDIR_RELEASE)/World.o $(OBJDIR_RELEASE)/OpenGLWorld.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/objloader.o $(OBJDIR_RELEASE)/shader.o $(OBJDIR_RELEASE)/texture.o $(OBJDIR_RELEASE)/BaseRenderer.o $(OBJDIR_RELEASE)/BoxObject.o $(OBJDIR_RELEASE)/Camera.o $(OBJDIR_RELEASE)/Drawable.o $(OBJDIR_RELEASE)/BaseObject.o $(OBJDIR_RELEASE)/GLDebugDrawer.o $(OBJDIR_RELEASE)/LegacyOpenGLRenderer.o $(OBJDIR_RELEASE)/ModelObject.o $(OBJDIR_RELEASE)/OpenGLRenderer.o $(OBJDIR_RELEASE)/LegacyOpenGLLight.o $(OBJDIR_RELEASE)/Container.o $(OBJDIR_RELEASE)/GlfwContainer.o
 
 all: debug release
 
@@ -118,6 +118,12 @@ $(OBJDIR_DEBUG)/OpenGLLight.o: OpenGLLight.cpp
 
 $(OBJDIR_DEBUG)/LegacyOpenGLLight.o: LegacyOpenGLLight.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c LegacyOpenGLLight.cpp -o $(OBJDIR_DEBUG)/LegacyOpenGLLight.o
+    
+$(OBJDIR_DEBUG)/Container.o: Container.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c Container.cpp -o $(OBJDIR_DEBUG)/Container.o
+
+$(OBJDIR_DEBUG)/GlfwContainer.o: GlfwContainer.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c GlfwContainer.cpp -o $(OBJDIR_DEBUG)/GlfwContainer.o
 
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
@@ -195,6 +201,12 @@ $(OBJDIR_RELEASE)/OpenGLLight.o: OpenGLLight.cpp
 $(OBJDIR_RELEASE)/LegacyOpenGLLight.o: LegacyOpenGLLight.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c LegacyOpenGLLight.cpp -o $(OBJDIR_RELEASE)/LegacyOpenGLLight.o
 
+$(OBJDIR_DEBUG)/Container.o: Container.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c Container.cpp -o $(OBJDIR_RELEASE)/Container.o
+
+$(OBJDIR_DEBUG)/GlfwContainer.o: GlfwContainer.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c GlfwContainer.cpp -o $(OBJDIR_RELEASE)/GlfwContainer.o
+    
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
 	rm -rf bin/linux/Release
