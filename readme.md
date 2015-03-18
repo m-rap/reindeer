@@ -45,7 +45,7 @@ Di Linux Anda dapat langsung mem-build dengan menjalankan perintah make dari roo
 
 Progress kami
 --------
-Lihat di [reindeer](https://www.youtube.com/watch?v=ELnp_dx780g)
+Lihat di [reindeer](https://youtu.be/WOElID2kxpA)
 
 
 To do
