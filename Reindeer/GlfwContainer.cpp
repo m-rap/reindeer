@@ -73,8 +73,9 @@ void GlfwContainer::ReadInput()
     double tempX = mouseX, tempY = mouseY;
     glfwGetCursorPos(window, &mouseX, &mouseY);
 
-    if (tempX != mouseX || tempY != mouseY)
-        MouseMoved(mouseX, mouseY);
+	if (tempX != mouseX || tempY != mouseY) {
+		MouseMoved(mouseX, mouseY);
+	}
 
     int mouseRightButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (mouseRightButtonState == GLFW_PRESS)

@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reindeer.opengl.vs2013", "Reindeer\Reindeer.opengl.vs2013.vcxproj", "{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reindeer.d3d9.vs2013", "Reindeer\Reindeer.d3d9.vs2013.vcxproj", "{E9795B96-6254-44CD-96B9-D1F9F2C89509}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Debug|Win32.Build.0 = Debug|Win32
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|Win32.ActiveCfg = Release|Win32
 		{E1AD19CB-D1AA-453D-A1C9-14CD55CB41DB}.Release|Win32.Build.0 = Release|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Debug|Win32.Build.0 = Debug|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Release|Win32.ActiveCfg = Release|Win32
+		{E9795B96-6254-44CD-96B9-D1F9F2C89509}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

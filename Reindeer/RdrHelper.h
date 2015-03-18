@@ -21,9 +21,9 @@ extern const float PIOVER2;
 #define ToDegree( radian ) ((radian) * (180.0 / M_PI))
 #endif
 
-extern const RDRVEC3 VECTOR_UP      ;
 extern const RDRVEC3 VECTOR_RIGHT   ;
 extern const RDRVEC3 VECTOR_LEFT    ;
+extern const RDRVEC3 VECTOR_UP      ;
 extern const RDRVEC3 VECTOR_DOWN    ;
 extern const RDRVEC3 VECTOR_BACKWARD;
 extern const RDRVEC3 VECTOR_FORWARD ;

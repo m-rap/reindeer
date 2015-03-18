@@ -152,17 +152,21 @@ void World::MouseMiddleButtonReleased(double x, double y)
 void World::MouseMoved(double x, double y)
 {
     if (mouseRightButtonDown) {
-        camera.RotateLocalX(ToRadian((mouseY - y) * 0.1f), true);
-        camera.RotateGlobalY(ToRadian((mouseX - x) * 0.1f), true);
+		double deltaX = mouseX - x, deltaY = mouseY - y;
+		printf("zz %lf %lf\n", deltaX, deltaY);
+        camera.RotateLocalX(ToRadian(deltaY * 0.1f), true);
+        camera.RotateGlobalY(ToRadian(deltaX * 0.1f), true);
         camera.BuildWorld();
         mouseX = x;
         mouseY = y;
     }
 
     if (mouseMiddleButtonDown) {
+		double deltaX = mouseX - x, deltaY = mouseY - y;
+		printf("zz %lf %lf\n", deltaX, deltaY);
         RDRVEC3 pos = *camera.GetPosition();
-        RDRVEC3 delta = (float)(mouseX - x) * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_X));
-		delta += (float)(y - mouseY) * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_Y));
+        RDRVEC3 delta = (float)deltaX * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_X));
+		delta += (float)-deltaY * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*camera.GetRotation(), AXIS_Y));
         camera.SetPosition(pos + delta);
         mouseX = x;
         mouseY = y;

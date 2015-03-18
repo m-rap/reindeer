@@ -1,15 +1,15 @@
 #include "reindeer.h"
 #include "RdrHelper.h"
 
-const RDRVEC3 VECTOR_UP       ( 0.0f,  1.0f,  0.0f);
 const RDRVEC3 VECTOR_RIGHT    ( 1.0f,  0.0f,  0.0f);
 const RDRVEC3 VECTOR_LEFT     (-1.0f,  0.0f,  0.0f);
+const RDRVEC3 VECTOR_UP       (0.0f, 1.0f, 0.0f);
 const RDRVEC3 VECTOR_DOWN     ( 0.0f, -1.0f,  0.0f);
-const RDRVEC3 VECTOR_BACKWARD ( 0.0f,  0.0f,  1.0f);
-const RDRVEC3 VECTOR_FORWARD  ( 0.0f,  0.0f, -1.0f);
+const RDRVEC3 VECTOR_BACKWARD(0.0f, 0.0f, 1.0f);
+const RDRVEC3 VECTOR_FORWARD(0.0f, 0.0f, -1.0f);
 
-const RDRVEC3 AXIS_X(1.0f, 0.0f,  0.0f);
-const RDRVEC3 AXIS_Y(0.0f, 1.0f,  0.0f);
+const RDRVEC3 AXIS_X(1.0f, 0.0f, 0.0f);
+const RDRVEC3 AXIS_Y(0.0f, 1.0f, 0.0f);
 const RDRVEC3 AXIS_Z(0.0f, 0.0f, -1.0f);
 
 #ifdef USE_D3D9
@@ -299,7 +299,7 @@ RDRQUAT RdrHelper::AngleAxis(const float& angle, const RDRVEC3& axis)
 	return glm::angleAxis(angle, axis);
 #else
 	RDRQUAT quat;
-	D3DXQuaternionRotationAxis(&quat, &axis, angle);
+	D3DXQuaternionRotationAxis(&quat, &axis, -angle);
 	return quat;
 #endif
 }

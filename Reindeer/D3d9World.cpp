@@ -43,12 +43,14 @@ void D3d9World::Init3d()
     D3DMATERIAL9 material;
 
     ZeroMemory(&light, sizeof(light));
-    light.Type = D3DLIGHT_POINT;    // make the light type 'point light'
+    //light.Type = D3DLIGHT_POINT;    // make the light type 'point light'
+	light.Type = D3DLIGHT_DIRECTIONAL;
 	light.Ambient = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
     light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-    light.Position = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
-    light.Range = 100.0f;    // a range of 100
+	light.Position = RDRVEC3(3.0f, 3.0f, 7.0f);// D3DXVECTOR3(0.0f, 5.0f, 0.0f);
+	light.Direction = RDRVEC3(0.0f, 0.0f, 0.0f) - light.Position;
+    light.Range = 1000.0f;    // a range of 100
     light.Attenuation0 = 0.0f;    // no constant inverse attenuation
     light.Attenuation1 = 0.125f;    // only .125 inverse attenuation
     light.Attenuation2 = 0.0f;    // no square inverse attenuation

@@ -36,9 +36,9 @@ void Camera::BuildProjection(bool perspective)
 }
 void Camera::BuildView() {
 #ifdef USE_D3D9
-	D3DXVECTOR3 up, lookAt(0, 0, 10);
+	D3DXVECTOR3 up, lookAt;
 
-	lookAt = RdrHelper::Vec3Transform(rotation, lookAt);
+	lookAt = RdrHelper::Vec3Transform(rotation, VECTOR_FORWARD);
 	D3DXVec3Add(&lookAt, &position, &lookAt);
 
 	up = RdrHelper::Vec3Transform(rotation, VECTOR_UP);
@@ -49,6 +49,10 @@ void Camera::BuildView() {
 		&lookAt,    // the look-at position
 		&up     // the up direction
 	);
+	//view._31 *= -1;
+	//view._32 *= -1;
+	//view._33 *= -1;
+	//view._34 *= -1;
 #else
 	glm::vec3 lookAt, up;
 	lookAt = rotation * VECTOR_FORWARD;

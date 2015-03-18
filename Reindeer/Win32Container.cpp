@@ -21,68 +21,40 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	if (that == NULL)
 		return DefWindowProc(hWnd, message, wParam, lParam);
 
+	pts = MAKEPOINTS(lParam);
+
 	switch (message)
 	{
 	case WM_LBUTTONDOWN:
-		//// Capture mouse input. 
-		//
-		//SetCapture(hWnd);
-		//
-		//// Retrieve the screen coordinates of the client area, 
-		//// and convert them into client coordinates. 
-		//
-		//GetClientRect(hWnd, &rcClient);
-		//ptClientUL.x = rcClient.left;
-		//ptClientUL.y = rcClient.top;
-		//
-		//// Add one to the right and bottom sides, because the 
-		//// coordinates retrieved by GetClientRect do not 
-		//// include the far left and lowermost pixels. 
-		//
-		//ptClientLR.x = rcClient.right + 1;
-		//ptClientLR.y = rcClient.bottom + 1;
-		//ClientToScreen(hWnd, &ptClientUL);
-		//ClientToScreen(hWnd, &ptClientLR);
-		//
-		//// Copy the client coordinates of the client area 
-		//// to the rcClient structure. Confine the mouse cursor 
-		//// to the client area by passing the rcClient structure 
-		//// to the ClipCursor function. 
-		//
-		//SetRect(&rcClient, ptClientUL.x, ptClientUL.y,
-		//	ptClientLR.x, ptClientLR.y);
-		//ClipCursor(&rcClient);
-		//
-		//// Convert the cursor coordinates into a POINTS 
-		//// structure, which defines the beginning point of the 
-		//// line drawn during a WM_MOUSEMOVE message. 
-
-		pts = MAKEPOINTS(lParam);
 		that->MouseLeftButtonPressed(pts.x, pts.y);
 		return 0;
 	case WM_LBUTTONUP:
-		pts = MAKEPOINTS(lParam);
 		that->MouseLeftButtonReleased(pts.x, pts.y);
 		return 0;
 	case WM_MBUTTONDOWN:
-		pts = MAKEPOINTS(lParam);
 		that->MouseMiddleButtonPressed(pts.x, pts.y);
 		return 0;
 	case WM_MBUTTONUP:
-		pts = MAKEPOINTS(lParam);
 		that->MouseMiddleButtonReleased(pts.x, pts.y);
 		return 0;
 	case WM_RBUTTONDOWN:
-		pts = MAKEPOINTS(lParam);
 		that->MouseRightButtonPressed(pts.x, pts.y);
 		return 0;
 	case WM_RBUTTONUP:
-		pts = MAKEPOINTS(lParam);
 		that->MouseRightButtonReleased(pts.x, pts.y);
 		return 0;
 	case WM_MOUSEMOVE:
-		pts = MAKEPOINTS(lParam);
 		that->MouseMoved(pts.x, pts.y);
+		return 0;
+	case WM_MOUSEWHEEL:
+		if (GET_WHEEL_DELTA_WPARAM(wParam) == -WHEEL_DELTA) {
+			pts.y = -1;
+			that->Scrolled(pts.x, pts.y);
+		}
+		else if (GET_WHEEL_DELTA_WPARAM(wParam) == WHEEL_DELTA) {
+			pts.y = 1;
+			that->Scrolled(pts.x, pts.y);
+		}
 		return 0;
 	}
 
