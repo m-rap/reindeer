@@ -9,12 +9,12 @@ MAKE = make
 all: bullet glew glfw glm reindeer_reindeer_linux
 
 reindeer_reindeer_linux: 
-	$(MAKE) -C Reinder all
+	$(MAKE) -C Reindeer all
 
 clean: clean_reindeer_reindeer_linux
 
 clean_reindeer_reindeer_linux: 
-	$(MAKE) -C Reinder clean
+	$(MAKE) -C Reindeer clean
 
 .PHONY: clean_reindeer_reindeer_linux
 
