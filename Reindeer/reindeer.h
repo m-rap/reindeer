@@ -58,6 +58,7 @@ extern float PHYSICS_WORLD_SCALE;
 extern unordered_map<string, btCollisionShape*> CollisionShapes;
 extern int DEPTHTEX_HEIGHT;
 extern int DEPTHTEX_WIDTH;
+extern bool DEBUG_SHADOWMAP;
 
 #include "RdrHelper.h"
 

@@ -25,6 +25,7 @@ public:
 	virtual int KEY_RIGHT();
 	virtual int KEY_UP()   ;
 	virtual int KEY_DOWN() ;
+	virtual int KEY_M()    ;
 
 	static unordered_map<GLFWwindow*, GlfwContainer*> ContainerMap;
 

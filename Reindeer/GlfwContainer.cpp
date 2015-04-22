@@ -35,6 +35,7 @@ int GlfwContainer::KEY_LEFT() { return GLFW_KEY_LEFT; }
 int GlfwContainer::KEY_RIGHT() { return GLFW_KEY_RIGHT; }
 int GlfwContainer::KEY_UP() { return GLFW_KEY_UP; }
 int GlfwContainer::KEY_DOWN() { return GLFW_KEY_DOWN; }
+int GlfwContainer::KEY_M() { return GLFW_KEY_M; }
 
 void GlfwContainer::Init()
 {
@@ -104,4 +105,7 @@ void GlfwContainer::ReadInput()
 
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
         KeyPressed(GLFW_KEY_DOWN);
+
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+        KeyPressed(GLFW_KEY_M);
 }

@@ -69,9 +69,7 @@ void World::Render()
 			PhysicalObjects[i]->Update();
 		}
 
-		PreUpdate();
 		Draw();
-		PostUpdate();
         container->PostUpdate();
 	}
 
@@ -186,6 +184,9 @@ void World::KeyPressed(int keyCode)
 
     if (keyCode == container->KEY_DOWN())
         camera.RotateLocalX(ToRadian(-0.01f));
+
+    if (keyCode == container->KEY_M())
+        DEBUG_SHADOWMAP = !DEBUG_SHADOWMAP;
 }
 
 void World::KeyReleased(int keyCode)

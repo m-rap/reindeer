@@ -36,9 +36,9 @@ void OpenGLWorld::Init3d()
 	glEnable(GL_CULL_FACE);
 
 	if (!USE_LEGACY) {
-		standardShader = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
-		depthShader = LoadShaders("DepthRTT.vertexshader", "DepthRTT.fragmentshader");
-		textureViewerShader = LoadShaders("Passthrough.vertexshader", "SimpleTexture.fragmentshader");
+		standardShader = LoadShaders("StandardShading.vert", "StandardShading.frag");
+		depthShader = LoadShaders("DepthRTT.vert", "DepthRTT.frag");
+		textureViewerShader = LoadShaders("Passthrough.vert", "SimpleTexture.frag");
 		light = new OpenGLLight();
 	}
 	else {
@@ -46,7 +46,7 @@ void OpenGLWorld::Init3d()
 	}
 
 	light->SetPosition(RDRVEC3(3.0f, 3.0f, 7.0f));
-	light->LookAt(RDRVEC3(0.0f, 0.0f, 0.0f));
+	light->LookAt(RDRVEC3(-0.7f, 1.0f, 0.5f));
 	light->Init();
 }
 
@@ -59,15 +59,33 @@ void OpenGLWorld::PreRender()
 
 void OpenGLWorld::PreUpdate()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glShadeModel(GL_SMOOTH);
-	glColorMask(1, 1, 1, 1);
+    if (!USE_LEGACY) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glShadeModel(GL_SMOOTH);
+        glColorMask(1, 1, 1, 1);
+    } else {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glCullFace(GL_FRONT);
+        glShadeModel(GL_SMOOTH);
+        glColorMask(0, 0, 0, 0);
+    }
 }
 
 void OpenGLWorld::PostUpdate()
 {
+    if (USE_LEGACY) {
+		glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);
+
+        glActiveTexture(GL_TEXTURE1);glDisable(GL_TEXTURE_2D); // disables texture 1
+        glDisable(GL_ALPHA_TEST);
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
+        glDisable(GL_TEXTURE_GEN_R);
+        glDisable(GL_TEXTURE_GEN_Q);
+	}
 }
 
 void OpenGLWorld::PostRender()
@@ -85,20 +103,15 @@ void OpenGLWorld::Draw()
 		glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthFrameBuffer()); // Render to our framebuffer
 	glViewport(0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
-	if (!USE_LEGACY)
-		PreUpdate();
-	else {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glCullFace(GL_FRONT);
-		glShadeModel(GL_SMOOTH);
-		glColorMask(0, 0, 0, 0);
-	}
+    PreUpdate();
 
 	if (!USE_LEGACY)
 		glUseProgram(depthShader);
+
 	for (size_t i = 0; i < DrawableObjects.size(); i++) {
 		DrawableObjects[i]->RenderShadow(light);
     }
+
 	if (USE_LEGACY) {
 		glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
 		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT);
@@ -121,22 +134,14 @@ void OpenGLWorld::Draw()
     light->RenderLight();
     World::Draw();
 
-	if (USE_LEGACY) {
-		glDisable(GL_LIGHT0);
-		glDisable(GL_LIGHTING);
+	PostUpdate();
 
-        glActiveTexture(GL_TEXTURE1);glDisable(GL_TEXTURE_2D); // disables texture 1
-        glDisable(GL_ALPHA_TEST);
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
-        glDisable(GL_TEXTURE_GEN_R);
-        glDisable(GL_TEXTURE_GEN_Q);
+	if (DEBUG_SHADOWMAP) {
+        // for debug shadow map texture
+        glViewport(0, 0, DEPTHTEX_WIDTH / 4, DEPTHTEX_HEIGHT / 4);
+
+        if (!USE_LEGACY)
+            glUseProgram(textureViewerShader);
+        light->DrawShadowMapTexture();
 	}
-
-	// for debug shadow map texture
-	glViewport(0, 0, DEPTHTEX_WIDTH / 4, DEPTHTEX_HEIGHT / 4);
-
-	if (!USE_LEGACY)
-		glUseProgram(textureViewerShader);
-	light->DrawShadowMapTexture();
 }

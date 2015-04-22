@@ -33,6 +33,7 @@ protected:
 
 	GLuint depthVertexPositionId;
 	GLuint shadowMapId;
+	GLuint shadowMap2Id;
 	GLuint depthMVPId;
 
 	GLuint texture;

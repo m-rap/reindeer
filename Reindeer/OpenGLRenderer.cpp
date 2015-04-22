@@ -48,6 +48,7 @@ void OpenGLRenderer::SetProgramId(const GLuint& programId)
 	this->useTextureId = glGetUniformLocation(programId, "useTexture");
 	this->depthBiasId = glGetUniformLocation(programId, "DepthBiasMVP");
 	this->shadowMapId = glGetUniformLocation(programId, "shadowMap");
+	this->shadowMap2Id = glGetUniformLocation(programId, "shadowMap2");
 }
 
 void OpenGLRenderer::SetDepthShader(const GLuint& id)
@@ -149,6 +150,7 @@ void OpenGLRenderer::Draw(Camera* camera, Light* light)
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
 	glUniform1i(shadowMapId, 1);
+	glUniform1i(shadowMap2Id, 1);
 
 	if (isIndexed)
 	{
