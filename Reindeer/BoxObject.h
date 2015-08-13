@@ -1,9 +1,8 @@
 #ifndef BOXOBJECT_H_
 #define BOXOBJECT_H_
 
-#include "PhysicalObject.h"
-#include "Drawable.h"
-#include "BaseRenderer.h"
+#include "RdrDrawable.h"
+#include "RdrMesh.h"
 
 class BoxObject :
     public PhysicalObject,

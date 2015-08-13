@@ -1,16 +1,16 @@
-#include "Camera.h"
+#include "RdrCamera.h"
 
-Camera::Camera() : BaseObject()
+RdrCamera::RdrCamera()
 {
 	BuildProjection();
 	BuildView();
 }
 
-Camera::~Camera()
+RdrCamera::~RdrCamera()
 {
 }
 
-void Camera::BuildProjection(bool perspective)
+void RdrCamera::BuildProjection(bool perspective)
 {
 #ifdef USE_D3D9
 	D3DXMatrixPerspectiveFovRH(&projection,
@@ -34,7 +34,7 @@ void Camera::BuildProjection(bool perspective)
 	}
 #endif
 }
-void Camera::BuildView() {
+void RdrCamera::BuildView() {
 #ifdef USE_D3D9
 	D3DXVECTOR3 up, lookAt;
 
@@ -55,24 +55,20 @@ void Camera::BuildView() {
 	//view._34 *= -1;
 #else
 	glm::vec3 lookAt, up;
-	lookAt = rotation * VECTOR_FORWARD;
-	lookAt = position + lookAt;
-	up = rotation * VECTOR_UP;
+	RDRQUAT* tempRotation = tr.GetRotation();
+	RDRVEC3* tempPosition = tr.GetPosition();
+	lookAt = *tempRotation * VECTOR_FORWARD;
+	lookAt = *tr.GetPosition() + lookAt;
+	up = *tempRotation * VECTOR_UP;
 
-	view = glm::lookAt(position, glm::vec3(lookAt), up);
+	view = glm::lookAt(*tempPosition, glm::vec3(lookAt), up);
 #endif
 }
 
-RDRMAT4* Camera::GetView() {
+RDRMAT4* RdrCamera::GetView() {
 	return &view;
 }
 
-RDRMAT4* Camera::GetProjection() {
+RDRMAT4* RdrCamera::GetProjection() {
 	return &projection;
-}
-
-void Camera::BuildWorld() {
-    BuildView();
-	//rotation = glm::quat_cast(view);
-	BaseObject::BuildWorld();
 }

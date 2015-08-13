@@ -3,25 +3,26 @@
 #ifndef OPENGLWORLD_H
 #define OPENGLWORLD_H
 
-#include "World.h"
+#include "RdrWorld.h"
 
-class OpenGLWorld :
-	public World
+class RdrWorld_OpenGL :
+	public RdrWorld
 {
 private:
     float lightPosition[4];
+    void PreShadow();
+    void PostShadow();
+    void PreDraw();
+    void PostDraw();
 
 protected:
 	virtual void Init3d();
-	virtual void PreRender();
-	virtual void PreUpdate();
-	virtual void PostUpdate();
 	virtual void PostRender();
 	virtual void Draw();
 
 public:
-	OpenGLWorld(Container* container);
-	virtual ~OpenGLWorld(void);
+	RdrWorld_OpenGL(Container* container);
+	virtual ~RdrWorld_OpenGL(void);
 
 	GLuint standardShader;
 	GLuint depthShader;

@@ -91,7 +91,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -103,13 +102,15 @@
     <ClCompile Include="LegacyOpenGLRenderer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="OpenGLLight.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="OpenGLWorld.cpp" />
-    <ClCompile Include="PhysicalObject.cpp" />
+    <ClCompile Include="RdrComposite.cpp" />
     <ClCompile Include="RdrHelper.cpp" />
+    <ClCompile Include="RdrMesh.cpp" />
+    <ClCompile Include="RdrRigidBody.cpp" />
+    <ClCompile Include="RdrTransform.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="WglContainer.cpp" />
@@ -117,7 +118,6 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
@@ -127,13 +127,15 @@
     <ClInclude Include="LegacyOpenGLLight.h" />
     <ClInclude Include="LegacyOpenGLRenderer.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="ModelObject.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="OpenGLLight.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="OpenGLWorld.h" />
-    <ClInclude Include="PhysicalObject.h" />
+    <ClInclude Include="RdrComposite.h" />
     <ClInclude Include="RdrHelper.h" />
+    <ClInclude Include="RdrMesh.h" />
+    <ClInclude Include="RdrRigidBody.h" />
+    <ClInclude Include="RdrTransform.h" />
     <ClInclude Include="reindeer.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="texture.h" />

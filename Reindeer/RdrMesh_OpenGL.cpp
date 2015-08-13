@@ -1,10 +1,9 @@
-#include "OpenGLRenderer.h"
-#include "ModelObject.h"
+#include "RdrMesh_OpenGL.h"
+#include "RdrWorld_OpenGL.h"
 #include "objloader.h"
 #include "texture.h"
-#include "OpenGLWorld.h"
 
-OpenGLRenderer::OpenGLRenderer(BaseObject* parent, bool isIndexed, bool useTexture) : BaseRenderer(parent, isIndexed, useTexture)
+RdrMesh_OpenGL::RdrMesh_OpenGL(bool isIndexed, bool useTexture) : RdrMesh(isIndexed, useTexture)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &normalBuffer);
@@ -16,11 +15,11 @@ OpenGLRenderer::OpenGLRenderer(BaseObject* parent, bool isIndexed, bool useTextu
 		texture = loadDDS("../uvmap.DDS");
 	}
 
-	SetProgramId(((OpenGLWorld*)World::Global)->standardShader);
-	SetDepthShader(((OpenGLWorld*)World::Global)->depthShader);
+	SetProgramId(((RdrWorld_OpenGL*)RdrWorld::Global)->standardShader);
+	SetDepthShader(((RdrWorld_OpenGL*)RdrWorld::Global)->depthShader);
 }
 
-OpenGLRenderer::~OpenGLRenderer(void)
+RdrMesh_OpenGL::~RdrMesh_OpenGL(void)
 {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &normalBuffer);
@@ -33,7 +32,7 @@ OpenGLRenderer::~OpenGLRenderer(void)
 	}
 }
 
-void OpenGLRenderer::SetProgramId(const GLuint& programId)
+void RdrMesh_OpenGL::SetProgramId(const GLuint& programId)
 {
 	this->programId = programId;
 	this->positionId = glGetAttribLocation(programId, "vertexPosition_modelspace");
@@ -51,14 +50,14 @@ void OpenGLRenderer::SetProgramId(const GLuint& programId)
 	this->shadowMap2Id = glGetUniformLocation(programId, "shadowMap2");
 }
 
-void OpenGLRenderer::SetDepthShader(const GLuint& id)
+void RdrMesh_OpenGL::SetDepthShader(const GLuint& id)
 {
 	this->depthRTTShader = id;
 	this->depthMVPId = glGetUniformLocation(depthRTTShader, "depthMVP");
 	this->depthVertexPositionId = glGetAttribLocation(depthRTTShader, "vertexPosition_modelspace");
 }
 
-void OpenGLRenderer::BuildBuffers(
+void RdrMesh_OpenGL::BuildBuffers(
 	RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 	size_t vertexCount, size_t indexCount, size_t uvCount
 )
@@ -86,12 +85,12 @@ void OpenGLRenderer::BuildBuffers(
 	}
 }
 
-void OpenGLRenderer::Draw(Camera* camera, Light* light)
+void RdrMesh_OpenGL::Draw(RdrTransform* tr, RdrCamera* camera, RdrLight* light)
 {
-	glm::vec3& lightPosition = *light->GetPosition();
+	glm::vec3& lightPosition = *light->GetTransform()->GetPosition();
 	glm::mat4& projection = *camera->GetProjection();
 	glm::mat4& view = *camera->GetView();
-	glm::mat4& world = *parent->GetWorld();
+	glm::mat4& world = *tr->GetWorld();
 	glm::mat4 modelview = view * world;
 	glm::mat4 mvp = projection * modelview;
 	glm::mat4 viewInv = glm::inverse(view);
@@ -168,9 +167,9 @@ void OpenGLRenderer::Draw(Camera* camera, Light* light)
 		glDisableVertexAttribArray(uvId);
 }
 
-void OpenGLRenderer::RenderShadow(Light* light)
+void RdrMesh_OpenGL::RenderShadow(RdrTransform* tr, RdrLight* light)
 {
-	glm::mat4& world = *parent->GetWorld();
+	glm::mat4& world = *tr->GetWorld();
 	glm::mat4 depthMVP = light->GetDepthMVP(world);
 
     // Send our transformation to the currently bound shader,

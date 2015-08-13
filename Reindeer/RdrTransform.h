@@ -1,9 +1,10 @@
-#ifndef BASEOBJECT_H_
-#define BASEOBJECT_H_
+#ifndef RDRTRANSFORM_H
+#define RDRTRANSFORM_H
 
 #include "reindeer.h"
 
-class BaseObject {
+class RdrTransform
+{
 protected:
 	RDRVEC3 position;
 	RDRVEC3 scale;
@@ -14,14 +15,17 @@ protected:
 	virtual void TransformationChanged() {}
 
 public:
-	BaseObject();
-	virtual ~BaseObject();
+	RdrTransform();
+	virtual ~RdrTransform();
 
 	virtual void SetPosition(const RDRVEC3& position, bool silent = false);
 	virtual void SetRotation(const RDRQUAT& rotation, bool silent = false);
 	virtual void SetScale(const RDRVEC3& scale, bool silent = false);
 
+	void Translate(const RDRVEC3& position, bool silent = false);
+
 	void Rotate(const float& angle, const RDRVEC3& axis, bool silent = false);
+	void Rotate(const RDRQUAT& rotation, bool silent = false);
 
 	void RotateLocalX(const float& angle, bool silent = false);
 	void RotateLocalY(const float& angle, bool silent = false);
@@ -39,6 +43,8 @@ public:
 	RDRMAT4* GetWorld();
 
 	virtual void BuildWorld();
+
+	virtual char* RdrName() { return "RdrTransform"; }
 };
 
-#endif /* BASEOBJECT_H_ */
+#endif /* RDRTRANSFORM_H */

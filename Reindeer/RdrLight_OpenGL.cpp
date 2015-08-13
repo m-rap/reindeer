@@ -1,18 +1,18 @@
-#include "OpenGLLight.h"
-#include "OpenGLWorld.h"
+#include "RdrLight_OpenGL.h"
+#include "RdrWorld_OpenGL.h"
 
-OpenGLLight::OpenGLLight(void) : Light()
+RdrLight_OpenGL::RdrLight_OpenGL(void) : RdrLight()
 {
 	depthFrameBuffer = 0;
 	depthTexture = 0;
-	
+
 	float s = 0.25f;
 	projection = glm::ortho<float>(-10 * s, 10 * s, -10 * s, 10 * s, 0, 20);
-	
+
 	glGenBuffers(1, &quadVertexBuffer);
 }
 
-OpenGLLight::~OpenGLLight(void)
+RdrLight_OpenGL::~RdrLight_OpenGL(void)
 {
 	if (depthFrameBuffer != 0)
 		glDeleteFramebuffers(1, &depthFrameBuffer);
@@ -21,40 +21,40 @@ OpenGLLight::~OpenGLLight(void)
 	glDeleteBuffers(1, &quadVertexBuffer);
 }
 
-void OpenGLLight::SetDepthShader(const GLuint& id)
+void RdrLight_OpenGL::SetDepthShader(const GLuint& id)
 {
 	this->depthShader = id;
 	this->depthMVPId = glGetUniformLocation(depthShader, "depthMVP");
 }
 
-void OpenGLLight::SetStandardShader(const GLuint& id)
+void RdrLight_OpenGL::SetStandardShader(const GLuint& id)
 {
 	this->standardShader = id;
 	this->lightPositionId = glGetUniformLocation(standardShader, "LightPosition_worldspace");
 }
 
-void OpenGLLight::SetTextureViewerShader(const GLuint& id)
+void RdrLight_OpenGL::SetTextureViewerShader(const GLuint& id)
 {
 	this->textureViewerShader = id;
 	this->textureViewerVertexId = glGetAttribLocation(id, "vertexPosition_modelspace");
 	this->textureViewerTextureId = glGetUniformLocation(id, "texture");
 }
 
-GLuint OpenGLLight::GetDepthTexture()
+GLuint RdrLight_OpenGL::GetDepthTexture()
 {
 	return depthTexture;
 }
 
-GLuint OpenGLLight::GetDepthFrameBuffer()
+GLuint RdrLight_OpenGL::GetDepthFrameBuffer()
 {
 	return depthFrameBuffer;
 }
 
-void OpenGLLight::Init()
+void RdrLight_OpenGL::Init()
 {
-	SetStandardShader(((OpenGLWorld*)World::Global)->standardShader);
-	SetDepthShader(((OpenGLWorld*)World::Global)->depthShader);
-	SetTextureViewerShader(((OpenGLWorld*)World::Global)->textureViewerShader);
+	SetStandardShader(((RdrWorld_OpenGL*)RdrWorld::Global)->standardShader);
+	SetDepthShader(((RdrWorld_OpenGL*)RdrWorld::Global)->depthShader);
+	SetTextureViewerShader(((RdrWorld_OpenGL*)RdrWorld::Global)->textureViewerShader);
 
 	static const GLfloat g_quad_vertex_buffer_data[] = {
 		-1.0f, -1.0f, 0.0f,
@@ -67,11 +67,11 @@ void OpenGLLight::Init()
 
 	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
-	
+
 	InitShadowMap();
 }
 
-bool OpenGLLight::InitShadowMap()
+bool RdrLight_OpenGL::InitShadowMap()
 {
 	glGenFramebuffers(1, &depthFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
@@ -103,7 +103,7 @@ bool OpenGLLight::InitShadowMap()
 	return true;
 }
 
-void OpenGLLight::DrawShadowMapTexture()
+void RdrLight_OpenGL::DrawShadowMapTexture()
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
@@ -122,14 +122,14 @@ void OpenGLLight::DrawShadowMapTexture()
 	glDisableVertexAttribArray(textureViewerVertexId);
 }
 
-void OpenGLLight::RenderLight()
+void RdrLight_OpenGL::RenderLight()
 {
 }
 
-void OpenGLLight::RenderDimLight()
+void RdrLight_OpenGL::RenderDimLight()
 {
 }
 
-void OpenGLLight::ApplyShadowMap(Camera& c)
+void RdrLight_OpenGL::ApplyShadowMap(RdrCamera& c)
 {
 }

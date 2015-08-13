@@ -1,22 +1,21 @@
-#ifndef CAMERA_H_
-#define CAMERA_H_
+#ifndef RDRCAMERA_H_
+#define RDRCAMERA_H_
 
-#include "BaseObject.h"
+#include "RdrNode.h"
 
-class Camera : public BaseObject {
+class RdrCamera :
+    public RdrNode {
 protected:
 	RDRMAT4 view, projection;
 public:
-	Camera();
-	virtual ~Camera();
+	RdrCamera();
+	virtual ~RdrCamera();
 
 	virtual void BuildProjection(bool perspective = true);
 	virtual void BuildView();
 
 	virtual RDRMAT4* GetView();
 	virtual RDRMAT4* GetProjection();
-
-	virtual void BuildWorld();
 };
 
-#endif /* CAMERA_H_ */
+#endif /* RDRCAMERA_H_ */

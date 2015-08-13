@@ -1,23 +1,19 @@
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef RDRWORLD_H
+#define RDRWORLD_H
 
 #include "shader.h"
-#include "Drawable.h"
-#include "Camera.h"
-#include "BoxObject.h"
-#include "ModelObject.h"
-#include "Light.h"
-
+#include "RdrLight.h"
+#include "btBulletDynamicsCommon.h"
 #include "Container.h"
 
 using namespace std;
 
-class World :
+class RdrWorld :
     public ContainerEventListener
 {
 protected:
 
-	BoxObject* ground;
+	//BoxObject* ground;
 
 	bool mouseRightButtonDown, mouseMiddleButtonDown;
 	unsigned long lastTimeMiddleMousePressed;
@@ -27,23 +23,22 @@ protected:
 
 	void InitWindow();
 	virtual void Init3d() = 0;
-	virtual void PreRender() = 0;
-	virtual void PreUpdate() = 0;
-	virtual void PostUpdate() = 0;
+	virtual void PreRender() {}
+	virtual void PreUpdate() {}
+	virtual void PostUpdate() {}
 	virtual void PostRender() = 0;
 	virtual void Draw();
 
 public:
-    World(Container* container);
-    virtual ~World();
+    RdrWorld(Container* container);
+    virtual ~RdrWorld();
 
-	static World* Global;
+    static RdrWorld* Global;
 
-    Camera camera;
-	Light* light;
+    RdrCamera camera;
+	RdrLight* light;
 
-    vector<Drawable*> DrawableObjects;
-	vector<PhysicalObject*> PhysicalObjects;
+    deque<RdrNode*> nodes;
 
     void Init();
     void Render();

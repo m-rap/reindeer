@@ -1,27 +1,27 @@
-#include "Light.h"
-#include "OpenGLWorld.h"
+#include "RdrLight.h"
+#include "RdrWorld_OpenGL.h"
 
-Light::Light(void) : Camera()
+RdrLight::RdrLight(void) : RdrCamera()
 {
 }
 
-Light::~Light(void)
+RdrLight::~RdrLight(void)
 {
 }
 
-void Light::Init()
+void RdrLight::Init()
 {
 	InitShadowMap();
 }
 
-RDRMAT4 Light::GetDepthMVP(const RDRMAT4& world)
+RDRMAT4 RdrLight::GetDepthMVP(const RDRMAT4& world)
 {
 	RDRMAT4 mvp;
 	RdrHelper::Mat4Multiply(mvp, projection, view, world);
 	return mvp;
 }
 
-RDRMAT4 Light::GetDepthBiasMVP(const RDRMAT4& world)
+RDRMAT4 RdrLight::GetDepthBiasMVP(const RDRMAT4& world)
 {
 	static RDRMAT4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,

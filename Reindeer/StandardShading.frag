@@ -17,6 +17,7 @@ uniform mat3 N;
 uniform sampler2D texture;
 uniform int useTexture;
 uniform sampler2DShadow shadowMap;
+uniform sampler2D shadowMap2;
 
 struct Light
 {
@@ -79,11 +80,14 @@ void main() {
 								  vec3(frontMaterial.specular) *
 								  pow(max(dot(n, halfV), 0.0), frontMaterial.shininess);
 
-		//float bias = 0.005;
-		float bias = 0.005*tan(acos(cosTheta));
-		bias = clamp(bias, 0, 0.005); //0.01);
+		float bias = 0.005;
+		//float bias = 0.0005*tan(acos(cosTheta));
+		//bias = clamp(bias, 0, 0.0005);
+		//bias = clamp(bias, 0, 0.01);
 
-		float visibility = shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
+		//float visibility = shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
+		//float visibility = shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z) / ShadowCoord.w)).r < ShadowCoord.z - bias ? 0.5 : 1.0;
+		float visibility = (texture2D(shadowMap2, ShadowCoord.xy).z < ShadowCoord.z - bias) ? 0.2 : 1.0;
 		//float visibility = 0.0;
 		//visibility += shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
 		//visibility += shadow2D(shadowMap, vec3(ShadowCoord.xy, (ShadowCoord.z - bias) / ShadowCoord.w)).r;
@@ -93,7 +97,7 @@ void main() {
 
 		totalLighting += (visibility * (diffuseReflection + specularReflection));
 	}
-	
+
 	vec4 ambient = sceneAmbient * frontMaterial.ambient;
 
 	gl_FragColor = ambient + vec4(totalLighting, 1.0);

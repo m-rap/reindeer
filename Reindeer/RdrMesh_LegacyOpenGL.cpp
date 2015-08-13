@@ -1,8 +1,7 @@
-#include "LegacyOpenGLRenderer.h"
-#include "ModelObject.h"
+#include "RdrMesh_LegacyOpenGL.h"
 #include "texture.h"
 
-LegacyOpenGLRenderer::LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed, bool useTexture) : BaseRenderer(parent, isIndexed, useTexture)
+RdrMesh_LegacyOpenGL::RdrMesh_LegacyOpenGL(bool isIndexed, bool useTexture)
 {
 	vertices = NULL;
 	normals = NULL;
@@ -15,7 +14,7 @@ LegacyOpenGLRenderer::LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed, b
 	}
 }
 
-LegacyOpenGLRenderer::~LegacyOpenGLRenderer(void)
+RdrMesh_LegacyOpenGL::~RdrMesh_LegacyOpenGL(void)
 {
 	if (vertices != NULL)
 		delete[] vertices;
@@ -32,7 +31,7 @@ LegacyOpenGLRenderer::~LegacyOpenGLRenderer(void)
 	}
 }
 
-void LegacyOpenGLRenderer::BuildBuffers(
+void RdrMesh_LegacyOpenGL::BuildBuffers(
 		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 		size_t vertexCount, size_t indexCount, size_t uvCount
 	)
@@ -68,11 +67,11 @@ void LegacyOpenGLRenderer::BuildBuffers(
 	}
 }
 
-void LegacyOpenGLRenderer::RenderShadow(Light* light)
+void RdrMesh_LegacyOpenGL::RenderShadow(RdrTransform* tr, RdrLight* light)
 {
 	glm::mat4& projection = *light->GetProjection();
 	glm::mat4& view = *light->GetView();
-	glm::mat4& world = *parent->GetWorld();
+	glm::mat4& world = *tr->GetWorld();
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(projection));
@@ -96,9 +95,9 @@ void LegacyOpenGLRenderer::RenderShadow(Light* light)
 	glDisable(GL_NORMAL_ARRAY);
 }
 
-void LegacyOpenGLRenderer::Draw(Camera* camera, Light* light)
+void RdrMesh_LegacyOpenGL::Draw(RdrTransform* tr, RdrCamera* camera, RdrLight* light)
 {
-	glm::mat4& world = *parent->GetWorld();
+	glm::mat4& world = *tr->GetWorld();
 	glm::mat4& projection = *camera->GetProjection();
 	glm::mat4& view = *camera->GetView();
 

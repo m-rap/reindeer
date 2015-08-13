@@ -1,12 +1,12 @@
 #pragma once
-#ifndef OPENGLRENDERER_H
-#define OPENGLRENDERER_H
+#ifndef RDRMESH_OPENGL_H
+#define RDRMESH_OPENGL_H
 
-#include "BaseRenderer.h"
-#include "Light.h"
+#include "RdrMesh.h"
+#include "RdrLight.h"
 
-class OpenGLRenderer :
-	public BaseRenderer
+class RdrMesh_OpenGL :
+	public RdrMesh
 {
 protected:
 	GLuint vertexBuffer;
@@ -38,8 +38,8 @@ protected:
 
 	GLuint texture;
 public:
-	OpenGLRenderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
-	virtual ~OpenGLRenderer(void);
+	RdrMesh_OpenGL(bool isIndexed = false, bool useTexture = false);
+	virtual ~RdrMesh_OpenGL(void);
 
 	virtual void SetProgramId(const GLuint& programId);
 	virtual void SetDepthShader(const GLuint& id);
@@ -47,8 +47,8 @@ public:
 		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 		size_t vertexCount, size_t indexCount, size_t uvCount
 	);
-	virtual void RenderShadow(Light* light);
-	virtual void Draw(Camera* camera, Light* light);
+	virtual void RenderShadow(RdrTransform* tr, RdrLight* light);
+	virtual void Draw(RdrTransform* tr, RdrCamera* camera, RdrLight* light);
 };
 
 #endif

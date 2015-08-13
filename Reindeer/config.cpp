@@ -11,5 +11,3 @@ int DEPTHTEX_HEIGHT = 1024;
 bool DEBUG_SHADOWMAP = false;
 
 float PHYSICS_WORLD_SCALE = 1;
-
-unordered_map<string, btCollisionShape*> CollisionShapes;

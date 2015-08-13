@@ -1,11 +1,12 @@
 #pragma once
 
-#ifndef LEGACYOPENGLLIGHT_H
-#define LEGACYOPENGLLIGHT_H
+#ifndef RDRLIGHT_LEGACYOPENGL_H
+#define RDRLIGHT_LEGACYOPENGL_H
 
-#include "Light.h"
-class LegacyOpenGLLight :
-	public Light
+#include "RdrLight.h"
+
+class RdrLight_LegacyOpenGL :
+	public RdrLight
 {
 protected:
 	GLuint depthTexture;
@@ -13,8 +14,8 @@ protected:
 	virtual bool InitShadowMap();
 
 public:
-	LegacyOpenGLLight();
-	virtual ~LegacyOpenGLLight();
+	RdrLight_LegacyOpenGL();
+	virtual ~RdrLight_LegacyOpenGL();
 
 	virtual void SetDepthShader(const GLuint& id);
 	virtual void SetStandardShader(const GLuint& id);
@@ -25,7 +26,7 @@ public:
 	virtual void Init();
 
 	virtual void DrawShadowMapTexture();
-	virtual void ApplyShadowMap(Camera& camera);
+	virtual void ApplyShadowMap(RdrCamera& camera);
 	virtual void RenderLight();
 	virtual void RenderDimLight();
 };

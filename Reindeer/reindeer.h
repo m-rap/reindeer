@@ -50,12 +50,9 @@ extern bool USE_LEGACY;
 
 using namespace std;
 
-#include "BulletCollision/CollisionShapes/btCollisionShape.h"
-
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
 extern float PHYSICS_WORLD_SCALE;
-extern unordered_map<string, btCollisionShape*> CollisionShapes;
 extern int DEPTHTEX_HEIGHT;
 extern int DEPTHTEX_WIDTH;
 extern bool DEBUG_SHADOWMAP;

@@ -2,12 +2,11 @@
 #ifndef LEGACYOPENGLRENDERER_H
 #define LEGACYOPENGLRENDERER_H
 
-#include "BaseRenderer.h"
-#include "Camera.h"
-#include "Light.h"
+#include "RdrCamera.h"
+#include "RdrLight.h"
 
-class LegacyOpenGLRenderer :
-	public BaseRenderer
+class RdrMesh_LegacyOpenGL :
+	public RdrMesh
 {
 protected:
 	GLfloat* vertices;
@@ -18,15 +17,15 @@ protected:
 	GLuint texture;
 
 public:
-	LegacyOpenGLRenderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
-	virtual ~LegacyOpenGLRenderer(void);
+	RdrMesh_LegacyOpenGL(bool isIndexed = false, bool useTexture = false);
+	virtual ~RdrMesh_LegacyOpenGL(void);
 
 	virtual void BuildBuffers(
 		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 		size_t vertexCount, size_t indexCount, size_t uvCount
 	);
-	virtual void RenderShadow(Light* light);
-	virtual void Draw(Camera* camera, Light* light);
+	virtual void RenderShadow(RdrTransform* tr, RdrLight* light);
+	virtual void Draw(RdrTransform* tr, RdrCamera* camera, RdrLight* light);
 };
 
 #endif

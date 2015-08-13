@@ -1,14 +1,17 @@
 #pragma once
-#ifndef BASERENDERER_H
-#define BASERENDERER_H
+#ifndef RDRMESHMODEL_H
+#define RDRMESHMODEL_H
 
 #include "Camera.h"
 #include "Light.h"
 
-class BaseRenderer
+class RdrMesh;
+
+class RdrMeshModel :
+    public Drawable
 {
 protected:
-	BaseObject* parent;
+	RdrMesh* parent;
 	bool isIndexed;
 	bool useTexture;
 	size_t vertexCount;
@@ -16,15 +19,13 @@ protected:
 	size_t uvCount;
 
 public:
-	BaseRenderer(BaseObject* parent, bool isIndexed = false, bool useTexture = false);
-	virtual ~BaseRenderer(void);
+	RdrMeshModel(RdrMesh* parent, bool isIndexed = false, bool useTexture = false);
+	virtual ~RdrMeshModel(void);
 
 	virtual void BuildBuffers(
 		RDRVEC3* vertices, RDRVEC3* normals, unsigned short* indices, RDRVEC2* uvs,
 		size_t vertexCount, size_t indexCount, size_t uvCount
 	) = 0;
-	virtual void RenderShadow(Light* light) = 0;
-	virtual void Draw(Camera* camera, Light* light) = 0;
 };
 
 #endif

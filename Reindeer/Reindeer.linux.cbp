@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="../Reindeer" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="../Reindeer" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,6 +33,8 @@
 		<Compiler>
 			<Add option="-std=c++11" />
 			<Add option="-Wall" />
+			<Add option="-Wno-unused-variable" />
+			<Add option="-Wno-write-strings" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
 			<Add directory="../include" />
@@ -49,46 +53,49 @@
 			<Add library="Xi" />
 			<Add directory="../lib/linux" />
 		</Linker>
-		<Unit filename="BaseObject.cpp" />
-		<Unit filename="BaseObject.h" />
-		<Unit filename="BaseRenderer.cpp" />
-		<Unit filename="BaseRenderer.h" />
-		<Unit filename="BoxObject.cpp" />
-		<Unit filename="BoxObject.h" />
-		<Unit filename="Camera.cpp" />
-		<Unit filename="Camera.h" />
 		<Unit filename="Container.cpp" />
 		<Unit filename="Container.h" />
-		<Unit filename="DepthRTT.fragmentshader" />
-		<Unit filename="DepthRTT.vertexshader" />
-		<Unit filename="Drawable.cpp" />
-		<Unit filename="Drawable.h" />
+		<Unit filename="DepthRTT.frag" />
+		<Unit filename="DepthRTT.vert" />
 		<Unit filename="GlfwContainer.cpp" />
 		<Unit filename="GlfwContainer.h" />
-		<Unit filename="LegacyOpenGLLight.cpp" />
-		<Unit filename="LegacyOpenGLLight.h" />
-		<Unit filename="LegacyOpenGLRenderer.cpp" />
-		<Unit filename="LegacyOpenGLRenderer.h" />
-		<Unit filename="Light.cpp" />
-		<Unit filename="Light.h" />
-		<Unit filename="ModelObject.cpp" />
-		<Unit filename="ModelObject.h" />
-		<Unit filename="OpenGLLight.cpp" />
-		<Unit filename="OpenGLLight.h" />
-		<Unit filename="OpenGLRenderer.cpp" />
-		<Unit filename="OpenGLRenderer.h" />
-		<Unit filename="OpenGLWorld.cpp" />
-		<Unit filename="OpenGLWorld.h" />
-		<Unit filename="Passthrough.vertexshader" />
-		<Unit filename="PhysicalObject.cpp" />
-		<Unit filename="PhysicalObject.h" />
+		<Unit filename="Passthrough.vert" />
+		<Unit filename="RdrCamera.cpp" />
+		<Unit filename="RdrCamera.h" />
+		<Unit filename="RdrCollisionShapeFactory.cpp" />
+		<Unit filename="RdrCollisionShapeFactory.h" />
+		<Unit filename="RdrDrawable.cpp" />
+		<Unit filename="RdrDrawable.h" />
 		<Unit filename="RdrHelper.cpp" />
 		<Unit filename="RdrHelper.h" />
-		<Unit filename="SimpleTexture.fragmentshader" />
-		<Unit filename="StandardShading.fragmentshader" />
-		<Unit filename="StandardShading.vertexshader" />
-		<Unit filename="World.cpp" />
-		<Unit filename="World.h" />
+		<Unit filename="RdrLight.cpp" />
+		<Unit filename="RdrLight.h" />
+		<Unit filename="RdrLight_LegacyOpenGL.cpp" />
+		<Unit filename="RdrLight_LegacyOpenGL.h" />
+		<Unit filename="RdrLight_OpenGL.cpp" />
+		<Unit filename="RdrLight_OpenGL.h" />
+		<Unit filename="RdrMesh.cpp" />
+		<Unit filename="RdrMesh.h" />
+		<Unit filename="RdrMeshFactory.h" />
+		<Unit filename="RdrMeshFactory_OpenGL.cpp" />
+		<Unit filename="RdrMeshFactory_OpenGL.h" />
+		<Unit filename="RdrMesh_LegacyOpenGL.cpp" />
+		<Unit filename="RdrMesh_LegacyOpenGL.h" />
+		<Unit filename="RdrMesh_OpenGL.cpp" />
+		<Unit filename="RdrMesh_OpenGL.h" />
+		<Unit filename="RdrNode.cpp" />
+		<Unit filename="RdrNode.h" />
+		<Unit filename="RdrShaderManager.cpp" />
+		<Unit filename="RdrShaderManager.h" />
+		<Unit filename="RdrTransform.cpp" />
+		<Unit filename="RdrTransform.h" />
+		<Unit filename="RdrWorld.cpp" />
+		<Unit filename="RdrWorld.h" />
+		<Unit filename="RdrWorld_OpenGL.cpp" />
+		<Unit filename="RdrWorld_OpenGL.h" />
+		<Unit filename="SimpleTexture.frag" />
+		<Unit filename="StandardShading.frag" />
+		<Unit filename="StandardShading.vert" />
 		<Unit filename="config.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="objloader.cpp" />

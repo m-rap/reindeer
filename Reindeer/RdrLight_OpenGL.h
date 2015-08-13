@@ -3,9 +3,9 @@
 #ifndef OPENGLLIGHT_H
 #define OPENGLLIGHT_H
 
-#include "Light.h"
-class OpenGLLight :
-	public Light
+#include "RdrLight.h"
+class RdrLight_OpenGL :
+	public RdrLight
 {
 protected:
 	GLuint depthShader;
@@ -25,8 +25,8 @@ protected:
 	virtual bool InitShadowMap();
 
 public:
-	OpenGLLight();
-	virtual ~OpenGLLight();
+	RdrLight_OpenGL();
+	virtual ~RdrLight_OpenGL();
 
 	virtual void SetDepthShader(const GLuint& id);
 	virtual void SetStandardShader(const GLuint& id);
@@ -37,7 +37,7 @@ public:
 	virtual void Init();
 
 	virtual void DrawShadowMapTexture();
-	virtual void ApplyShadowMap(Camera& camera);
+	virtual void ApplyShadowMap(RdrCamera& camera);
 	virtual void RenderLight();
 	virtual void RenderDimLight();
 };

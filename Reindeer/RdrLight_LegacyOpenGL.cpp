@@ -1,6 +1,6 @@
-#include "LegacyOpenGLLight.h"
+#include "RdrLight_LegacyOpenGL.h"
 
-LegacyOpenGLLight::LegacyOpenGLLight(void) : Light()
+RdrLight_LegacyOpenGL::RdrLight_LegacyOpenGL(void) : RdrLight()
 {
 	depthTexture = 0;
 
@@ -8,40 +8,40 @@ LegacyOpenGLLight::LegacyOpenGLLight(void) : Light()
 	projection = glm::ortho<float>(-10 * s, 10 * s, -10 * s, 10 * s, 0, 20);
 }
 
-LegacyOpenGLLight::~LegacyOpenGLLight(void)
+RdrLight_LegacyOpenGL::~RdrLight_LegacyOpenGL(void)
 {
 	if (depthTexture != 0)
 		glDeleteTextures(1, &depthTexture);
 }
 
-void LegacyOpenGLLight::SetDepthShader(const GLuint& id)
+void RdrLight_LegacyOpenGL::SetDepthShader(const GLuint& id)
 {
 }
 
-void LegacyOpenGLLight::SetStandardShader(const GLuint& id)
+void RdrLight_LegacyOpenGL::SetStandardShader(const GLuint& id)
 {
 }
 
-void LegacyOpenGLLight::SetTextureViewerShader(const GLuint& id)
+void RdrLight_LegacyOpenGL::SetTextureViewerShader(const GLuint& id)
 {
 }
 
-GLuint LegacyOpenGLLight::GetDepthTexture()
+GLuint RdrLight_LegacyOpenGL::GetDepthTexture()
 {
 	return depthTexture;
 }
 
-GLuint LegacyOpenGLLight::GetDepthFrameBuffer()
+GLuint RdrLight_LegacyOpenGL::GetDepthFrameBuffer()
 {
 	return 0;
 }
 
-void LegacyOpenGLLight::Init()
+void RdrLight_LegacyOpenGL::Init()
 {
 	InitShadowMap();
 }
 
-bool LegacyOpenGLLight::InitShadowMap()
+bool RdrLight_LegacyOpenGL::InitShadowMap()
 {
 	glGenTextures(1, &depthTexture); // Depth texture. Slower than a depth buffer, but you can sample it later in your shader
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
@@ -59,7 +59,7 @@ bool LegacyOpenGLLight::InitShadowMap()
 	return true;
 }
 
-void LegacyOpenGLLight::DrawShadowMapTexture()
+void RdrLight_LegacyOpenGL::DrawShadowMapTexture()
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -95,15 +95,16 @@ void LegacyOpenGLLight::DrawShadowMapTexture()
 	glDisable(GL_TEXTURE_2D);
 }
 
-void LegacyOpenGLLight::RenderLight()
+void RdrLight_LegacyOpenGL::RenderLight()
 {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
 	float lightPosition[4];
-	lightPosition[0] = position.x;
-	lightPosition[1] = position.y;
-	lightPosition[2] = -position.z;
+	RDRVEC3* position = tr.GetPosition();
+	lightPosition[0] = position->x;
+	lightPosition[1] = position->y;
+	lightPosition[2] = -position->z;
 	lightPosition[3] = 0.0f;
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	//glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
@@ -126,15 +127,16 @@ void LegacyOpenGLLight::RenderLight()
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
 }
 
-void LegacyOpenGLLight::RenderDimLight()
+void RdrLight_LegacyOpenGL::RenderDimLight()
 {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
 	float lightPosition[4];
-	lightPosition[0] = position.x;
-	lightPosition[1] = position.y;
-	lightPosition[2] = -position.z;
+	RDRVEC3* position = tr.GetPosition();
+	lightPosition[0] = position->x;
+	lightPosition[1] = position->y;
+	lightPosition[2] = -position->z;
 	lightPosition[3] = 0.0f;
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	//glLightfv(GL_LIGHT0, GL_POSITION, &position.x);
@@ -146,7 +148,7 @@ void LegacyOpenGLLight::RenderDimLight()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
 }
 
-void LegacyOpenGLLight::ApplyShadowMap(Camera& c)
+void RdrLight_LegacyOpenGL::ApplyShadowMap(RdrCamera& c)
 {
 	glActiveTexture(GL_TEXTURE1); glEnable(GL_TEXTURE_2D); // enables texture 1
 	glBindTexture(GL_TEXTURE_2D, depthTexture);

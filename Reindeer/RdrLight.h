@@ -1,18 +1,18 @@
 #pragma once
-#ifndef LIGHT_H
-#define LIGHT_H
+#ifndef RDRLIGHT_H
+#define RDRLIGHT_H
 
-#include "Camera.h"
+#include "RdrCamera.h"
 
-class Light :
-	public Camera
+class RdrLight :
+	public RdrCamera
 {
 protected:
 	virtual bool InitShadowMap() = 0;
 
 public:
-	Light(void);
-	virtual ~Light(void);
+	RdrLight(void);
+	virtual ~RdrLight(void);
 
 #ifdef USE_OPENGL
 	virtual void SetDepthShader(const GLuint& id) = 0;
@@ -27,7 +27,7 @@ public:
 	RDRMAT4 GetDepthBiasMVP(const RDRMAT4& depthMVP);
 
 	virtual void DrawShadowMapTexture() = 0;
-	virtual void ApplyShadowMap(Camera& camera) = 0;
+	virtual void ApplyShadowMap(RdrCamera& camera) = 0;
 	virtual void RenderLight() = 0;
 	virtual void RenderDimLight() = 0;
 };
