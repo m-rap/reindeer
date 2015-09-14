@@ -37,13 +37,13 @@
 			<Add option="-Wno-write-strings" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
-			<Add directory="../include" />
+			<Add directory="/usr/include/bullet" />
 		</Compiler>
 		<Linker>
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
-			<Add library="glfw3" />
+			<Add library="glfw" />
 			<Add library="GLEW" />
 			<Add library="GL" />
 			<Add library="X11" />
@@ -51,7 +51,6 @@
 			<Add library="pthread" />
 			<Add library="Xrandr" />
 			<Add library="Xi" />
-			<Add directory="../lib/linux" />
 		</Linker>
 		<Unit filename="Container.cpp" />
 		<Unit filename="Container.h" />
