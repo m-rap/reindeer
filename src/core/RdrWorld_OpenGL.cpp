@@ -36,9 +36,9 @@ void RdrWorld_OpenGL::Init3d()
 	glEnable(GL_CULL_FACE);
 
 	if (!USE_LEGACY) {
-		standardShader = LoadShaders("StandardShading.vert", "StandardShading.frag");
-		depthShader = LoadShaders("DepthRTT.vert", "DepthRTT.frag");
-		textureViewerShader = LoadShaders("Passthrough.vert", "SimpleTexture.frag");
+		standardShader = LoadShaders("shader/StandardShading.vert", "shader/StandardShading.frag");
+		depthShader = LoadShaders("shader/DepthRTT.vert", "shader/DepthRTT.frag");
+		textureViewerShader = LoadShaders("shader/Passthrough.vert", "shader/SimpleTexture.frag");
 		light = new RdrLight_OpenGL();
 	}
 	else {

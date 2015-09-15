@@ -12,7 +12,7 @@ RdrMesh_OpenGL::RdrMesh_OpenGL(bool isIndexed, bool useTexture) : RdrMesh(isInde
 	if (useTexture)
 	{
 		glGenBuffers(1, &uvBuffer);
-		texture = loadDDS("../uvmap.DDS");
+		texture = loadDDS("res/uvmap.DDS");
 	}
 
 	SetProgramId(((RdrWorld_OpenGL*)RdrWorld::Global)->standardShader);

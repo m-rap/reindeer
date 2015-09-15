@@ -61,8 +61,8 @@ int main()
 	}
 
 
-	RdrMesh* suzanne = RdrMeshFactory_OpenGL::GetInstance().CreateComplexMesh("../suzanne.obj");
-	btCollisionShape* suzanneShape = RdrCollisionShapeFactory::GetInstance().CreateComplexShape("../suzanne.obj");
+	RdrMesh* suzanne = RdrMeshFactory_OpenGL::GetInstance().CreateComplexMesh("res/suzanne.obj");
+	btCollisionShape* suzanneShape = RdrCollisionShapeFactory::GetInstance().CreateComplexShape("res/suzanne.obj");
 
 	nodes[nBox + 1].Mesh = suzanne;
 	nodes[nBox + 1].AddRigidBodyInfo(suzanneShape, 7.0f);
