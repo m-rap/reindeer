@@ -1,41 +1,29 @@
-#include "gtkmm.h"
-#include <iostream>
+#include "gtk/gtk.h"
 
-class Window1 :
-    public Gtk::Window
+void on_window1_destroy(GtkWidget *object, gpointer user_data)
 {
-public:
-    Window1(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
-        : Gtk::Window(cobject) {}
-    virtual ~Window1() {}
-};
+    gtk_main_quit();
+}
 
 int main(int argc, char *argv[])
 {
-    Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
-    Glib::RefPtr<Gtk::Builder> refBuilder = Gtk::Builder::create_from_file("src/editor/main_form.glade");
-    //Glib::RefPtr<Gtk::Builder> refBuilder = Gtk::Builder::create();
-    //try {
-    //    refBuilder->add_from_file("src/editor/main_form.glade");
-    //} catch(const Glib::FileError& ex) {
-    //    std::cerr << "FileError: " << ex.what() << std::endl;
-    //    return 1;
-    //} catch(const Glib::MarkupError& ex) {
-    //    std::cerr << "MarkupError: " << ex.what() << std::endl;
-    //    return 1;
-    //} catch(const Gtk::BuilderError& ex) {
-    //    std::cerr << "BuilderError: " << ex.what() << std::endl;
-    //    return 1;
-    //}
+    GtkBuilder      *builder;
+    GtkWidget       *window;
 
-    //Get the GtkBuilder-instantiated Dialog:
-    Window1* pDialog = 0;
-    refBuilder->get_widget_derived("window1", pDialog);
-    if(pDialog) {
-        app->run(*pDialog);
-    }
+    gtk_init(&argc, &argv);
 
-    delete pDialog;
+    builder = gtk_builder_new();
+    gtk_builder_add_from_file(builder, "src/editor/main_form.glade", NULL);
+
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+    g_signal_connect(window, "destroy", G_CALLBACK(on_window1_destroy), NULL);
+
+    gtk_builder_connect_signals(builder, NULL);
+
+    g_object_unref(G_OBJECT(builder));
+
+    gtk_widget_show(window);
+    gtk_main();
 
     return 0;
 }
