@@ -4,6 +4,8 @@
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkWindow" id="window1">
+    <property name="width_request">640</property>
+    <property name="height_request">480</property>
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <child>
@@ -178,7 +180,7 @@
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTreeView" id="treeview2">
+                  <object class="GtkTreeView" id="treeview1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststore1</property>
@@ -195,19 +197,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow2">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+                <object class="GtkGLArea" id="gl_drawing_area">
+                    <signal name="realize" handler="gl_init" object="GlareaAppWindow" swapped="yes"/>
+                    <signal name="unrealize" handler="gl_fini" object="GlareaAppWindow" swapped="yes"/>
+                    <signal name="render" handler="gl_draw" object="GlareaAppWindow" swapped="yes"/>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                </object>
             </child>
           </object>
           <packing>

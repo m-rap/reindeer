@@ -6,12 +6,12 @@ RdrWorld* RdrWorld::Global = 0;
 
 RdrWorld::RdrWorld(Container* container)
 {
-	mouseRightButtonDown = false;
-	mouseMiddleButtonDown = false;
-	btClock cl;
-	lastTimeMiddleMousePressed = cl.getTimeMilliseconds();
-	this->container = container;
-	container->AddListener(this);
+    mouseRightButtonDown = false;
+    mouseMiddleButtonDown = false;
+    btClock cl;
+    lastTimeMiddleMousePressed = cl.getTimeMilliseconds();
+    this->container = container;
+    container->AddListener(this);
 }
 
 RdrWorld::~RdrWorld()
@@ -19,15 +19,15 @@ RdrWorld::~RdrWorld()
     //dtor
 }
 
-void RdrWorld::Init()
+void RdrWorld::Init(int argc, char *argv[])
 {
-	InitWindow();
-	Init3d();
+    InitWindow(argc, argv);
+    Init3d();
 }
 
-void RdrWorld::InitWindow()
+void RdrWorld::InitWindow(int argc, char *argv[])
 {
-    container->Init();
+    container->Init(argc, argv);
 }
 
 void TraverseRigidBodies(btCollisionShape** result, RdrNode* root, RdrNode* current, int& bodiesCount, float& totalMass)
@@ -60,12 +60,12 @@ void TraverseRigidBodies(btCollisionShape** result, RdrNode* root, RdrNode* curr
 void RdrWorld::Render()
 {
     btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-	collisionConfiguration->setConvexConvexMultipointIterations(3);
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
-	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-	dynamicsWorld->setGravity(btVector3(0.0f * PHYSICS_WORLD_SCALE, -10.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
+    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+    collisionConfiguration->setConvexConvexMultipointIterations(3);
+    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
+    btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0.0f * PHYSICS_WORLD_SCALE, -10.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
 
     deque<btRigidBody*> rigidBodies;
 
@@ -102,47 +102,47 @@ void RdrWorld::Render()
         dynamicsWorld->addRigidBody(rb);
     }
 
-	btClock cl;
-	btScalar currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+    btClock cl;
+    btScalar currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
 
-	while (true) {
+    while (true) {
         container->ReadInput();
-		if (container->ShouldClose())
-			break;
+        if (container->ShouldClose())
+            break;
 
-		btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
-		btScalar frameTime = newTime - currentTime;
-		currentTime = newTime;
+        btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+        btScalar frameTime = newTime - currentTime;
+        currentTime = newTime;
 
-		dynamicsWorld->stepSimulation(frameTime, 7);
+        dynamicsWorld->stepSimulation(frameTime, 7);
 
-		for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
-		{
-			RdrNode* rc = (RdrNode*)(*it)->getUserPointer();
-			btTransform trans;
+        for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
+        {
+            RdrNode* rc = (RdrNode*)(*it)->getUserPointer();
+            btTransform trans;
             (*it)->getMotionState()->getWorldTransform(trans);
-			rc->Update(trans);
-		}
+            rc->Update(trans);
+        }
 
-		PreUpdate();
-		Draw();
-		PostUpdate();
+        PreUpdate();
+        Draw();
+        PostUpdate();
         container->PostUpdate();
-	}
+    }
 
-	for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
-	{
-		dynamicsWorld->removeRigidBody(*it);
-		delete *it;
-	}
+    for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
+    {
+        dynamicsWorld->removeRigidBody(*it);
+        delete *it;
+    }
 
-	delete dynamicsWorld;
-	delete solver;
-	delete collisionConfiguration;
-	delete dispatcher;
-	delete broadphase;
+    delete dynamicsWorld;
+    delete solver;
+    delete collisionConfiguration;
+    delete dispatcher;
+    delete broadphase;
 
-	PostRender();
+    PostRender();
 }
 
 void RdrWorld::Draw()

@@ -4,7 +4,7 @@
 #include "shader.h"
 #include "RdrLight.h"
 #include "btBulletDynamicsCommon.h"
-#include "Container.h"
+#include "../container/Container.h"
 
 using namespace std;
 
@@ -13,21 +13,21 @@ class RdrWorld :
 {
 protected:
 
-	//BoxObject* ground;
+    //BoxObject* ground;
 
-	bool mouseRightButtonDown, mouseMiddleButtonDown;
-	unsigned long lastTimeMiddleMousePressed;
-	double mouseX, mouseY;
+    bool mouseRightButtonDown, mouseMiddleButtonDown;
+    unsigned long lastTimeMiddleMousePressed;
+    double mouseX, mouseY;
 
-	Container* container;
+    Container* container;
 
-	void InitWindow();
-	virtual void Init3d() = 0;
-	virtual void PreRender() {}
-	virtual void PreUpdate() {}
-	virtual void PostUpdate() {}
-	virtual void PostRender() = 0;
-	virtual void Draw();
+    void InitWindow(int argc, char *argv[]);
+    virtual void Init3d() = 0;
+    virtual void PreRender() {}
+    virtual void PreUpdate() {}
+    virtual void PostUpdate() {}
+    virtual void PostRender() = 0;
+    virtual void Draw();
 
 public:
     RdrWorld(Container* container);
@@ -36,11 +36,11 @@ public:
     static RdrWorld* Global;
 
     RdrCamera camera;
-	RdrLight* light;
+    RdrLight* light;
 
     deque<RdrNode*> nodes;
 
-    void Init();
+    void Init(int argc, char *argv[]);
     void Render();
 
     virtual void Scrolled(double xoffset, double yoffset);
