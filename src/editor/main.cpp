@@ -1,29 +1,45 @@
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
+#include <stdlib.h>
+//#include <gtk/gtkgl.h>
 
-void on_window1_destroy(GtkWidget *object, gpointer user_data)
+typedef struct {
+    GtkWidget *window1;
+} AppWidgets;
+
+extern "C"
 {
-    gtk_main_quit();
+    G_MODULE_EXPORT void on_window1_destroy(GtkWidget *object, gpointer user_data)
+    {
+        gtk_main_quit();
+    }
 }
 
 int main(int argc, char *argv[])
 {
     GtkBuilder      *builder;
-    GtkWidget       *window;
+    GError *err = NULL;
+
+    AppWidgets *app = g_slice_new(AppWidgets);
 
     gtk_init(&argc, &argv);
+    //gtk_gl_init(&argc, &argv);
 
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "src/editor/main_form.glade", NULL);
+    gtk_builder_add_from_file(builder, "src/editor/main_form.glade", &err);
+    if (err) {
+        g_error(err->message);
+        g_error_free(err);
+        g_slice_free(AppWidgets, app);
+        return 1;
+    }
 
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
-    g_signal_connect(window, "destroy", G_CALLBACK(on_window1_destroy), NULL);
+    app->window1 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
 
-    gtk_builder_connect_signals(builder, NULL);
-
+    gtk_builder_connect_signals(builder, app);
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_show(window);
     gtk_main();
+    g_slice_free(AppWidgets, app);
 
     return 0;
 }

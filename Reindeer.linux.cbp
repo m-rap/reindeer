@@ -37,14 +37,14 @@
 			<Add option="-Wall" />
 			<Add option="-Wno-unused-variable" />
 			<Add option="-Wno-write-strings" />
-			<Add option="`pkg-config gtk+-3.0 gtkglext-1.0 --cflags`" />
+			<Add option="`pkg-config gtk+-2.0 gtkglext-1.0 --cflags`" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
 			<Add directory="." />
 			<Add directory="/usr/include/bullet" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config gtk+-3.0 gtkglext-1.0 --libs`" />
+			<Add option="`pkg-config gtk+-2.0 gtkglext-1.0 --libs`" />
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />

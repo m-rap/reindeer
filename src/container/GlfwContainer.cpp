@@ -31,13 +31,7 @@ GlfwContainer::~GlfwContainer()
 		glfwTerminate();
 }
 
-int GlfwContainer::KEY_LEFT() { return GLFW_KEY_LEFT; }
-int GlfwContainer::KEY_RIGHT() { return GLFW_KEY_RIGHT; }
-int GlfwContainer::KEY_UP() { return GLFW_KEY_UP; }
-int GlfwContainer::KEY_DOWN() { return GLFW_KEY_DOWN; }
-int GlfwContainer::KEY_M() { return GLFW_KEY_M; }
-
-void GlfwContainer::Init()
+void GlfwContainer::Init(int argc, char *argv[])
 {
     int init = glfwInit();
 	if (init == GL_FALSE) {

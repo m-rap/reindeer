@@ -2,7 +2,7 @@
 #define CONTAINER_H
 
 #include <deque>
-#include "reindeer.h"
+#include "../core/reindeer.h"
 
 using namespace std;
 
@@ -29,16 +29,16 @@ public:
     Container();
     virtual ~Container();
 
-	virtual int KEY_LEFT() = 0;
-	virtual int KEY_RIGHT() = 0;
-	virtual int KEY_UP() = 0;
-	virtual int KEY_DOWN() = 0;
-	virtual int KEY_M() = 0;
+    virtual int KEY_LEFT() = 0;
+    virtual int KEY_RIGHT() = 0;
+    virtual int KEY_UP() = 0;
+    virtual int KEY_DOWN() = 0;
+    virtual int KEY_M() = 0;
 
     void AddListener(ContainerEventListener* listener);
 
     virtual int ShouldClose() = 0;
-    virtual void Init() = 0;
+    virtual void Init(int argc, char *argv[]) = 0;
     virtual void PreUpdate() = 0;
     virtual void PostUpdate() = 0;
     virtual void ReadInput() = 0;
