@@ -15,6 +15,7 @@
 					<Add option="-g" />
 					<Add directory="../Reindeer" />
 					<Add directory="src/container" />
+					<Add directory="src/common" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -26,6 +27,7 @@
 					<Add option="-O2" />
 					<Add directory="../Reindeer" />
 					<Add directory="src/container" />
+					<Add directory="src/common" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -37,14 +39,14 @@
 			<Add option="-Wall" />
 			<Add option="-Wno-unused-variable" />
 			<Add option="-Wno-write-strings" />
-			<Add option="`pkg-config gtk+-2.0 gtkglext-1.0 --cflags`" />
+			<Add option="`pkg-config gtk+-3.0 --cflags`" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
 			<Add directory="." />
 			<Add directory="/usr/include/bullet" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config gtk+-2.0 gtkglext-1.0 --libs`" />
+			<Add option="`pkg-config gtk+-3.0 --libs`" />
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
@@ -57,10 +59,15 @@
 			<Add library="Xrandr" />
 			<Add library="Xi" />
 		</Linker>
+		<Unit filename="src/common/RdrLinuxThread.cpp" />
+		<Unit filename="src/common/RdrLinuxThread.h" />
+		<Unit filename="src/common/RdrThread.h" />
 		<Unit filename="src/container/Container.cpp" />
 		<Unit filename="src/container/Container.h" />
 		<Unit filename="src/container/GlfwContainer.cpp" />
 		<Unit filename="src/container/GlfwContainer.h" />
+		<Unit filename="src/container/GlxContainer.cpp" />
+		<Unit filename="src/container/GlxContainer.h" />
 		<Unit filename="src/container/RdrGtkContainer.cpp" />
 		<Unit filename="src/container/RdrGtkContainer.h" />
 		<Unit filename="src/core/RdrCamera.cpp" />

@@ -4,8 +4,8 @@ unordered_map<GLFWwindow*, GlfwContainer*> GlfwContainer::ContainerMap;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	if (GlfwContainer::ContainerMap.find(window) != GlfwContainer::ContainerMap.end())
-		GlfwContainer::ContainerMap[window]->Scrolled(xoffset, yoffset);
+    if (GlfwContainer::ContainerMap.find(window) != GlfwContainer::ContainerMap.end())
+        GlfwContainer::ContainerMap[window]->Scrolled(xoffset, yoffset);
 }
 
 void key_callback(GLFWwindow *window, int key, int scancodes, int action, int mods)
@@ -27,30 +27,30 @@ GlfwContainer::GlfwContainer()
 
 GlfwContainer::~GlfwContainer()
 {
-	if (window)
-		glfwTerminate();
+    if (window)
+        glfwTerminate();
 }
 
 void GlfwContainer::Init(int argc, char *argv[])
 {
     int init = glfwInit();
-	if (init == GL_FALSE) {
-		printf("glfw init failed\n");
-		return;
-	}
+    if (init == GL_FALSE) {
+        printf("glfw init failed\n");
+        return;
+    }
 
-	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Reindeer", NULL, NULL);
-	if (!window) {
-		printf("glfw create window failed\n");
-		glfwTerminate();
-		return;
-	}
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Reindeer", NULL, NULL);
+    if (!window) {
+        printf("glfw create window failed\n");
+        glfwTerminate();
+        return;
+    }
 
-	GlfwContainer::ContainerMap[window] = this;
-	glfwMakeContextCurrent(window);
+    GlfwContainer::ContainerMap[window] = this;
+    glfwMakeContextCurrent(window);
 
-	glfwSetScrollCallback(window, scroll_callback);
-	glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
 }
 
 void GlfwContainer::PreUpdate()
@@ -68,9 +68,9 @@ void GlfwContainer::ReadInput()
     double tempX = mouseX, tempY = mouseY;
     glfwGetCursorPos(window, &mouseX, &mouseY);
 
-	if (tempX != mouseX || tempY != mouseY) {
-		MouseMoved(mouseX, mouseY);
-	}
+    if (tempX != mouseX || tempY != mouseY) {
+        MouseMoved(mouseX, mouseY);
+    }
 
     int mouseRightButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (mouseRightButtonState == GLFW_PRESS)
