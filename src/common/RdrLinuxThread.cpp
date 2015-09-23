@@ -4,24 +4,70 @@ void *pthreadFunc(void *param)
 {
     Runnable *r = static_cast<Runnable*>(param);
     r->Run();
+    return NULL;
+}
+
+RdrLinuxMutex::RdrLinuxMutex()
+{
+    pthread_mutex_init(&mutex, NULL);
+}
+
+RdrLinuxMutex::~RdrLinuxMutex()
+{
+    pthread_mutex_destroy(&mutex);
+}
+
+int RdrLinuxMutex::Lock()
+{
+    return pthread_mutex_lock(&mutex);
+}
+
+int RdrLinuxMutex::Unlock()
+{
+    return pthread_mutex_unlock(&mutex);
 }
 
 RdrLinuxThread::RdrLinuxThread()
 {
-    //ctor
 }
 
 RdrLinuxThread::~RdrLinuxThread()
 {
-    //dtor
 }
 
-void RdrLinuxThread::Start(Runnable* runnable)
+int RdrLinuxThread::Start(Runnable* runnable)
 {
-    pthread_create(&thread, 0, pthreadFunc, (void*)runnable);
+    return pthread_create(&thread, 0, pthreadFunc, runnable);
 }
 
-void RdrLinuxThread::Join()
+int RdrLinuxThread::Join()
 {
-    pthread_join(thread, NULL);
+    return pthread_join(thread, NULL);
+}
+
+RdrLinuxEvent::RdrLinuxEvent()
+{
+    flag = false;
+    pthread_cond_init(&signal, NULL);
+}
+
+RdrLinuxEvent::~RdrLinuxEvent()
+{
+}
+
+void RdrLinuxEvent::Wait()
+{
+    protect.Lock();
+    while (!flag)
+        pthread_cond_wait(&signal, &protect.mutex);
+    flag = false;
+    protect.Unlock();
+}
+
+int RdrLinuxEvent::Set()
+{
+    protect.Lock();
+    flag = true;
+    protect.Unlock();
+    return pthread_cond_signal(&signal);
 }

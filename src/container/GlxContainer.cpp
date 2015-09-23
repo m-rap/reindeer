@@ -4,6 +4,8 @@ bool GlxContainer::ctxErrorOccurred = false;
 
 GlxContainer::GlxContainer()
 {
+    shouldClose = 1;
+    currentKey = -1;
 }
 
 GlxContainer::~GlxContainer()
@@ -11,15 +13,8 @@ GlxContainer::~GlxContainer()
     //dtor
 }
 
-void GlxContainer::Init(int argc, char *argv[])
+void GlxContainer::FbSetup()
 {
-    display = XOpenDisplay(NULL);
-
-    if (!display) {
-        printf("Failed to open X display\n");
-        exit(1);
-    }
-
     // Get a matching FB config
     static int visual_attribs[] = {
         GLX_X_RENDERABLE    , True,
@@ -81,39 +76,57 @@ void GlxContainer::Init(int argc, char *argv[])
         XFree(vi);
     }
 
-    GLXFBConfig bestFbc = fbc[best_fbc];
+    bestFbc = fbc[best_fbc];
 
     // Be sure to free the FBConfig list allocated by glXChooseFBConfig()
     XFree( fbc );
 
     // Get a visual
-    XVisualInfo *vi = glXGetVisualFromFBConfig(display, bestFbc);
+    XVisualInfo* vi = glXGetVisualFromFBConfig(display, bestFbc);
+    visual = vi->visual;
+    screen = vi->screen;
+    depth = vi->depth;
     printf("Chosen visual ID = 0x%x\n", vi->visualid);
+    // Done with the visual info data
+    XFree(vi);
 
     printf("Creating colormap\n");
-    XSetWindowAttributes swa;
-    Colormap cmap;
-    swa.colormap = cmap = XCreateColormap(display,
-                                          RootWindow(display, vi->screen),
-                                          vi->visual, AllocNone);
-    swa.background_pixmap = None ;
+    swa.colormap = XCreateColormap(display,
+                                   RootWindow(display, vi->screen),
+                                   vi->visual, AllocNone);
+    swa.background_pixmap = None;
     swa.border_pixel      = 0;
     swa.event_mask        = StructureNotifyMask;
+
+}
+
+void GlxContainer::Init(int argc, char *argv[])
+{
+    display = XOpenDisplay(NULL);
+    screen = 0;
+    depth = DefaultDepth(display, 0);
+
+    if (!display) {
+        printf("Failed to open X display\n");
+        exit(1);
+    }
+
+    //FbSetup();
+    visual = DefaultVisual(display, 0);
+
+    swa.background_pixel = XWhitePixel(display, 0);
 
     printf("Creating window\n");
     width = SCREEN_WIDTH;
     height = SCREEN_HEIGHT;
-    window = XCreateWindow(display, RootWindow(display, vi->screen),
-                           0, 0, width, height, 0, vi->depth, InputOutput,
-                           vi->visual,
+    window = XCreateWindow(display, RootWindow(display, screen),
+                           0, 0, width, height, 0, depth, InputOutput,
+                           visual,
                            CWBorderPixel | CWColormap | CWEventMask, &swa);
     if (!window) {
-        printf( "Failed to create window.\n" );
+        printf("Failed to create window.\n");
         exit(1);
     }
-
-    // Done with the visual info data
-    XFree(vi);
 
     XStoreName(display, window, "GL 3.0 Window");
 
@@ -121,9 +134,9 @@ void GlxContainer::Init(int argc, char *argv[])
     XMapWindow(display, window);
 
     // Get the default screen's GLX extension list
-    const char *glxExts = glXQueryExtensionsString(display, DefaultScreen(display));
+    //const char *glxExts = glXQueryExtensionsString(display, DefaultScreen(display));
 
-    GLXContext ctx = 0;
+    ctx = 0;
 
     // Install an X error handler so the application won't exit if GL 3.0
     // context allocation fails.
@@ -134,7 +147,8 @@ void GlxContainer::Init(int argc, char *argv[])
     ctxErrorOccurred = false;
     int (*oldHandler)(Display*, XErrorEvent*) = XSetErrorHandler(&ctxErrorHandler);
 
-    ctx = glXCreateNewContext(display, bestFbc, GLX_RGBA_TYPE, 0, True);
+    //ctx = glXCreateNewContext(display, bestFbc, GLX_RGBA_TYPE, 0, True);
+    //ctx = glXCreateContext()
 
     // Sync to ensure any errors generated are processed.
     XSync(display, False);
@@ -160,15 +174,23 @@ void GlxContainer::Init(int argc, char *argv[])
     thread.Start(this);
 }
 
+void GlxContainer::ReadInput()
+{
+    //if (currentKey != -1) {
+    //    KeyPressed(currentKey);
+    //    currentKey = -1;
+    //}
+}
+
 void GlxContainer::Run()
 {
     Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(display, window, &wmDeleteMessage, 1);
 
-    bool opened = true;
     bool loaded = false;
+    shouldClose = 0;
 
-    while (opened) {
+    while (!shouldClose) {
         XNextEvent(display, &event);
 
         switch (event.type) {
@@ -181,12 +203,12 @@ void GlxContainer::Run()
             break;
 
         case KeyPress:
-            OnKeyPress(&event);
+            currentKey = XLookupKeysym(&event.xkey, 0);
             break;
 
         case ClientMessage:
             if (event.xclient.data.l[0] == wmDeleteMessage) {
-                opened = false;
+                shouldClose = 1;
                 XDestroyWindow(display, event.xclient.window);
             }
             break;
@@ -216,10 +238,6 @@ void GlxContainer::OnClosing()
 }
 
 void GlxContainer::OnClosed()
-{
-}
-
-void GlxContainer::OnKeyPress(XEvent* e)
 {
 }
 

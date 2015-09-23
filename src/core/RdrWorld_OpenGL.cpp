@@ -17,38 +17,38 @@ RdrWorld_OpenGL::~RdrWorld_OpenGL(void)
 
 void RdrWorld_OpenGL::Init3d()
 {
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
-		return;
-	}
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
+        return;
+    }
 
-	if (!GLEW_VERSION_1_5)
-		USE_LEGACY = true;
+    if (!GLEW_VERSION_1_5)
+        USE_LEGACY = true;
 
-	printf("%s\n", glGetString(GL_VERSION));
+    printf("%s\n", glGetString(GL_VERSION));
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glDepthMask(GL_TRUE);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	//glClearDepth(1.0f);
-	glEnable(GL_CULL_FACE);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    //glClearDepth(1.0f);
+    glEnable(GL_CULL_FACE);
 
-	if (!USE_LEGACY) {
-		standardShader = LoadShaders("shader/StandardShading.vert", "shader/StandardShading.frag");
-		depthShader = LoadShaders("shader/DepthRTT.vert", "shader/DepthRTT.frag");
-		textureViewerShader = LoadShaders("shader/Passthrough.vert", "shader/SimpleTexture.frag");
-		light = new RdrLight_OpenGL();
-	}
-	else {
-		light = new RdrLight_LegacyOpenGL();
-	}
+    if (!USE_LEGACY) {
+        standardShader = LoadShaders("shader/StandardShading.vert", "shader/StandardShading.frag");
+        depthShader = LoadShaders("shader/DepthRTT.vert", "shader/DepthRTT.frag");
+        textureViewerShader = LoadShaders("shader/Passthrough.vert", "shader/SimpleTexture.frag");
+        light = new RdrLight_OpenGL();
+    }
+    else {
+        light = new RdrLight_LegacyOpenGL();
+    }
 
-	light->GetTransform()->SetPosition(RDRVEC3(3.0f, 3.0f, 7.0f));
-	light->GetTransform()->LookAt(RDRVEC3(-0.7f, 1.0f, 0.5f));
-	light->BuildView();
-	light->Init();
+    light->GetTransform()->SetPosition(RDRVEC3(3.0f, 3.0f, 7.0f));
+    light->GetTransform()->LookAt(RDRVEC3(-0.7f, 1.0f, 0.5f));
+    light->BuildView();
+    light->Init();
 }
 
 void RdrWorld_OpenGL::PreShadow()

@@ -6,6 +6,7 @@
 #endif
 #include "RdrCollisionShapeFactory.h"
 #include "../container/GlfwContainer.h"
+#include "../container/GlxContainer.h"
 #ifdef _WIN32
 #include "WglContainer.h"
 #endif
@@ -27,8 +28,9 @@ int main(int argc, char *argv[])
     Win32Container container;
     D3d9World world(&container);
 #else
-    GlfwContainer container;
+    //GlfwContainer container;
     //WglContainer container;
+    GlxContainer container;
     RdrWorld_OpenGL world(&container);
 #endif
     RdrWorld::Global = &world;

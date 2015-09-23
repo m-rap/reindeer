@@ -1,5 +1,12 @@
-#ifndef RUNNABLE_H
-#define RUNNABLE_H
+#ifndef RDRTHREAD_H
+#define RDRTHREAD_H
+
+class RdrMutex
+{
+public:
+    virtual int Lock() = 0;
+    virtual int Unlock() = 0;
+};
 
 class Runnable
 {
@@ -10,8 +17,15 @@ public:
 class RdrThread
 {
 public:
-    virtual void Start() = 0;
-    virtual void Join() = 0;
+    virtual int Start() = 0;
+    virtual int Join() = 0;
+};
+
+class RdrEvent
+{
+public:
+    virtual void Wait() = 0;
+    virtual int Set() = 0;
 };
 
 #endif // RUNNABLE_H

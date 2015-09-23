@@ -1,8 +1,23 @@
-#ifndef LINUXTHREAD_H
-#define LINUXTHREAD_H
+#ifndef RDRLINUXTHREAD_H
+#define RDRLINUXTHREAD_H
 
 #include "RdrThread.h"
 #include <pthread.h>
+
+class RdrLinuxEvent;
+
+class RdrLinuxMutex
+{
+friend class RdrLinuxEvent;
+private:
+    pthread_mutex_t mutex;
+public:
+    RdrLinuxMutex();
+    ~RdrLinuxMutex();
+
+    virtual int Lock();
+    virtual int Unlock();
+};
 
 class RdrLinuxThread
 {
@@ -13,8 +28,23 @@ public:
     RdrLinuxThread();
     virtual ~RdrLinuxThread();
 
-    void Start(Runnable* runnable);
-    void Join();
+    int Start(Runnable* runnable);
+    int Join();
+};
+
+class RdrLinuxEvent :
+    public RdrEvent
+{
+private:
+    bool flag;
+    RdrLinuxMutex protect;
+    pthread_cond_t signal;
+public:
+    RdrLinuxEvent();
+    ~RdrLinuxEvent();
+
+    virtual void Wait();
+    virtual int Set();
 };
 
 #endif // LINUXTHREAD_H

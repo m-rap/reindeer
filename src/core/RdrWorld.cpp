@@ -235,7 +235,7 @@ void RdrWorld::KeyPressed(int keyCode)
     if (keyCode == container->KEY_DOWN())
         tr->RotateLocalX(ToRadian(-0.01f));
 
-    if (keyCode == container->KEY_M())
+    if (keyCode == container->KEY_m())
         DEBUG_SHADOWMAP = !DEBUG_SHADOWMAP;
 
     camera.BuildView();

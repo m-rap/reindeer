@@ -34,6 +34,7 @@ public:
     virtual int KEY_UP() = 0;
     virtual int KEY_DOWN() = 0;
     virtual int KEY_M() = 0;
+    virtual int KEY_m() = 0;
 
     void AddListener(ContainerEventListener* listener);
 
