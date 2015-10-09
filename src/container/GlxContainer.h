@@ -31,6 +31,8 @@ private:
     int depth;
     XSetWindowAttributes swa;
     GLXFBConfig bestFbc;
+    Atom wmDeleteMessage;
+    bool loaded;
 
     void FbSetup();
 
@@ -53,10 +55,10 @@ public:
     virtual int KEY_M() { return XK_M; }
     virtual int KEY_m() { return XK_m; }
 
-    virtual int ShouldClose() { return shouldClose; }
+    virtual int ShouldClose();
     virtual void Init(int argc, char *argv[]);
     virtual void PreUpdate() {}
-    virtual void PostUpdate() {}
+    virtual void PostUpdate();
     virtual void ReadInput();
 
     virtual void Run();

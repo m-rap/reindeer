@@ -37,13 +37,18 @@ bool GlxContainer::ctxErrorOccurred = false;
 
 GlxContainer::GlxContainer()
 {
-    shouldClose = 1;
+    shouldClose = 0;
     currentKey = -1;
 }
 
 GlxContainer::~GlxContainer()
 {
-    //dtor
+    glXMakeCurrent(display, 0, 0);
+    glXDestroyContext(display, ctx);
+
+    XDestroyWindow(display, window);
+    XFreeColormap(display, swa.colormap);
+    XCloseDisplay(display);
 }
 
 void GlxContainer::FbSetup()
@@ -255,15 +260,59 @@ void GlxContainer::Init(int argc, char *argv[])
     printf("Making context current\n");
     glXMakeCurrent(display, window, ctx);
 
+    wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(display, window, &wmDeleteMessage, 1);
+
+    loaded = false;
+    shouldClose = 0;
+
     //thread.Start(this);
+}
+
+int GlxContainer::ShouldClose()
+{
+    return shouldClose;
+}
+
+void GlxContainer::PostUpdate()
+{
+    glXSwapBuffers(display, window);
 }
 
 void GlxContainer::ReadInput()
 {
-    //if (currentKey != -1) {
-    //    KeyPressed(currentKey);
-    //    currentKey = -1;
-    //}
+    XCheckMaskEvent(display, KeyPressMask | ExposureMask | StructureNotifyMask, &event);
+    switch (event.type) {
+    case Expose:
+        if (!loaded) {
+            OnLoad();
+            loaded = true;
+        }
+        break;
+
+    case KeyPress:
+        currentKey = XLookupKeysym(&event.xkey, 0);
+        break;
+
+    case ConfigureNotify:
+        XConfigureEvent xce = event.xconfigure;
+        if (xce.width != width || xce.height != height) {
+            width = xce.width;
+            height = xce.height;
+            OnResize();
+        }
+        break;
+    }
+
+    XCheckTypedWindowEvent(display, window, ClientMessage, &event);
+    switch (event.type) {
+    case ClientMessage:
+        if (event.xclient.data.l[0] == wmDeleteMessage) {
+            shouldClose = 1;
+            XDestroyWindow(display, event.xclient.window);
+        }
+        break;
+    }
 }
 
 void GlxContainer::Run()
