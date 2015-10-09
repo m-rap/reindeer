@@ -283,18 +283,18 @@ void GlxContainer::ReadInput()
 {
     XCheckMaskEvent(display, KeyPressMask | ExposureMask | StructureNotifyMask, &event);
     switch (event.type) {
-    case Expose:
+    case Expose: // part of exposure mask
         if (!loaded) {
             OnLoad();
             loaded = true;
         }
         break;
 
-    case KeyPress:
+    case KeyPress: // part of keypressmask
         currentKey = XLookupKeysym(&event.xkey, 0);
         break;
 
-    case ConfigureNotify:
+    case ConfigureNotify: // part of structurenotifymask
         XConfigureEvent xce = event.xconfigure;
         if (xce.width != width || xce.height != height) {
             width = xce.width;
