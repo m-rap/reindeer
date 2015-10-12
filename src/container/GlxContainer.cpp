@@ -39,6 +39,7 @@ GlxContainer::GlxContainer()
 {
     shouldClose = 0;
     currentKey = -1;
+    checkMask = false;
 }
 
 GlxContainer::~GlxContainer()
@@ -102,9 +103,7 @@ void GlxContainer::FbSetup()
             glXGetFBConfigAttrib(display, fbc[i], GLX_SAMPLE_BUFFERS, &samp_buf);
             glXGetFBConfigAttrib(display, fbc[i], GLX_SAMPLES       , &samples );
 
-            printf("  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d,"
-                   " SAMPLES = %d\n",
-                   i, vi -> visualid, samp_buf, samples);
+            printf("  Matching fbconfig %d, visual ID 0x%2x: SAMPLE_BUFFERS = %d, SAMPLES = %d\n", i, vi -> visualid, samp_buf, samples);
 
             if (best_fbc < 0 || samp_buf && samples > best_num_samp)
                 best_fbc = i, best_num_samp = samples;
@@ -132,7 +131,6 @@ void GlxContainer::FbSetup()
                                    vi->visual, AllocNone);
     swa.background_pixmap = None;
     swa.border_pixel      = 0;
-    swa.event_mask        = StructureNotifyMask;
 
 }
 
@@ -151,6 +149,10 @@ void GlxContainer::Init(int argc, char *argv[])
     //visual = DefaultVisual(display, 0);
 
     swa.background_pixel = XWhitePixel(display, 0);
+    swa.event_mask       = KeyPressMask | KeyRelease |
+                           ExposureMask |
+                           PointerMotionMask | ButtonPressMask | ButtonReleaseMask |
+                           StructureNotifyMask;
 
     printf("Creating window\n");
     width = SCREEN_WIDTH;
@@ -281,72 +283,61 @@ void GlxContainer::PostUpdate()
 
 void GlxContainer::ReadInput()
 {
-    XCheckMaskEvent(display, KeyPressMask | ExposureMask | StructureNotifyMask, &event);
-    switch (event.type) {
-    case Expose: // part of exposure mask
-        if (!loaded) {
-            OnLoad();
-            loaded = true;
-        }
-        break;
-
-    case KeyPress: // part of keypressmask
-        currentKey = XLookupKeysym(&event.xkey, 0);
-        break;
-
-    case ConfigureNotify: // part of structurenotifymask
-        XConfigureEvent xce = event.xconfigure;
-        if (xce.width != width || xce.height != height) {
-            width = xce.width;
-            height = xce.height;
-            OnResize();
-        }
-        break;
-    }
-
-    XCheckTypedWindowEvent(display, window, ClientMessage, &event);
-    switch (event.type) {
-    case ClientMessage:
-        if (event.xclient.data.l[0] == wmDeleteMessage) {
-            shouldClose = 1;
-            XDestroyWindow(display, event.xclient.window);
-        }
-        break;
-    }
-}
-
-void GlxContainer::Run()
-{
-    Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols(display, window, &wmDeleteMessage, 1);
-
-    bool loaded = false;
-    shouldClose = 0;
-
-    while (!shouldClose) {
-        XNextEvent(display, &event);
-
+    if (checkMask || XCheckMaskEvent(display, swa.event_mask, &event)) {
         switch (event.type) {
-
-        case Expose:
+        case Expose: // part of exposure mask
             if (!loaded) {
                 OnLoad();
                 loaded = true;
             }
             break;
 
-        case KeyPress:
-            currentKey = XLookupKeysym(&event.xkey, 0);
+        case KeyPress: // part of keypressmask
+            KeyPressed(XLookupKeysym(&event.xkey, 0));
             break;
 
-        case ClientMessage:
-            if (event.xclient.data.l[0] == wmDeleteMessage) {
-                shouldClose = 1;
-                XDestroyWindow(display, event.xclient.window);
+        case KeyRelease:
+            break;
+
+        case ButtonPress:
+            switch (event.xbutton.button) {
+            case Button1:
+                MouseLeftButtonPressed(event.xbutton.x, event.xbutton.y);
+                break;
+            case Button2:
+                MouseMiddleButtonPressed(event.xbutton.x, event.xbutton.y);
+                break;
+            case Button3:
+                MouseRightButtonPressed(event.xbutton.x, event.xbutton.y);
+                break;
+            case Button4:
+                Scrolled(0, 1);
+                break;
+            case Button5:
+                Scrolled(0, -1);
+                break;
             }
             break;
 
-        case ConfigureNotify:
+        case ButtonRelease:
+            switch (event.xbutton.button) {
+            case Button1:
+                MouseLeftButtonReleased(event.xbutton.x, event.xbutton.y);
+                break;
+            case Button2:
+                MouseMiddleButtonReleased(event.xbutton.x, event.xbutton.y);
+                break;
+            case Button3:
+                MouseRightButtonReleased(event.xbutton.x, event.xbutton.y);
+                break;
+            }
+            break;
+
+        case MotionNotify:
+            MouseMoved(event.xmotion.x, event.xmotion.y);
+            break;
+
+        case ConfigureNotify: // part of structurenotifymask
             XConfigureEvent xce = event.xconfigure;
             if (xce.width != width || xce.height != height) {
                 width = xce.width;
@@ -355,16 +346,20 @@ void GlxContainer::Run()
             }
             break;
         }
+
+        do {
+            checkMask = XCheckMaskEvent(display, swa.event_mask, &event);
+        } while (checkMask && event.type == MotionNotify);
     }
 
-    OnClosing();
-    glXMakeCurrent(display, 0, 0);
-    glXDestroyContext(display, ctx);
-
-    XDestroyWindow(display, window);
-    XFreeColormap(display, swa.colormap);
-    XCloseDisplay(display);
-    OnClosed();
+    XCheckTypedWindowEvent(display, window, ClientMessage, &event);
+    switch (event.type) {
+    case ClientMessage:
+        if (event.xclient.data.l[0] == wmDeleteMessage) {
+            shouldClose = 1;
+        }
+        break;
+    }
 }
 
 void GlxContainer::OnLoad()

@@ -198,7 +198,6 @@ void RdrWorld::MouseMoved(double x, double y)
     RdrTransform* tr = camera.GetTransform();
     if (mouseRightButtonDown) {
 		double deltaX = mouseX - x, deltaY = mouseY - y;
-		printf("zz %lf %lf\n", deltaX, deltaY);
         tr->RotateLocalX(ToRadian(deltaY * 0.1f), true);
         tr->RotateGlobalY(ToRadian(deltaX * 0.1f), true);
         tr->BuildWorld();
@@ -209,7 +208,6 @@ void RdrWorld::MouseMoved(double x, double y)
 
     if (mouseMiddleButtonDown) {
 		double deltaX = mouseX - x, deltaY = mouseY - y;
-		printf("zz %lf %lf\n", deltaX, deltaY);
         RDRVEC3 pos = *tr->GetPosition();
         RDRVEC3 delta = (float)deltaX * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_X));
 		delta += (float)-deltaY * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_Y));
@@ -224,16 +222,16 @@ void RdrWorld::KeyPressed(int keyCode)
 {
     RdrTransform* tr = camera.GetTransform();
     if (keyCode == container->KEY_LEFT())
-        tr->RotateGlobalY(ToRadian(0.01f));
+        tr->RotateGlobalY(ToRadian(0.1f));
 
     if (keyCode == container->KEY_RIGHT())
-        tr->RotateGlobalY(ToRadian(-0.01f));
+        tr->RotateGlobalY(ToRadian(-0.1f));
 
     if (keyCode == container->KEY_UP())
-        tr->RotateLocalX(ToRadian(0.01f));
+        tr->RotateLocalX(ToRadian(0.1f));
 
     if (keyCode == container->KEY_DOWN())
-        tr->RotateLocalX(ToRadian(-0.01f));
+        tr->RotateLocalX(ToRadian(-0.1f));
 
     if (keyCode == container->KEY_m())
         DEBUG_SHADOWMAP = !DEBUG_SHADOWMAP;

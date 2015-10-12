@@ -13,8 +13,7 @@
 typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
 
 class GlxContainer :
-    public Container,
-    public Runnable
+    public Container
 {
 private:
     Window window;
@@ -33,6 +32,7 @@ private:
     GLXFBConfig bestFbc;
     Atom wmDeleteMessage;
     bool loaded;
+    bool checkMask;
 
     void FbSetup();
 
@@ -60,8 +60,6 @@ public:
     virtual void PreUpdate() {}
     virtual void PostUpdate();
     virtual void ReadInput();
-
-    virtual void Run();
 
     void OnLoad();
     void OnClosing();
