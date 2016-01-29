@@ -16,7 +16,7 @@ private:
     void PostDraw();
 
 protected:
-	virtual void Init3d();
+	virtual void Init3d(int argc, char *argv[]);
 	virtual void PostRender();
 	virtual void Draw();
 

@@ -12,6 +12,16 @@ class RdrWorld :
     public ContainerEventListener
 {
 protected:
+    btClock cl;
+    btScalar currentTime;
+
+    btBroadphaseInterface* broadphase;
+    btDiscreteDynamicsWorld* dynamicsWorld;
+    btDefaultCollisionConfiguration* collisionConfiguration;
+    btCollisionDispatcher* dispatcher;
+    btSequentialImpulseConstraintSolver* solver;
+
+    deque<btRigidBody*> rigidBodies;
 
     //BoxObject* ground;
 
@@ -21,8 +31,7 @@ protected:
 
     Container* container;
 
-    void InitWindow(int argc, char *argv[]);
-    virtual void Init3d() = 0;
+    virtual void Init3d(int argc, char **argv) = 0;
     virtual void PreRender() {}
     virtual void PreUpdate() {}
     virtual void PostUpdate() {}
@@ -40,9 +49,12 @@ public:
 
     deque<RdrNode*> nodes;
 
-    void Init(int argc, char *argv[]);
-    void Render();
+    void Init(int argc, char **argv);
+    void CreatePhysicsEnv();
 
+    virtual void OnLoad(int argc, char** argv);
+    virtual void OnPaint();
+    virtual void OnClosing();
     virtual void Scrolled(double xoffset, double yoffset);
     virtual void MouseLeftButtonPressed  (double x, double y);
     virtual void MouseLeftButtonReleased (double x, double y);

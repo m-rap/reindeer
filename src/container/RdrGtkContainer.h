@@ -1,11 +1,34 @@
 #ifndef RDRGTKCONTAINER_H
 #define RDRGTKCONTAINER_H
 
-#include "Container.h"
+#include "GlxContainer.h"
+#include "../common/RdrLinuxThread.h"
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
+
+class RdrGtkContainer;
+
+typedef struct {
+    RdrGtkContainer* container;
+    GtkWidget* gtkWindow;
+    GtkWidget* box;
+    GtkWidget* drawArea;
+    GtkStatusbar* statusBar;
+} AppWidgets;
 
 class RdrGtkContainer :
-    public Container
+    public GlxContainer
 {
+protected:
+    AppWidgets* appWidgets;
+    GtkApplication* app;
+    guint timerId;
+
+    virtual void SubInit();
+    void LoadNoGlade();
+    void LoadGlade();
+    virtual void DeinitWindowAndDisplay();
+
 public:
     RdrGtkContainer();
     virtual ~RdrGtkContainer();
@@ -17,10 +40,14 @@ public:
     virtual int KEY_M() { return -1; }
 
     virtual int ShouldClose() { return -1; }
-    virtual void Init(int argc, char *argv[]);
-    virtual void PreUpdate() {}
-    virtual void PostUpdate() {}
-    virtual void ReadInput() {}
+    virtual void OnLoad();
+
+    static G_MODULE_EXPORT void OnWindowDestroy(GtkWidget *object, gpointer userData);
+    static G_MODULE_EXPORT void OnPanelLoad(GtkWidget *object, cairo_t* cr, gpointer userData);
+    static G_MODULE_EXPORT void OnPanelClosed(GtkWidget *object, GdkEvent* event, gpointer userData);
+    static G_MODULE_EXPORT gboolean OnTimerTick(gpointer userData);
+
+    virtual void Main();
 };
 
 #endif // GTKCONTAINER_H

@@ -2,7 +2,7 @@
 
 void *pthreadFunc(void *param)
 {
-    Runnable *r = static_cast<Runnable*>(param);
+    RdrRunnable *r = static_cast<RdrRunnable*>(param);
     r->Run();
     return NULL;
 }
@@ -35,7 +35,7 @@ RdrLinuxThread::~RdrLinuxThread()
 {
 }
 
-int RdrLinuxThread::Start(Runnable* runnable)
+int RdrLinuxThread::Start(RdrRunnable* runnable)
 {
     return pthread_create(&thread, 0, pthreadFunc, runnable);
 }

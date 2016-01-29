@@ -8,7 +8,7 @@ public:
     virtual int Unlock() = 0;
 };
 
-class Runnable
+class RdrRunnable
 {
 public:
     virtual void Run() = 0;

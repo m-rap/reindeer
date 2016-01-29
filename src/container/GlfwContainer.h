@@ -17,6 +17,9 @@ protected:
     GLFWwindow* window;
     double lastTimeMiddleMousePressed;
     double mouseX, mouseY;
+
+    virtual void SubInit();
+
 public:
     GlfwContainer();
     virtual ~GlfwContainer();
@@ -31,7 +34,7 @@ public:
     static unordered_map<GLFWwindow*, GlfwContainer*> ContainerMap;
 
     virtual int ShouldClose() { return glfwWindowShouldClose(window); }
-    virtual void Init(int argc, char *argv[]);
+    virtual void Deinit();
     virtual void PreUpdate();
     virtual void PostUpdate();
     virtual void ReadInput();

@@ -15,7 +15,7 @@ RdrWorld_OpenGL::~RdrWorld_OpenGL(void)
 }
 
 
-void RdrWorld_OpenGL::Init3d()
+void RdrWorld_OpenGL::Init3d(int argc, char *argv[])
 {
     GLenum err = glewInit();
     if (err != GLEW_OK) {
@@ -140,7 +140,7 @@ void RdrWorld_OpenGL::Draw()
 	PostUpdate();
 
 	if (DEBUG_SHADOWMAP) { // for debug shadow map texture
-        glViewport(0, 0, DEPTHTEX_WIDTH / 4, DEPTHTEX_HEIGHT / 4);
+        glViewport(0, 0, DEPTHTEX_WIDTH / 2, DEPTHTEX_HEIGHT / 2);
         if (!USE_LEGACY)
             glUseProgram(textureViewerShader);
         light->DrawShadowMapTexture();

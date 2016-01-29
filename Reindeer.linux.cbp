@@ -39,14 +39,15 @@
 			<Add option="-Wall" />
 			<Add option="-Wno-unused-variable" />
 			<Add option="-Wno-write-strings" />
-			<Add option="`pkg-config gtk+-3.0 --cflags`" />
+			<Add option="`pkg-config gtk+-3.0 --cflags gl`" />
 			<Add option="-DUSE_OPENGL" />
 			<Add option="-DGLEW_STATIC" />
 			<Add directory="." />
 			<Add directory="/usr/include/bullet" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config gtk+-3.0 --libs`" />
+			<Add option="`pkg-config gtk+-3.0 --libs gl`" />
+			<Add option="-rdynamic" />
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />

@@ -7,6 +7,7 @@
 #include "RdrCollisionShapeFactory.h"
 #include "../container/GlfwContainer.h"
 #include "../container/GlxContainer.h"
+#include "../container/RdrGtkContainer.h"
 #ifdef _WIN32
 #include "WglContainer.h"
 #endif
@@ -30,11 +31,12 @@ int main(int argc, char *argv[])
 #else
     //GlfwContainer container;
     //WglContainer container;
-    GlxContainer container;
+    //GlxContainer container;
+    RdrGtkContainer container;
     RdrWorld_OpenGL world(&container);
 #endif
     RdrWorld::Global = &world;
-    world.Init(argc, argv);
+    container.Init(argc, argv);
 
     RdrNode* nodes = new RdrNode[nBox + 2];
 
@@ -80,7 +82,10 @@ int main(int argc, char *argv[])
     camera.GetTransform()->BuildWorld();
     camera.BuildView();
 
-    world.Render();
+    world.CreatePhysicsEnv();
+
+    container.Main();
+    container.Deinit();
 
     delete[] nodes;
 

@@ -2,7 +2,5 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Reindeer">
 		<Project filename="Reindeer.linux.cbp" />
-		<Project filename="ReindeerEditor.cbp" />
-		<Project filename="OpenGLGlx.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

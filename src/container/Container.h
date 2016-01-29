@@ -9,6 +9,9 @@ using namespace std;
 class ContainerEventListener
 {
 public:
+    virtual void OnLoad(int argc, char **argv) = 0;
+    virtual void OnPaint() = 0;
+    virtual void OnClosing() = 0;
     virtual void Scrolled(double xoffset, double yoffset) = 0;
     virtual void MouseLeftButtonPressed  (double x, double y) = 0;
     virtual void MouseLeftButtonReleased (double x, double y) = 0;
@@ -25,6 +28,12 @@ class Container
 {
 protected:
     deque<ContainerEventListener*> listeners;
+    int argc;
+    char** argv;
+    bool loaded;
+
+    virtual void SubInit() = 0;
+
 public:
     Container();
     virtual ~Container();
@@ -39,11 +48,16 @@ public:
     void AddListener(ContainerEventListener* listener);
 
     virtual int ShouldClose() = 0;
-    virtual void Init(int argc, char *argv[]) = 0;
+    void Init(int argc, char *argv[]);
+    virtual void Deinit() = 0;
     virtual void PreUpdate() = 0;
     virtual void PostUpdate() = 0;
     virtual void ReadInput() = 0;
+    virtual void Main();
 
+    void OnLoad();
+    void OnPaint();
+    void OnClosing();
     void Scrolled(double xoffset, double yoffset);
     void MouseLeftButtonPressed  (double x, double y);
     void MouseLeftButtonReleased (double x, double y);

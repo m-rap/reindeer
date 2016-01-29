@@ -31,7 +31,7 @@ GlfwContainer::~GlfwContainer()
         glfwTerminate();
 }
 
-void GlfwContainer::Init(int argc, char *argv[])
+void GlfwContainer::SubInit()
 {
     int init = glfwInit();
     if (init == GL_FALSE) {
@@ -51,6 +51,10 @@ void GlfwContainer::Init(int argc, char *argv[])
 
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback);
+}
+
+void GlfwContainer::Deinit()
+{
 }
 
 void GlfwContainer::PreUpdate()

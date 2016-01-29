@@ -6,6 +6,7 @@ RdrWorld* RdrWorld::Global = 0;
 
 RdrWorld::RdrWorld(Container* container)
 {
+    dynamicsWorld = NULL;
     mouseRightButtonDown = false;
     mouseMiddleButtonDown = false;
     btClock cl;
@@ -21,13 +22,7 @@ RdrWorld::~RdrWorld()
 
 void RdrWorld::Init(int argc, char *argv[])
 {
-    InitWindow(argc, argv);
-    Init3d();
-}
-
-void RdrWorld::InitWindow(int argc, char *argv[])
-{
-    container->Init(argc, argv);
+    Init3d(argc, argv);
 }
 
 void TraverseRigidBodies(btCollisionShape** result, RdrNode* root, RdrNode* current, int& bodiesCount, float& totalMass)
@@ -57,17 +52,15 @@ void TraverseRigidBodies(btCollisionShape** result, RdrNode* root, RdrNode* curr
     }
 }
 
-void RdrWorld::Render()
+void RdrWorld::CreatePhysicsEnv()
 {
-    btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+    broadphase = new btDbvtBroadphase();
+    collisionConfiguration = new btDefaultCollisionConfiguration();
     collisionConfiguration->setConvexConvexMultipointIterations(3);
-    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
-    btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    solver = new btSequentialImpulseConstraintSolver();
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0.0f * PHYSICS_WORLD_SCALE, -10.0f * PHYSICS_WORLD_SCALE, 0.0f * PHYSICS_WORLD_SCALE));
-
-    deque<btRigidBody*> rigidBodies;
 
     for (deque<RdrNode*>::iterator it = nodes.begin(); it != nodes.end(); it++) {
         btCollisionShape* shape;
@@ -101,19 +94,23 @@ void RdrWorld::Render()
         rigidBodies.push_back(rb);
         dynamicsWorld->addRigidBody(rb);
     }
+}
 
-    btClock cl;
-    btScalar currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+void RdrWorld::OnLoad(int argc, char **argv)
+{
+    Init(argc, argv);
+    currentTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+    OnPaint();
+}
 
-    while (true) {
-        container->ReadInput();
-        if (container->ShouldClose())
-            break;
+void RdrWorld::OnPaint()
+{
+    btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
+    btScalar frameTime = newTime - currentTime;
+    currentTime = newTime;
 
-        btScalar newTime = (btScalar)cl.getTimeMicroseconds() / 1000000.f;
-        btScalar frameTime = newTime - currentTime;
-        currentTime = newTime;
-
+    if (dynamicsWorld != NULL)
+    {
         dynamicsWorld->stepSimulation(frameTime, 7);
 
         for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
@@ -123,13 +120,16 @@ void RdrWorld::Render()
             (*it)->getMotionState()->getWorldTransform(trans);
             rc->Update(trans);
         }
-
-        PreUpdate();
-        Draw();
-        PostUpdate();
-        container->PostUpdate();
     }
 
+    PreUpdate();
+    Draw();
+    PostUpdate();
+    container->PostUpdate();
+}
+
+void RdrWorld::OnClosing()
+{
     for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
     {
         dynamicsWorld->removeRigidBody(*it);
@@ -147,8 +147,8 @@ void RdrWorld::Render()
 
 void RdrWorld::Draw()
 {
-	for (deque<RdrNode*>::iterator it = nodes.begin(); it != nodes.end(); it++) {
-		(*it)->Draw(NULL, &camera, light);
+    for (deque<RdrNode*>::iterator it = nodes.begin(); it != nodes.end(); it++) {
+        (*it)->Draw(NULL, &camera, light);
     }
 }
 
@@ -156,9 +156,9 @@ void RdrWorld::Scrolled(double xoffset, double yoffset)
 {
     RdrTransform* tr = camera.GetTransform();
     RDRVEC3 pos = *tr->GetPosition();
-	RDRVEC3 delta = (float)yoffset * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_Z));
-	tr->SetPosition(pos + delta);
-	camera.BuildView();
+    RDRVEC3 delta = (float)yoffset * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_Z));
+    tr->SetPosition(pos + delta);
+    camera.BuildView();
 }
 
 void RdrWorld::MouseLeftButtonPressed(double x, double y)
@@ -197,7 +197,7 @@ void RdrWorld::MouseMoved(double x, double y)
 {
     RdrTransform* tr = camera.GetTransform();
     if (mouseRightButtonDown) {
-		double deltaX = mouseX - x, deltaY = mouseY - y;
+        double deltaX = mouseX - x, deltaY = mouseY - y;
         tr->RotateLocalX(ToRadian(deltaY * 0.1f), true);
         tr->RotateGlobalY(ToRadian(deltaX * 0.1f), true);
         tr->BuildWorld();
@@ -207,10 +207,10 @@ void RdrWorld::MouseMoved(double x, double y)
     }
 
     if (mouseMiddleButtonDown) {
-		double deltaX = mouseX - x, deltaY = mouseY - y;
+        double deltaX = mouseX - x, deltaY = mouseY - y;
         RDRVEC3 pos = *tr->GetPosition();
         RDRVEC3 delta = (float)deltaX * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_X));
-		delta += (float)-deltaY * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_Y));
+        delta += (float)-deltaY * 0.01f * RdrHelper::Vec3Normalize(RdrHelper::Vec3Transform(*tr->GetRotation(), AXIS_Y));
         tr->SetPosition(pos + delta);
         camera.BuildView();
         mouseX = x;

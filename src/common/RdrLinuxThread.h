@@ -28,7 +28,7 @@ public:
     RdrLinuxThread();
     virtual ~RdrLinuxThread();
 
-    int Start(Runnable* runnable);
+    int Start(RdrRunnable* runnable);
     int Join();
 };
 

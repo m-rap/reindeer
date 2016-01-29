@@ -44,15 +44,28 @@ GlxContainer::GlxContainer()
 
 GlxContainer::~GlxContainer()
 {
+}
+
+void GlxContainer::DeinitWindowAndDisplay()
+{
     glXMakeCurrent(display, 0, 0);
     glXDestroyContext(display, ctx);
-
     XDestroyWindow(display, window);
     XFreeColormap(display, swa.colormap);
     XCloseDisplay(display);
 }
 
-void GlxContainer::FbSetup()
+void GlxContainer::InitDisplay()
+{
+    display = XOpenDisplay(NULL);
+
+    if (!display) {
+        printf("Failed to open X display\n");
+        exit(1);
+    }
+}
+
+void GlxContainer::InitFb()
 {
     // Get a matching FB config
     static int visual_attribs[] = {
@@ -124,30 +137,10 @@ void GlxContainer::FbSetup()
     screen = vi->screen;
     depth = vi->depth;
     printf("Chosen visual ID = 0x%x\n", vi->visualid);
-
-    printf("Creating colormap\n");
-    swa.colormap = XCreateColormap(display,
-                                   RootWindow(display, vi->screen),
-                                   vi->visual, AllocNone);
-    swa.background_pixmap = None;
-    swa.border_pixel      = 0;
-
 }
 
-void GlxContainer::Init(int argc, char *argv[])
+void GlxContainer::InitWindow()
 {
-    display = XOpenDisplay(NULL);
-    screen = 0;
-    depth = DefaultDepth(display, 0);
-
-    if (!display) {
-        printf("Failed to open X display\n");
-        exit(1);
-    }
-
-    FbSetup();
-    //visual = DefaultVisual(display, 0);
-
     swa.background_pixel = XWhitePixel(display, 0);
     swa.event_mask       = KeyPressMask | KeyRelease |
                            ExposureMask |
@@ -157,7 +150,7 @@ void GlxContainer::Init(int argc, char *argv[])
     printf("Creating window\n");
     width = SCREEN_WIDTH;
     height = SCREEN_HEIGHT;
-    window = XCreateWindow(display, RootWindow(display, screen),
+    window = XCreateWindow(display, root,
                            0, 0, width, height, 0, depth, InputOutput,
                            visual,
                            CWBorderPixel | CWColormap | CWEventMask, &swa);
@@ -166,13 +159,28 @@ void GlxContainer::Init(int argc, char *argv[])
         exit(1);
     }
 
-    // Done with the visual info data
-    XFree(vi);
-
     XStoreName(display, window, "GL 3.0 Window");
 
     printf("Mapping window\n");
     XMapWindow(display, window);
+}
+
+void GlxContainer::SubInit()
+{
+    InitDisplay();
+    InitFb();
+
+    root = RootWindow(display, screen);
+
+    printf("Creating colormap\n");
+    swa.colormap = XCreateColormap(display, root, visual, AllocNone);
+    swa.background_pixmap = None;
+    swa.border_pixel      = 0;
+
+    InitWindow();
+
+    // Done with the visual info data
+    XFree(vi);
 
     // Get the default screen's GLX extension list
     const char *glxExts = glXQueryExtensionsString(display, DefaultScreen(display));
@@ -197,8 +205,7 @@ void GlxContainer::Init(int argc, char *argv[])
     // If either is not present, use GLX 1.3 context creation method.
     if (!isExtensionSupported(glxExts, "GLX_ARB_create_context") ||
         !glXCreateContextAttribsARB) {
-        printf( "glXCreateContextAttribsARB() not found"
-                " ... using old-style GLX context\n" );
+        printf( "glXCreateContextAttribsARB() not found... using old-style GLX context\n" );
         ctx = glXCreateNewContext( display, bestFbc, GLX_RGBA_TYPE, 0, True );
     }
 
@@ -218,9 +225,9 @@ void GlxContainer::Init(int argc, char *argv[])
                                           True, context_attribs );
 
         // Sync to ensure any errors generated are processed.
-        XSync( display, False );
+        XSync(display, False);
         if ( !ctxErrorOccurred && ctx )
-            printf( "Created GL 3.0 context\n" );
+            printf("Created GL 3.0 context\n");
         else
         {
             // Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
@@ -265,10 +272,14 @@ void GlxContainer::Init(int argc, char *argv[])
     wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(display, window, &wmDeleteMessage, 1);
 
-    loaded = false;
     shouldClose = 0;
 
     //thread.Start(this);
+}
+
+void GlxContainer::Deinit()
+{
+    DeinitWindowAndDisplay();
 }
 
 int GlxContainer::ShouldClose()
@@ -286,10 +297,7 @@ void GlxContainer::ReadInput()
     if (checkMask || XCheckMaskEvent(display, swa.event_mask, &event)) {
         switch (event.type) {
         case Expose: // part of exposure mask
-            if (!loaded) {
-                OnLoad();
-                loaded = true;
-            }
+            OnLoad();
             break;
 
         case KeyPress: // part of keypressmask
@@ -360,14 +368,6 @@ void GlxContainer::ReadInput()
         }
         break;
     }
-}
-
-void GlxContainer::OnLoad()
-{
-}
-
-void GlxContainer::OnClosing()
-{
 }
 
 void GlxContainer::OnClosed()

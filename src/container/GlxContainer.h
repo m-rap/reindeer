@@ -15,8 +15,9 @@ typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXC
 class GlxContainer :
     public Container
 {
-private:
+protected:
     Window window;
+    Window root;
     Display *display;
     XEvent event;
     int width, height;
@@ -31,10 +32,13 @@ private:
     XSetWindowAttributes swa;
     GLXFBConfig bestFbc;
     Atom wmDeleteMessage;
-    bool loaded;
     bool checkMask;
 
-    void FbSetup();
+    virtual void SubInit();
+    virtual void InitDisplay();
+    inline void InitFb();
+    virtual void InitWindow();
+    virtual void DeinitWindowAndDisplay();
 
 public:
     GlxContainer();
@@ -56,22 +60,18 @@ public:
     virtual int KEY_m() { return XK_m; }
 
     virtual int ShouldClose();
-    virtual void Init(int argc, char *argv[]);
+    virtual void Deinit();
+
     virtual void PreUpdate() {}
     virtual void PostUpdate();
     virtual void ReadInput();
 
-    void OnLoad();
-    void OnClosing();
     void OnClosed();
     void OnResize();
-
-protected:
-private:
 };
 
 class GlxInputResetThread :
-    public Runnable
+    public RdrRunnable
 {
 private:
     RdrLinuxThread thread;
