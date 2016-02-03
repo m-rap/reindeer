@@ -57,6 +57,12 @@ void Container::OnClosing()
         (*it)->OnClosing();
 }
 
+void Container::OnResize(int width, int height)
+{
+    for (deque<ContainerEventListener*>::iterator it = listeners.begin(); it != listeners.end(); it++)
+        (*it)->OnResize(width, height);
+}
+
 void Container::Scrolled(double xoffset, double yoffset)
 {
     for (deque<ContainerEventListener*>::iterator it = listeners.begin(); it != listeners.end(); it++)

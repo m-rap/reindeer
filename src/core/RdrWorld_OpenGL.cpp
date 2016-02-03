@@ -4,14 +4,14 @@
 
 RdrWorld_OpenGL::RdrWorld_OpenGL(Container* container) : RdrWorld(container)
 {
-	light = NULL;
+    light = NULL;
 }
 
 
 RdrWorld_OpenGL::~RdrWorld_OpenGL(void)
 {
-	if (light != NULL)
-		delete light;
+    if (light != NULL)
+        delete light;
 }
 
 
@@ -54,9 +54,9 @@ void RdrWorld_OpenGL::Init3d(int argc, char *argv[])
 void RdrWorld_OpenGL::PreShadow()
 {
     if (!USE_LEGACY)
-		glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthFrameBuffer()); // Render to our framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthFrameBuffer()); // Render to our framebuffer
 
-	glViewport(0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+    glViewport(0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
     if (!USE_LEGACY) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -76,17 +76,17 @@ void RdrWorld_OpenGL::PreShadow()
 
 void RdrWorld_OpenGL::PostShadow() {
     if (USE_LEGACY) {
-		glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
-		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT);
-	}
+        glBindTexture(GL_TEXTURE_2D, light->GetDepthTexture());
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, DEPTHTEX_WIDTH, DEPTHTEX_HEIGHT);
+    }
 }
 
 void RdrWorld_OpenGL::PreDraw()
 {
     if (!USE_LEGACY)
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render to our screen
+        glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render to our screen
 
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
     if (!USE_LEGACY) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -107,8 +107,8 @@ void RdrWorld_OpenGL::PreDraw()
 void RdrWorld_OpenGL::PostDraw()
 {
     if (USE_LEGACY) {
-		glDisable(GL_LIGHT0);
-		glDisable(GL_LIGHTING);
+        glDisable(GL_LIGHT0);
+        glDisable(GL_LIGHTING);
 
         glActiveTexture(GL_TEXTURE1);glDisable(GL_TEXTURE_2D); // disables texture 1
         glDisable(GL_ALPHA_TEST);
@@ -116,33 +116,33 @@ void RdrWorld_OpenGL::PostDraw()
         glDisable(GL_TEXTURE_GEN_T);
         glDisable(GL_TEXTURE_GEN_R);
         glDisable(GL_TEXTURE_GEN_Q);
-	}
+    }
 }
 
 void RdrWorld_OpenGL::PostRender()
 {
-	if (!USE_LEGACY)
-	{
-		glDeleteProgram(standardShader);
-		glDeleteProgram(depthShader);
-	}
+    if (!USE_LEGACY)
+    {
+        glDeleteProgram(standardShader);
+        glDeleteProgram(depthShader);
+    }
 }
 
 void RdrWorld_OpenGL::Draw()
 {
-	PreShadow();
-	for (deque<RdrNode*>::iterator it = nodes.begin(); it != nodes.end(); it++) {
-		(*it)->RenderShadow(NULL, light);
+    PreShadow();
+    for (deque<RdrNode*>::iterator it = nodes.begin(); it != nodes.end(); it++) {
+        (*it)->RenderShadow(NULL, light);
     }
     PostShadow();
-	PreDraw();
+    PreDraw();
     RdrWorld::Draw();
-	PostUpdate();
+    PostUpdate();
 
-	if (DEBUG_SHADOWMAP) { // for debug shadow map texture
+    if (DEBUG_SHADOWMAP) { // for debug shadow map texture
         glViewport(0, 0, DEPTHTEX_WIDTH / 2, DEPTHTEX_HEIGHT / 2);
         if (!USE_LEGACY)
             glUseProgram(textureViewerShader);
         light->DrawShadowMapTexture();
-	}
+    }
 }

@@ -1,23 +1,5 @@
 #include "GlfwContainer.h"
 
-unordered_map<GLFWwindow*, GlfwContainer*> GlfwContainer::ContainerMap;
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    if (GlfwContainer::ContainerMap.find(window) != GlfwContainer::ContainerMap.end())
-        GlfwContainer::ContainerMap[window]->Scrolled(xoffset, yoffset);
-}
-
-void key_callback(GLFWwindow *window, int key, int scancodes, int action, int mods)
-{
-    if (GlfwContainer::ContainerMap.find(window) != GlfwContainer::ContainerMap.end()) {
-        if (action == GLFW_PRESS)
-            GlfwContainer::ContainerMap[window]->KeyPressed(key);
-        if (action == GLFW_RELEASE)
-            GlfwContainer::ContainerMap[window]->KeyReleased(key);
-    }
-}
-
 GlfwContainer::GlfwContainer()
 {
     lastTimeMiddleMousePressed = glfwGetTime();
@@ -29,6 +11,29 @@ GlfwContainer::~GlfwContainer()
 {
     if (window)
         glfwTerminate();
+}
+
+void GlfwContainer::ScrollCb(GLFWwindow* window, double xoffset, double yoffset)
+{
+    GlfwContainer* container = (GlfwContainer*)glfwGetWindowUserPointer(window);
+    container->Scrolled(xoffset, yoffset);
+}
+
+void GlfwContainer::KeyCb(GLFWwindow *window, int key, int scancodes, int action, int mods)
+{
+    GlfwContainer* container = (GlfwContainer*)glfwGetWindowUserPointer(window);
+    if (action == GLFW_PRESS)
+        container->KeyPressed(key);
+    if (action == GLFW_RELEASE)
+        container->KeyReleased(key);
+}
+
+void GlfwContainer::ResizeCb(GLFWwindow *window, int width, int height)
+{
+    GlfwContainer* container = (GlfwContainer*)glfwGetWindowUserPointer(window);
+    if (width != SCREEN_WIDTH || height != SCREEN_HEIGHT) {
+        container->OnResize(width, height);
+    }
 }
 
 void GlfwContainer::SubInit()
@@ -46,11 +51,12 @@ void GlfwContainer::SubInit()
         return;
     }
 
-    GlfwContainer::ContainerMap[window] = this;
+    glfwSetWindowUserPointer(window, this);
     glfwMakeContextCurrent(window);
 
-    glfwSetScrollCallback(window, scroll_callback);
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, ScrollCb);
+    glfwSetKeyCallback(window, KeyCb);
+    glfwSetWindowSizeCallback(window, ResizeCb);
 }
 
 void GlfwContainer::Deinit()

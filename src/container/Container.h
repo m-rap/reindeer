@@ -12,6 +12,7 @@ public:
     virtual void OnLoad(int argc, char **argv) = 0;
     virtual void OnPaint() = 0;
     virtual void OnClosing() = 0;
+    virtual void OnResize(int width, int height) = 0;
     virtual void Scrolled(double xoffset, double yoffset) = 0;
     virtual void MouseLeftButtonPressed  (double x, double y) = 0;
     virtual void MouseLeftButtonReleased (double x, double y) = 0;
@@ -54,16 +55,17 @@ public:
     virtual void PostUpdate() = 0;
     virtual void ReadInput() = 0;
     virtual void Main();
+    virtual void OnLoad();
 
-    void OnLoad();
     void OnPaint();
     void OnClosing();
+    void OnResize(int width, int height);
     void Scrolled(double xoffset, double yoffset);
-    void MouseLeftButtonPressed  (double x, double y);
-    void MouseLeftButtonReleased (double x, double y);
-    void MouseRightButtonPressed (double x, double y);
+    void MouseLeftButtonPressed(double x, double y);
+    void MouseLeftButtonReleased(double x, double y);
+    void MouseRightButtonPressed(double x, double y);
     void MouseRightButtonReleased(double x, double y);
-    void MouseMiddleButtonPressed (double x, double y);
+    void MouseMiddleButtonPressed(double x, double y);
     void MouseMiddleButtonReleased(double x, double y);
     void MouseMoved(double x, double y);
     void KeyPressed(int keyCode);

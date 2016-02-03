@@ -109,12 +109,10 @@ void RdrWorld::OnPaint()
     btScalar frameTime = newTime - currentTime;
     currentTime = newTime;
 
-    if (dynamicsWorld != NULL)
-    {
+    if (dynamicsWorld != NULL) {
         dynamicsWorld->stepSimulation(frameTime, 7);
 
-        for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
-        {
+        for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++) {
             RdrNode* rc = (RdrNode*)(*it)->getUserPointer();
             btTransform trans;
             (*it)->getMotionState()->getWorldTransform(trans);
@@ -130,8 +128,7 @@ void RdrWorld::OnPaint()
 
 void RdrWorld::OnClosing()
 {
-    for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++)
-    {
+    for (deque<btRigidBody*>::iterator it = rigidBodies.begin(); it != rigidBodies.end(); it++) {
         dynamicsWorld->removeRigidBody(*it);
         delete *it;
     }
@@ -143,6 +140,13 @@ void RdrWorld::OnClosing()
     delete broadphase;
 
     PostRender();
+}
+
+void RdrWorld::OnResize(int width, int height)
+{
+    SCREEN_WIDTH = width;
+    SCREEN_HEIGHT = height;
+    camera.BuildProjection();
 }
 
 void RdrWorld::Draw()

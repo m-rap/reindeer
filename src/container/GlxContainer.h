@@ -20,7 +20,6 @@ protected:
     Window root;
     Display *display;
     XEvent event;
-    int width, height;
     RdrLinuxThread thread;
     int shouldClose;
     int currentKey;
@@ -67,7 +66,6 @@ public:
     virtual void ReadInput();
 
     void OnClosed();
-    void OnResize();
 };
 
 class GlxInputResetThread :
@@ -86,7 +84,6 @@ public:
 
     virtual void Run()
     {
-
     }
 };
 

@@ -2,41 +2,98 @@
 
 RdrGtkContainer::RdrGtkContainer()
 {
+    running = false;
 }
 
 RdrGtkContainer::~RdrGtkContainer()
 {
 }
 
-void RdrGtkContainer::OnLoad()
+G_MODULE_EXPORT gboolean RdrGtkContainer::TimerTickCb(gpointer userData)
 {
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
 
+    if (!container->running)
+        return true;
+
+    gtk_widget_queue_draw(container->appWidgets->drawArea);
+    return true;
 }
 
-G_MODULE_EXPORT void RdrGtkContainer::OnWindowDestroy(GtkWidget *object, gpointer userData)
+G_MODULE_EXPORT void RdrGtkContainer::WindowDestroyCb(GtkWidget* object, gpointer userData)
 {
-    g_source_remove(((RdrGtkContainer*)userData)->timerId);
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
+    container->running = false;
+    g_source_remove(container->timerId);
+
     gtk_main_quit();
 }
 
-G_MODULE_EXPORT void RdrGtkContainer::OnPanelLoad(GtkWidget *object, cairo_t* cr, gpointer userData)
+G_MODULE_EXPORT void RdrGtkContainer::PanelLoadCb(GtkWidget* object, GdkEventExpose* event, gpointer userData)
 {
     ((RdrGtkContainer*)userData)->OnLoad();
 }
 
-G_MODULE_EXPORT void RdrGtkContainer::OnPanelClosed(GtkWidget *object, GdkEvent* event, gpointer userData)
+G_MODULE_EXPORT void RdrGtkContainer::DrawCb(GtkWidget* object, cairo_t* cr, gpointer userData)
+{
+    ((RdrGtkContainer*)userData)->OnPaint();
+}
+
+G_MODULE_EXPORT void RdrGtkContainer::PanelClosedCb(GtkWidget* object, GdkEvent* event, gpointer userData)
 {
     ((RdrGtkContainer*)userData)->OnClosing();
 }
 
-G_MODULE_EXPORT gboolean RdrGtkContainer::OnTimerTick(gpointer userData)
+G_MODULE_EXPORT gboolean RdrGtkContainer::MotionNotifyEventCb(GtkWidget* object, GdkEventMotion* event, gpointer userData)
 {
-    RdrGtkContainer* container = ((RdrGtkContainer*)userData);
-    container->OnPaint();
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
+    container->MouseMoved(event->x, event->y);
     return true;
 }
 
-void RdrGtkContainer::DeinitWindowAndDisplay()
+G_MODULE_EXPORT gboolean RdrGtkContainer::ButtonPressEventCb(GtkWidget* object, GdkEventButton* event, gpointer userData)
+{
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
+    if (event->button == 1)
+        container->MouseLeftButtonPressed(event->x, event->y);
+    else if (event->button == 2)
+        container->MouseMiddleButtonPressed(event->x, event->y);
+    else if (event->button == 3)
+        container->MouseRightButtonPressed(event->x, event->y);
+    return true;
+}
+
+G_MODULE_EXPORT gboolean RdrGtkContainer::ButtonReleaseEventCb(GtkWidget* object, GdkEventButton* event, gpointer userData)
+{
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
+    if (event->button == 1)
+        container->MouseLeftButtonReleased(event->x, event->y);
+    else if (event->button == 2)
+        container->MouseMiddleButtonReleased(event->x, event->y);
+    else if (event->button == 3)
+        container->MouseRightButtonReleased(event->x, event->y);
+    return true;
+}
+
+G_MODULE_EXPORT gboolean RdrGtkContainer::ScrollEventCb(GtkWidget* object, GdkEventScroll* event, gpointer userData)
+{
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
+    if (event->direction == GDK_SCROLL_UP)
+        container->Scrolled(0, 1);
+    else if (event->direction == GDK_SCROLL_DOWN)
+        container->Scrolled(0, -1);
+    return true;
+}
+
+G_MODULE_EXPORT gboolean RdrGtkContainer::ConfigureEventCb(GtkWidget* object, GdkEventConfigure* event, gpointer userData)
+{
+    RdrGtkContainer* container = (RdrGtkContainer*)userData;
+    if (event->width != SCREEN_WIDTH || event->height != SCREEN_HEIGHT)
+        container->OnResize(event->width, event->height);
+    return true;
+}
+
+void RdrGtkContainer::Deinit()
 {
     g_slice_free(AppWidgets, appWidgets);
 }
@@ -56,15 +113,8 @@ void RdrGtkContainer::LoadGlade()
     gtk_statusbar_push(appWidgets->statusBar, statusCtxId, "Hello world");
 
     appWidgets->drawArea = gtk_drawing_area_new();
-    gtk_box_pack_start(GTK_BOX(appWidgets->box), appWidgets->drawArea, TRUE, TRUE, 0);
-    gtk_container_add(GTK_CONTAINER(appWidgets->box), appWidgets->drawArea);
-
-    g_timeout_add(1000.0/60.0,(GSourceFunc)OnTimerTick, this);
-    g_signal_connect(appWidgets->drawArea, "delete-event", G_CALLBACK(OnPanelClosed), this);
-    g_signal_connect(appWidgets->drawArea, "draw", G_CALLBACK(OnPanelLoad), this);
-    g_signal_connect(appWidgets->gtkWindow, "destroy", G_CALLBACK(OnWindowDestroy), this);
-
-    //gtk_builder_connect_signals(builder, appWidgets);
+    gtk_widget_set_double_buffered(appWidgets->drawArea, false);
+    gtk_box_pack_start(GTK_BOX(appWidgets->box), appWidgets->drawArea, TRUE, TRUE, 0); // already includes gtk_container_add
 
     g_object_unref(G_OBJECT(builder));
 }
@@ -78,11 +128,20 @@ void RdrGtkContainer::LoadNoGlade()
     gtk_widget_set_double_buffered(appWidgets->drawArea, FALSE);
     gtk_widget_set_size_request(appWidgets->drawArea, SCREEN_WIDTH, SCREEN_WIDTH);
     gtk_container_add(GTK_CONTAINER(appWidgets->gtkWindow), appWidgets->drawArea);
+}
 
-    timerId = g_timeout_add(1000.0/60.0,(GSourceFunc)OnTimerTick, this);
-    g_signal_connect(appWidgets->drawArea, "delete-event", G_CALLBACK(OnPanelClosed), this);
-    g_signal_connect(appWidgets->gtkWindow, "draw", G_CALLBACK(OnPanelLoad), this);
-    g_signal_connect(appWidgets->gtkWindow, "destroy", G_CALLBACK(OnWindowDestroy), this);
+void RdrGtkContainer::ConnectSignals()
+{
+    timerId = g_timeout_add(1000.0f/60.0f,(GSourceFunc)TimerTickCb, this);
+    g_signal_connect(appWidgets->drawArea, "delete-event", G_CALLBACK(PanelClosedCb), this);
+    g_signal_connect(appWidgets->drawArea, "expose-event", G_CALLBACK(PanelLoadCb), this);
+    g_signal_connect(appWidgets->drawArea, "draw", G_CALLBACK(DrawCb), this);
+    g_signal_connect(appWidgets->drawArea, "motion-notify-event", G_CALLBACK(MotionNotifyEventCb), this);
+    g_signal_connect(appWidgets->drawArea, "button-press-event", G_CALLBACK(ButtonPressEventCb), this);
+    g_signal_connect(appWidgets->drawArea, "button-release-event", G_CALLBACK(ButtonReleaseEventCb), this);
+    g_signal_connect(appWidgets->drawArea, "scroll-event", G_CALLBACK(ScrollEventCb), this);
+    g_signal_connect(appWidgets->drawArea, "configure-event", G_CALLBACK(ConfigureEventCb), this);
+    g_signal_connect(appWidgets->gtkWindow, "destroy", G_CALLBACK(WindowDestroyCb), this);
 }
 
 void RdrGtkContainer::SubInit()
@@ -91,7 +150,17 @@ void RdrGtkContainer::SubInit()
     gtk_init(&argc, &argv);
 
     LoadGlade();
-    //LoadNoGlade();
+
+    gtk_widget_set_events(
+        appWidgets->drawArea,
+        gtk_widget_get_events(appWidgets->drawArea) |
+            GDK_BUTTON_PRESS_MASK |
+            GDK_BUTTON_RELEASE_MASK |
+            GDK_SCROLL_MASK |
+            GDK_POINTER_MOTION_MASK
+    );
+
+    ConnectSignals();
 
     GdkDisplay* gtkDisplay = gtk_widget_get_display(appWidgets->gtkWindow);
     display = gdk_x11_display_get_xdisplay(gtkDisplay);
@@ -99,12 +168,13 @@ void RdrGtkContainer::SubInit()
 
     GLint att[] = {GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None};
     vi = glXChooseVisual(display, 0, att);
-    if(vi == NULL)
+    if(vi == NULL) {
         printf("No matching visuals\n");
+        exit(0);
+    }
 
     swa.colormap = XCreateColormap(display, root, vi->visual, AllocNone);
-    if(swa.colormap == 0)
-    {
+    if(swa.colormap == 0) {
         printf("Cannot create color map\n");
         exit(0);
     }
@@ -114,16 +184,20 @@ void RdrGtkContainer::SubInit()
     ctx = glXCreateContext(display, vi, NULL, GL_TRUE);
     GdkWindow *gdkWindow = gtk_widget_get_window(GTK_WIDGET(appWidgets->drawArea));
     window = gdk_x11_window_get_xid(gdkWindow);
-    if (!glXMakeCurrent(display, window, ctx))
-    {
+    XMapWindow(display, window);
+
+    if (!glXMakeCurrent(display, window, ctx)) {
         printf("Error make current\n");
         exit(0);
     }
-
-    XMapWindow(display, window);
 }
 
 void RdrGtkContainer::Main()
 {
+    if (running)
+        return;
+
+    running = true;
+
     gtk_main();
 }

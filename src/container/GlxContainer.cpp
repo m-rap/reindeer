@@ -148,10 +148,8 @@ void GlxContainer::InitWindow()
                            StructureNotifyMask;
 
     printf("Creating window\n");
-    width = SCREEN_WIDTH;
-    height = SCREEN_HEIGHT;
     window = XCreateWindow(display, root,
-                           0, 0, width, height, 0, depth, InputOutput,
+                           0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, depth, InputOutput,
                            visual,
                            CWBorderPixel | CWColormap | CWEventMask, &swa);
     if (!window) {
@@ -207,13 +205,8 @@ void GlxContainer::SubInit()
         !glXCreateContextAttribsARB) {
         printf( "glXCreateContextAttribsARB() not found... using old-style GLX context\n" );
         ctx = glXCreateNewContext( display, bestFbc, GLX_RGBA_TYPE, 0, True );
-    }
-
-    // If it does, try to get a GL 3.0 context!
-    else
-    {
-        int context_attribs[] =
-        {
+    } else { // If it does, try to get a GL 3.0 context!
+        int context_attribs[] = {
             GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
             GLX_CONTEXT_MINOR_VERSION_ARB, 0,
             //GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
@@ -228,8 +221,7 @@ void GlxContainer::SubInit()
         XSync(display, False);
         if ( !ctxErrorOccurred && ctx )
             printf("Created GL 3.0 context\n");
-        else
-        {
+        else {
             // Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
             // When a context version below 3.0 is requested, implementations will
             // return the newest context version compatible with OpenGL versions less
@@ -347,11 +339,8 @@ void GlxContainer::ReadInput()
 
         case ConfigureNotify: // part of structurenotifymask
             XConfigureEvent xce = event.xconfigure;
-            if (xce.width != width || xce.height != height) {
-                width = xce.width;
-                height = xce.height;
-                OnResize();
-            }
+            if (xce.width != SCREEN_WIDTH || xce.height != SCREEN_HEIGHT)
+                OnResize(xce.width, xce.height);
             break;
         }
 
@@ -371,9 +360,5 @@ void GlxContainer::ReadInput()
 }
 
 void GlxContainer::OnClosed()
-{
-}
-
-void GlxContainer::OnResize()
 {
 }

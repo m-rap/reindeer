@@ -31,13 +31,15 @@ public:
     virtual int KEY_M() { return GLFW_KEY_M; }
     virtual int KEY_m() { return GLFW_KEY_M; }
 
-    static unordered_map<GLFWwindow*, GlfwContainer*> ContainerMap;
-
     virtual int ShouldClose() { return glfwWindowShouldClose(window); }
     virtual void Deinit();
     virtual void PreUpdate();
     virtual void PostUpdate();
     virtual void ReadInput();
+
+    static void ScrollCb(GLFWwindow* window, double xoffset, double yoffset);
+    static void KeyCb(GLFWwindow *window, int key, int scancodes, int action, int mods);
+    static void ResizeCb(GLFWwindow *window, int width, int height);
 };
 
 #endif // GLFWCONTAINER_H

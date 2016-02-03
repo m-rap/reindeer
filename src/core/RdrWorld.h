@@ -55,6 +55,7 @@ public:
     virtual void OnLoad(int argc, char** argv);
     virtual void OnPaint();
     virtual void OnClosing();
+    virtual void OnResize(int width, int height);
     virtual void Scrolled(double xoffset, double yoffset);
     virtual void MouseLeftButtonPressed  (double x, double y);
     virtual void MouseLeftButtonReleased (double x, double y);
