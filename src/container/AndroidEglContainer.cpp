@@ -5,7 +5,7 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
     if (app->userData == NULL) {
         return;
     }
-    EglContainer* container1 = (EglContainer*)app->userData;
+    AndroidEglContainer* container1 = (AndroidEglContainer*)app->userData;
     switch (cmd) {
         case APP_CMD_SAVE_STATE:
             break;
@@ -13,7 +13,7 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
             if (container1->app->window != NULL) {
                 container1->Init(0, NULL);
                 if (container1->ConstructDraw != NULL) {
-                    conrainer1->ConstructDraw(container1);
+                    container1->ConstructDraw(container1);
                 }
             }
             break;

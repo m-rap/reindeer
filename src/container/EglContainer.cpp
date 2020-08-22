@@ -1,4 +1,4 @@
-#include "EglContainer.cpp"
+#include "EglContainer.h"
 
 void EglContainer::SubInit() {
     LOGI("init");
@@ -46,7 +46,7 @@ void EglContainer::SubInit() {
 
     if (config == NULL) {
         LOGI("Unable to initialize EGLConfig");
-        return -1;
+        return;
     }
 
     eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
@@ -55,7 +55,7 @@ void EglContainer::SubInit() {
 
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
         LOGI("Unable to eglMakeCurrent");
-        return -1;
+        return;
     }
 
     eglQuerySurface(display, surface, EGL_WIDTH, &w);
@@ -76,15 +76,15 @@ void EglContainer::SubInit() {
 
     LOGI("init done");
     
+    running = true;
 }
 
 void EglContainer::Deinit() {
     LOGI("deinit %d", running);
     if (!running) {
-        return 0;
+        return;
     }
     running = false;
-    animating = false;
 
     eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     if (context != EGL_NO_CONTEXT) {

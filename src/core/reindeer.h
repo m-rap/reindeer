@@ -14,11 +14,17 @@ struct CUSTOMVERTEX {FLOAT X, Y, Z; D3DVECTOR NORMAL; FLOAT u, v;};
 extern LPDIRECT3DDEVICE9 d3ddev;
 #else
 
-#include <GL/glew.h>
+//#include <GL/glew.h>
 #ifdef _MSC_VER
 #include <GL/wglew.h>
 #endif
+#if defined __arm__ || defined __aarch64__
+#include <GLES/gl.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>

@@ -17,14 +17,14 @@ RdrWorld_OpenGL::~RdrWorld_OpenGL(void)
 
 void RdrWorld_OpenGL::Init3d(int argc, char *argv[])
 {
-    GLenum err = glewInit();
-    if (err != GLEW_OK) {
-        fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
-        return;
-    }
+    //GLenum err = glewInit();
+    //if (err != GLEW_OK) {
+    //    fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
+    //    return;
+    //}
 
-    if (!GLEW_VERSION_1_5)
-        USE_LEGACY = true;
+    //if (!GLEW_VERSION_1_5)
+    //    USE_LEGACY = true;
 
     printf("%s\n", glGetString(GL_VERSION));
 
@@ -62,7 +62,7 @@ void RdrWorld_OpenGL::PreShadow()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
-        glShadeModel(GL_SMOOTH);
+        //glShadeModel(GL_SMOOTH);
         glColorMask(1, 1, 1, 1);
 
         glUseProgram(depthShader);
@@ -92,7 +92,7 @@ void RdrWorld_OpenGL::PreDraw()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        glShadeModel(GL_SMOOTH);
+        //glShadeModel(GL_SMOOTH);
         glColorMask(1, 1, 1, 1);
         glUseProgram(standardShader);
     } else {
@@ -112,10 +112,13 @@ void RdrWorld_OpenGL::PostDraw()
 
         glActiveTexture(GL_TEXTURE1);glDisable(GL_TEXTURE_2D); // disables texture 1
         glDisable(GL_ALPHA_TEST);
+
+#if !defined __arm__ && !defined __aarch64__
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
         glDisable(GL_TEXTURE_GEN_R);
         glDisable(GL_TEXTURE_GEN_Q);
+#endif
     }
 }
 
