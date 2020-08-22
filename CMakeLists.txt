@@ -11,7 +11,9 @@ set(BUILD_EXTRAS false)
 set(BUILD_UNIT_TESTS false)
 add_subdirectory(../bullet3 bullet3)
 
+if (NOT ANDROID_NDK)
 set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
+endif()
 
 set(BUILD_FLAGS "-Wno-writable-strings -DUSE_OPENGL")
 
@@ -27,17 +29,14 @@ add_library(reindeer
     src/core/RdrWorld.cpp
     src/core/RdrWorld_OpenGL.cpp
     src/core/RdrCollisionShapeFactory.cpp
-    src/core/BoxObject.cpp
-    src/core/GLDebugDrawer.cpp
     src/core/RdrCamera.cpp
     src/core/RdrDrawable.cpp
     src/core/RdrLight.cpp
-    src/core/RdrLight_LegacyOpenGL.cpp
+    #src/core/RdrLight_LegacyOpenGL.cpp
     src/core/RdrLight_OpenGL.cpp
     src/core/RdrMesh.cpp
     src/core/RdrMeshFactory_OpenGL.cpp
-    src/core/RdrMeshModel.cpp
-    src/core/RdrMesh_LegacyOpenGL.cpp
+    #src/core/RdrMesh_LegacyOpenGL.cpp
     src/core/RdrMesh_OpenGL.cpp
     src/core/RdrNode.cpp
     src/core/RdrRigidBody.cpp
@@ -45,8 +44,8 @@ add_library(reindeer
     src/core/RdrTransform.cpp
     src/core/objloader.cpp
     src/core/shader.cpp
-    src/core/texture.cpp
     src/core/config.cpp
+    src/core/texture.cpp
 )
 
 target_include_directories(reindeer PUBLIC
@@ -60,7 +59,13 @@ target_include_directories(reindeer PUBLIC
 #    ${CMAKE_BINARY_DIR}/bullet3/src/Bullet3Commom
 #)
 
-target_link_libraries(reindeer glm Bullet3Common)
+target_link_libraries(reindeer
+    glm
+    Bullet3Common
+    BulletDynamics
+    BulletCollision
+    LinearMath
+)
 
 set_target_properties(reindeer PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 

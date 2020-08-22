@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <GL/glew.h>
+//#include <GL/glew.h>
 
 GLuint loadBMP_custom(const char * imagepath){
 
