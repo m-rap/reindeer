@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined __arm__ || defined __aarch64__
+#include <GLES/gl.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#else
+#include <GL2/gl2.h>
+#endif
+
 //#include <GL/glew.h>
 
 GLuint loadBMP_custom(const char * imagepath){
@@ -63,7 +71,11 @@ GLuint loadBMP_custom(const char * imagepath){
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	// Give the image to OpenGL
+#if defined __arm__ || defined __aarch64__
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+#else
 	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+#endif
 
 	// OpenGL has now copied the data. Free our own version
 	delete [] data;

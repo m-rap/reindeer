@@ -83,7 +83,7 @@ bool RdrLight_OpenGL::InitShadowMap()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-#if !defined __arm__ && !defined __arch64__
+#if !defined __arm__ && !defined __aarch64__
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
@@ -91,7 +91,7 @@ bool RdrLight_OpenGL::InitShadowMap()
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
-#if !defined __arm__ && !defined __arch64__
+#if !defined __arm__ && !defined __aarch64__
 	// No color output in the bound framebuffer, only depth.
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);

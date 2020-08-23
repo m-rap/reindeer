@@ -1,5 +1,6 @@
 #include "RdrMesh_LegacyOpenGL.h"
 #include "texture.h"
+#include "reindeer.h"
 
 RdrMesh_LegacyOpenGL::RdrMesh_LegacyOpenGL(bool isIndexed, bool useTexture)
 {
@@ -122,14 +123,17 @@ void RdrMesh_LegacyOpenGL::Draw(RdrTransform* tr, RdrCamera* camera, RdrLight* l
 	}
 	else
 	{
-		glColor3f(1.0f, 1.0f, 1.0f); //diffuse and ambient
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f); //diffuse and ambient
 	}
 
 	glEnable(GL_COLOR_MATERIAL);
+
+#if !defined __arm__ && !defined __aarch64__
 	//glColorMaterial(GL_FRONT, GL_AMBIENT); // the diffuse and ambient of material has been represented on color or texture
 	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	glColorMaterial(GL_FRONT, GL_SPECULAR);
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+#endif
 
 	//float matAmbientAndDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, matAmbientAndDiffuse); // the diffuse and ambient of material has been represented on color or texture

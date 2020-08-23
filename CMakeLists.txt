@@ -4,18 +4,21 @@ project(reindeer)
 
 add_subdirectory(../glm glm)
 
+set(TMP ${CMAKE_CXX_FLAGS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(BUILD_BULLET3 true)
 set(BUILD_OPENGL3_DEMOS false)
 set(BUILD_BULLET2_DEMOS false)
 set(BUILD_EXTRAS false)
 set(BUILD_UNIT_TESTS false)
 add_subdirectory(../bullet3 bullet3)
+set(CMAKE_CXX_FLAGS "${TMP}")
 
 if (NOT ANDROID_NDK)
 set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
 endif()
 
-set(BUILD_FLAGS "-Wno-writable-strings -DUSE_OPENGL")
+set(BUILD_FLAGS "-Wno-writable-strings -DUSE_OPENGL -fPIC")
 
 add_library(reindeer
     STATIC
@@ -32,11 +35,11 @@ add_library(reindeer
     src/core/RdrCamera.cpp
     src/core/RdrDrawable.cpp
     src/core/RdrLight.cpp
-    #src/core/RdrLight_LegacyOpenGL.cpp
+    src/core/RdrLight_LegacyOpenGL.cpp
     src/core/RdrLight_OpenGL.cpp
     src/core/RdrMesh.cpp
     src/core/RdrMeshFactory_OpenGL.cpp
-    #src/core/RdrMesh_LegacyOpenGL.cpp
+    src/core/RdrMesh_LegacyOpenGL.cpp
     src/core/RdrMesh_OpenGL.cpp
     src/core/RdrNode.cpp
     src/core/RdrRigidBody.cpp
