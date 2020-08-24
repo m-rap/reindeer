@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined __arm__ || defined __aarch64__
+//#if defined __arm__ || defined __aarch64__
+#ifdef USE_GLES
 #include <GLES/gl.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -71,7 +72,8 @@ GLuint loadBMP_custom(const char * imagepath){
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	// Give the image to OpenGL
-#if defined __arm__ || defined __aarch64__
+//#if defined __arm__ || defined __aarch64__
+#ifdef USE_GLES
 	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 #else
 	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);

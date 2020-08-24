@@ -113,7 +113,8 @@ void RdrWorld_OpenGL::PostDraw()
         glActiveTexture(GL_TEXTURE1);glDisable(GL_TEXTURE_2D); // disables texture 1
         glDisable(GL_ALPHA_TEST);
 
-#if !defined __arm__ && !defined __aarch64__
+//#if !defined __arm__ && !defined __aarch64__
+#ifndef USE_GLES
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
         glDisable(GL_TEXTURE_GEN_R);

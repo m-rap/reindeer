@@ -3,7 +3,8 @@
 
 //#include <GL/glew.h>
 
-#if defined __arm__ || defined __aarch64__
+//#if defined __arm__ || defined __aarch64__
+#ifdef USE_GLES
 #include <GLES2/gl2.h>
 #else
 #include <GL/gl.h>

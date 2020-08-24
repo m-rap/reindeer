@@ -128,7 +128,8 @@ void RdrMesh_LegacyOpenGL::Draw(RdrTransform* tr, RdrCamera* camera, RdrLight* l
 
 	glEnable(GL_COLOR_MATERIAL);
 
-#if !defined __arm__ && !defined __aarch64__
+//#if !defined __arm__ && !defined __aarch64__
+#ifndef USE_GLES
 	//glColorMaterial(GL_FRONT, GL_AMBIENT); // the diffuse and ambient of material has been represented on color or texture
 	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	glColorMaterial(GL_FRONT, GL_SPECULAR);
