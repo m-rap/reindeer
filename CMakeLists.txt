@@ -14,7 +14,10 @@ set(BUILD_UNIT_TESTS false)
 add_subdirectory(../bullet3 bullet3)
 set(CMAKE_CXX_FLAGS "${TMP}")
 
-if (NOT ANDROID_NDK)
+
+message(INFO " varsss ANDROID_NDK ${ANDROID_NDK} CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
+
+if (NOT ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
 set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
 endif()
 
