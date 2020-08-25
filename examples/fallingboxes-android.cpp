@@ -67,4 +67,7 @@ void constructDraw(Container* container) {
 }
 
 void android_main(struct android_app* state) {
+    AndroidEglContainer container;
+    container.SetAndroidAttr(state, constructDraw);
+    container.Main();
 }

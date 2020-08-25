@@ -4,13 +4,14 @@ class AndroidEglContainer : public EglContainer {
 protected:
     virtual void SubInit() {
         animating = false;
+        window = app->window;
         EglContainer::SubInit();
     }
 public:
     android_app* app;
     bool animating;
 
-    void Init(android_app* app, void (*cnsdrwFunc)(Container*));
+    void SetAndroidAttr(android_app* app, void (*cnsdrwFunc)(Container*));
 
     virtual void Deinit() {
        EglContainer::Deinit();

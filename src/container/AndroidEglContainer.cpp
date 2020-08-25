@@ -33,13 +33,11 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
     
 }
 
-void AndroidEglContainer::Init(android_app* _app, void (*cnsdrwFunc)(Container*)) {
+void AndroidEglContainer::SetAndroidAttr(android_app* _app, void (*cnsdrwFunc)(Container*)) {
     app = _app;
     ConstructDraw = cnsdrwFunc;
     app->userData = this;
     app->onAppCmd = AndroidEglContainer::AndroidHandleCmd;
-    window = app->window;
-    Init(0, NULL);
 }
 
 void AndroidEglContainer::Main() {

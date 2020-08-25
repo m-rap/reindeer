@@ -9,7 +9,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(BUILD_BULLET3 ON)
 set(BUILD_OPENGL3_DEMOS OFF)
 set(BUILD_BULLET2_DEMOS OFF)
-set(BUILD_BULLET3_DEMOS OFF)
 set(BUILD_EXTRAS OFF)
 set(BUILD_UNIT_TESTS OFF)
 set(BUILD_CPU_DEMOS OFF)
@@ -24,10 +23,12 @@ set(CMAKE_CXX_FLAGS "${TMP}")
 message(INFO " varsss ANDROID_NDK ${ANDROID_NDK} CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
 
 if (NOT ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
-set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
+    set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
+    set(USING_TERMUX TRUE)
 endif()
 
-set(BUILD_FLAGS "-Wno-writable-strings -DUSE_OPENGL -fPIC")
+set(EXAMPLE_BUILD_FLAGS "-Wno-writable-strings -DUSE_OPENGL")
+set(BUILD_FLAGS "${EXAMPLE_BUILD_FLAGS} -fPIC")
 
 set(REINDEER_SRC
     src/container/Container.cpp
@@ -71,6 +72,7 @@ if (ANDROID_NDK)
         ${REINDEER_INCLUDE}
         ${ANDROID_NDK}/sources/android/native_app_glue
     )
+    set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLES")
     set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLES")
 endif()
 
@@ -114,9 +116,17 @@ if (ANDROID_NDK)
     )
     
     set_target_properties(reindeer-example
-        PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS}
+        PROPERTIES COMPILE_FLAGS ${EXAMPLE_BUILD_FLAGS}
     )
+
+    set(EXAMPLE_LINK_FLAGS "-u ANativeActivity_onCreate")
+
+    message("USING_TERMUXXXX ${USING_TERMUX}")
+    if (USING_TERMUX)
+        set(EXAMPLE_LINK_FLAGS "${EXAMPLE_LINK_FLAGS -Wl,--no-undefined")
+    endif()
+
     set_target_properties(reindeer-example
-        PROPERTIES LINK_FLAGS -Wl,--no-undefined
+        PROPERTIES LINK_FLAGS ${EXAMPLE_LINK_FLAGS}
     )
 endif()
