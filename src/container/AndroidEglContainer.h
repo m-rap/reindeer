@@ -1,4 +1,5 @@
 #include "EglContainer.h"
+#include "RdrWorld_OpenGL.h"
 
 class AndroidEglContainer : public EglContainer {
 protected:
@@ -10,15 +11,17 @@ protected:
 public:
     android_app* app;
     bool animating;
+    RdrWorld_OpenGL* world;
 
-    void SetAndroidAttr(android_app* app, void (*cnsdrwFunc)(Container*));
+    void SetAttrs(android_app* app, void (*cnsdrwFunc)(Container&,RdrWorld_OpenGL&), RdrWorld_OpenGL* world);
 
     virtual void Deinit() {
-       EglContainer::Deinit();
-       animating = false;
+        world->nodes.clear();
+        EglContainer::Deinit();
+        animating = false;
     }
    
     static void AndroidHandleCmd(android_app* app, int32_t cmd);
-    void (*ConstructDraw)(Container*);
+    void (*ConstructDraw)(Container&,RdrWorld_OpenGL&);
     virtual void Main();
 };

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void constructDraw(Container* container) {
+void constructDraw(Container& container, RdrWorld_OpenGL& world) {
     int nBox;
     //printf("nBox: ");
     nBox = 10;
@@ -15,7 +15,7 @@ void constructDraw(Container* container) {
     PHYSICS_WORLD_SCALE = 1;
     //scanf("%f", &PHYSICS_WORLD_SCALE);
 
-    RdrWorld_OpenGL world(container);
+    //RdrWorld_OpenGL world(&container);
     RdrWorld::Global = &world;
 
     vector<RdrNode> nodes;
@@ -68,6 +68,7 @@ void constructDraw(Container* container) {
 
 void android_main(struct android_app* state) {
     AndroidEglContainer container;
-    container.SetAndroidAttr(state, constructDraw);
+    RdrWorld_OpenGL world(&container);
+    container.SetAttrs(state, &constructDraw, &world);
     container.Main();
 }

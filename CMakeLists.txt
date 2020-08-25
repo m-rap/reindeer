@@ -123,7 +123,7 @@ if (ANDROID_NDK)
 
     message("USING_TERMUXXXX ${USING_TERMUX}")
     if (USING_TERMUX)
-        set(EXAMPLE_LINK_FLAGS "${EXAMPLE_LINK_FLAGS -Wl,--no-undefined")
+        set(EXAMPLE_LINK_FLAGS "${EXAMPLE_LINK_FLAGS} -Wl,--no-undefined")
     endif()
 
     set_target_properties(reindeer-example

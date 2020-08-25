@@ -13,7 +13,7 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
             if (container1->app->window != NULL) {
                 container1->Init(0, NULL);
                 if (container1->ConstructDraw != NULL) {
-                    container1->ConstructDraw(container1);
+                    container1->ConstructDraw(*container1, *container1->world);
                 }
             }
             break;
@@ -33,9 +33,10 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
     
 }
 
-void AndroidEglContainer::SetAndroidAttr(android_app* _app, void (*cnsdrwFunc)(Container*)) {
+void AndroidEglContainer::SetAttrs(android_app* _app, void (*cnsdrwFunc)(Container&,RdrWorld_OpenGL&), RdrWorld_OpenGL* _world) {
     app = _app;
     ConstructDraw = cnsdrwFunc;
+    world = _world;
     app->userData = this;
     app->onAppCmd = AndroidEglContainer::AndroidHandleCmd;
 }
