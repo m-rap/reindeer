@@ -2,6 +2,7 @@
 #define RDRMESHFACTORY_OPENGL_H
 
 #include "RdrMeshFactory.h"
+#include "RdrMesh_LegacyOpenGL.h"
 #include "RdrMesh_OpenGL.h"
 
 class RdrMeshFactory_OpenGL :

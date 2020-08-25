@@ -11,13 +11,16 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
             break;
         case APP_CMD_INIT_WINDOW:
             if (container1->app->window != NULL) {
+                LOGI("call container Init");
                 container1->Init(0, NULL);
                 if (container1->ConstructDraw != NULL) {
-                    container1->ConstructDraw(*container1, *container1->world);
+                    LOGI("call ConstructDraw");
+                    container1->ConstructDraw(container1, container1->world);
                 }
             }
             break;
         case APP_CMD_TERM_WINDOW:
+            container1->OnClosing();
             container1->Deinit();
             break;
         case APP_CMD_GAINED_FOCUS:
@@ -33,7 +36,7 @@ void AndroidEglContainer::AndroidHandleCmd(android_app* app, int32_t cmd) {
     
 }
 
-void AndroidEglContainer::SetAttrs(android_app* _app, void (*cnsdrwFunc)(Container&,RdrWorld_OpenGL&), RdrWorld_OpenGL* _world) {
+void AndroidEglContainer::SetAttrs(android_app* _app, void (*cnsdrwFunc)(Container*,RdrWorld*), RdrWorld* _world) {
     app = _app;
     ConstructDraw = cnsdrwFunc;
     world = _world;

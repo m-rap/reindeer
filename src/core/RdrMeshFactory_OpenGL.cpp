@@ -32,7 +32,13 @@ RdrMesh* RdrMeshFactory_OpenGL::CreateBoxMesh(const float& width, const float& h
 
 	if (RdrMeshFactory_OpenGL::Cache.find(key) == RdrMeshFactory_OpenGL::Cache.end()) {
 
-		RdrMesh* mesh = new RdrMesh_OpenGL(true);
+        RdrMesh* mesh;
+	    if (USE_LEGACY) {
+            mesh = new RdrMesh_LegacyOpenGL(true);
+	    } else {
+            mesh = new RdrMesh_OpenGL(true);
+	    }
+
 
         RDRVEC3 vertices[] = {
             RDRVEC3(-width / 2, -height / 2,  length / 2),    // side 1

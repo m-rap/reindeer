@@ -11,9 +11,9 @@ protected:
 public:
     android_app* app;
     bool animating;
-    RdrWorld_OpenGL* world;
+    RdrWorld* world;
 
-    void SetAttrs(android_app* app, void (*cnsdrwFunc)(Container&,RdrWorld_OpenGL&), RdrWorld_OpenGL* world);
+    void SetAttrs(android_app* app, void (*cnsdrwFunc)(Container*,RdrWorld*), RdrWorld* world);
 
     virtual void Deinit() {
         world->nodes.clear();
@@ -22,6 +22,6 @@ public:
     }
    
     static void AndroidHandleCmd(android_app* app, int32_t cmd);
-    void (*ConstructDraw)(Container&,RdrWorld_OpenGL&);
+    void (*ConstructDraw)(Container*,RdrWorld*);
     virtual void Main();
 };

@@ -1,6 +1,7 @@
 #include "RdrWorld_OpenGL.h"
 #include "RdrLight_LegacyOpenGL.h"
 #include "RdrLight_OpenGL.h"
+#include "../container/EglContainer.h"
 
 RdrWorld_OpenGL::RdrWorld_OpenGL(Container* container) : RdrWorld(container)
 {
@@ -17,6 +18,7 @@ RdrWorld_OpenGL::~RdrWorld_OpenGL(void)
 
 void RdrWorld_OpenGL::Init3d(int argc, char *argv[])
 {
+    LOGI("inside Init3d");
     //GLenum err = glewInit();
     //if (err != GLEW_OK) {
     //    fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));

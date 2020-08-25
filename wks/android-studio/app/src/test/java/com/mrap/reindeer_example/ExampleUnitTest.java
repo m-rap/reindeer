@@ -1,4 +1,4 @@
-package com.mrap.loda;
+package com.mrap.reindeer_example;
 
 import org.junit.Test;
 

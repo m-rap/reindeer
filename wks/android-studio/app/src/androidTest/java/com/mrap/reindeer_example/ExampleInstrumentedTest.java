@@ -1,4 +1,4 @@
-package com.mrap.loda;
+package com.mrap.reindeer_example;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.mrap.loda", appContext.getPackageName());
+        assertEquals("com.mrap.reindeer_example", appContext.getPackageName());
     }
 }

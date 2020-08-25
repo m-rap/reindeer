@@ -46,7 +46,7 @@ public:
         eglSwapBuffers(display, surface);
     }
     virtual void ReadInput() { }
-    virtual void OnLoad() { }
+    //virtual void OnLoad() { }
 
 };
 

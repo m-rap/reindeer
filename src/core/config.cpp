@@ -1,7 +1,7 @@
 #include "reindeer.h"
 
 #ifdef USE_OPENGL
-bool USE_LEGACY = false;
+bool USE_LEGACY = true;
 #endif
 
 int SCREEN_WIDTH = 800;
