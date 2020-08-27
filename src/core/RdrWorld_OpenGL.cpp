@@ -18,15 +18,18 @@ RdrWorld_OpenGL::~RdrWorld_OpenGL(void)
 
 void RdrWorld_OpenGL::Init3d(int argc, char *argv[])
 {
-    LOGI("inside Init3d");
-    //GLenum err = glewInit();
-    //if (err != GLEW_OK) {
-    //    fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
-    //    return;
-    //}
+    LOGI("inside Init3d\n");
+    
+#if !defined USE_GLES && !defined __APPLE__
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
+        return;
+    }
 
-    //if (!GLEW_VERSION_1_5)
-    //    USE_LEGACY = true;
+    if (!GLEW_VERSION_1_5)
+        USE_LEGACY = true;
+#endif
 
     printf("%s\n", glGetString(GL_VERSION));
 
@@ -90,16 +93,17 @@ void RdrWorld_OpenGL::PreDraw()
 
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    //glShadeModel(GL_SMOOTH);
+    glColorMask(1, 1, 1, 1);
+
     if (!USE_LEGACY) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        //glShadeModel(GL_SMOOTH);
-        glColorMask(1, 1, 1, 1);
         glUseProgram(standardShader);
     } else {
         light->RenderDimLight();
-        RdrWorld::Draw();
+        //RdrWorld::Draw();
     }
 
     light->ApplyShadowMap(camera);
@@ -143,7 +147,6 @@ void RdrWorld_OpenGL::Draw()
     PostShadow();
     PreDraw();
     RdrWorld::Draw();
-    PostUpdate();
 
     if (DEBUG_SHADOWMAP) { // for debug shadow map texture
         glViewport(0, 0, DEPTHTEX_WIDTH / 2, DEPTHTEX_HEIGHT / 2);

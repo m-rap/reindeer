@@ -5,9 +5,13 @@
 #include "RdrMeshFactory_OpenGL.h"
 #endif
 #include "RdrCollisionShapeFactory.h"
+#ifdef USE_GLFW
 #include "../container/GlfwContainer.h"
+#endif
 #include "../container/GlxContainer.h"
+#ifdef USE_GTK
 #include "../container/RdrGtkContainer.h"
+#endif
 #ifdef _WIN32
 #include "WglContainer.h"
 #endif
@@ -29,9 +33,9 @@ int main(int argc, char *argv[])
     Win32Container container;
     D3d9World world(&container);
 #else
-    GlfwContainer container;
+    //GlfwContainer container;
     //WglContainer container;
-    //GlxContainer container;
+    GlxContainer container;
     //RdrGtkContainer container;
     RdrWorld_OpenGL world(&container);
 #endif
@@ -65,15 +69,15 @@ int main(int argc, char *argv[])
     }
 
 
-    RdrMesh* suzanne = RdrMeshFactory_OpenGL::GetInstance().CreateComplexMesh("res/suzanne.obj");
-    btCollisionShape* suzanneShape = RdrCollisionShapeFactory::GetInstance().CreateComplexShape("res/suzanne.obj");
-
-    nodes[nBox + 1].Mesh = suzanne;
-    nodes[nBox + 1].AddRigidBodyInfo(suzanneShape, 7.0f);
-    nodes[nBox + 1].GetTransform()->SetPosition(RDRVEC3(-0.7f, 1.0f, 0.5f), true);
-    //nodes[nBox].GetTransform()->RotateGlobalY(ToRadian(180.0f), true);
-    nodes[nBox + 1].GetTransform()->BuildWorld();
-    world.nodes.push_back(&nodes[nBox + 1]);
+    //RdrMesh* suzanne = RdrMeshFactory_OpenGL::GetInstance().CreateComplexMesh("res/suzanne.obj");
+    //btCollisionShape* suzanneShape = RdrCollisionShapeFactory::GetInstance().CreateComplexShape("res/suzanne.obj");
+    //
+    //nodes[nBox + 1].Mesh = suzanne;
+    //nodes[nBox + 1].AddRigidBodyInfo(suzanneShape, 7.0f);
+    //nodes[nBox + 1].GetTransform()->SetPosition(RDRVEC3(-0.7f, 1.0f, 0.5f), true);
+    ////nodes[nBox].GetTransform()->RotateGlobalY(ToRadian(180.0f), true);
+    //nodes[nBox + 1].GetTransform()->BuildWorld();
+    //world.nodes.push_back(&nodes[nBox + 1]);
 
     RdrCamera& camera = world.camera;
     camera.GetTransform()->SetPosition(RDRVEC3(0.0f, 3.0f, 7.0f), true);

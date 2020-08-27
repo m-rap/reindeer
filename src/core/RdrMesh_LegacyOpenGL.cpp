@@ -2,7 +2,7 @@
 #include "texture.h"
 #include "reindeer.h"
 
-RdrMesh_LegacyOpenGL::RdrMesh_LegacyOpenGL(bool isIndexed, bool useTexture)
+RdrMesh_LegacyOpenGL::RdrMesh_LegacyOpenGL(bool isIndexed, bool useTexture) : RdrMesh(isIndexed, useTexture)
 {
 	vertices = NULL;
 	normals = NULL;

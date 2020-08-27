@@ -2,7 +2,7 @@
 #define GLXCONTAINER_H
 
 #include "Container.h"
-#include "../common/RdrLinuxThread.h"
+//#include "../common/RdrLinuxThread.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/gl.h>
@@ -20,7 +20,7 @@ protected:
     Window root;
     Display *display;
     XEvent event;
-    RdrLinuxThread thread;
+    //RdrLinuxThread thread;
     int shouldClose;
     int currentKey;
     GLXContext ctx;
@@ -68,18 +68,19 @@ public:
     void OnClosed();
 };
 
-class GlxInputResetThread :
-    public RdrRunnable
+class GlxInputResetThread
+//    :
+//    public RdrRunnable
 {
 private:
-    RdrLinuxThread thread;
+    //RdrLinuxThread thread;
     GlxContainer *container;
 
 public:
     GlxInputResetThread(GlxContainer* container)
     {
         this->container = container;
-        thread.Start(this);
+        //thread.Start(this);
     }
 
     virtual void Run()

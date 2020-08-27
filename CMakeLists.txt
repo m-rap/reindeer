@@ -33,7 +33,6 @@ set(BUILD_FLAGS "${EXAMPLE_BUILD_FLAGS} -fPIC")
 set(REINDEER_SRC
     src/container/Container.cpp
     src/container/EglContainer.cpp
-    src/container/AndroidEglContainer.cpp
     src/core/RdrTransform.cpp
     src/core/RdrHelper.cpp
     src/core/RdrNode.cpp
@@ -66,6 +65,7 @@ set(REINDEER_INCLUDE
 if (ANDROID_NDK)
     set(REINDEER_SRC
         ${REINDEER_SRC}
+        src/container/AndroidEglContainer.cpp
         ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c
     )
     set(REINDEER_INCLUDE
@@ -74,6 +74,14 @@ if (ANDROID_NDK)
     )
     set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLES")
     set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLES")
+else()
+    set(REINDEER_SRC
+        ${REINDEER_SRC}
+        src/container/GlxContainer.cpp
+        #src/container/GlfwContainer.cpp
+    )
+    #set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLFW")
+    #set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLFW")
 endif()
 
 add_library(reindeer
@@ -128,5 +136,23 @@ if (ANDROID_NDK)
 
     set_target_properties(reindeer-example
         PROPERTIES LINK_FLAGS ${EXAMPLE_LINK_FLAGS}
+    )
+else()
+    
+    add_executable(reindeer-example
+        examples/fallingboxes.cpp
+    )
+    
+    set_target_properties(reindeer-example
+        PROPERTIES COMPILE_FLAGS ${EXAMPLE_BUILD_FLAGS}
+    )
+    
+    target_link_libraries(reindeer-example
+        reindeer
+        EGL
+        GL
+        X11
+        GLEW
+        #glfw
     )
 endif()

@@ -1,12 +1,13 @@
 #ifndef SHADER_HPP
 #define SHADER_HPP
 
-//#include <GL/glew.h>
-
 //#if defined __arm__ || defined __aarch64__
 #ifdef USE_GLES
 #include <GLES2/gl2.h>
+#elif defined __APPLE__
+    #include <OpenGL/gl.h>
 #else
+#include <GL/glew.h>
 #include <GL/gl.h>
 #endif
 

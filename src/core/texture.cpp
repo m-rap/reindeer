@@ -7,11 +7,12 @@
 #include <GLES/gl.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#elif defined __APPLE__
+    #include <OpenGL/gl.h>
 #else
-#include <GL2/gl2.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 #endif
-
-//#include <GL/glew.h>
 
 GLuint loadBMP_custom(const char * imagepath){
 

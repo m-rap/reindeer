@@ -2,6 +2,7 @@
 
 #ifdef USE_OPENGL
 bool USE_LEGACY = true;
+//bool USE_LEGACY = false;
 #endif
 
 int SCREEN_WIDTH = 800;
