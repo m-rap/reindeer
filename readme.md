@@ -1,33 +1,46 @@
 REINDEER
 ======
 
-Ini adalah project reindeer. Project ini di masa mendatang akan menjadi project 3D game engine. Namun untuk sementara, sekarang project ini masih dipakai sebagai sarana belajar 3d programming.
+A 3D Engine.
 
-Reindeer dapat di-render dengan Direct3D dan juga OpenGL. IDE yang digunakan adalah Visual Studio dengan compiler VC++ atau Codeblocks dengan compiler GCC jika menggunakan linux atau MinGW jika menggunakan Windows. Untuk tiap IDE sudah disiapkan file descriptor projectnya (.sln, .vcproj, .workspace, .cbp, dll). Jika Anda tidak berkenan dengan IDE tersebut, tentu saja Anda dapat memakai IDE atau text editor kesukaan Anda.
 
-Dependensi
+Building
 --------
 
-Untuk Linux secara umum:
-- wget
-- cmake
-- rsync
-- unzip
+- Install glew library
+- Get the bullet3 and glm source code and extract them, it's recommended to extract them in same directory where the reindeer source dir exists.
+- Execute this in a terminal emulator:
+```
+$ cd <reindeer_path>
+$ mkdir build
+```
+- If the bullet3 and glm source code are in the recommended path:
+```
+$ cmake ..
+```
+- If the bullet3 or glm source code in custom path set it with -DBULLET_SRC_DIR or -DGLM_SRC_DIR. Example:
+```
+$ cmake -DBULLET_SRC_DIR=<bullet_custom_path> ..
+```
+- Then make it:
+```
+$ make -j 4
+```
 
-Untuk Distro keluarga debian:
-- libxxf86vm-dev
-- libgl1-mesa-dev
-- libxrandr-dev
-- xorg-dev
-- libglu1-mesa-dev
-- libglm-dev
-- libglew-dev
-- libglfw3-dev
-- libbullet-dev
 
-Progress kami
+Configuration
+-------
+
+Some configurations like resolution etc are still currently hard-coded in src/core/config.cpp file. Sorry.
+
+
+Examples
 --------
-Lihat di [reindeer](https://youtu.be/WOElID2kxpA)
+It's included in examples directory and automatically built with project. Execute it from the build directory with:
+```
+./reindeer-example
+````
+[example video](https://youtu.be/WOElID2kxpA)
 
 
 To do
@@ -38,11 +51,10 @@ To do
 - shadow
 - fog
 - animation
-- editor, contoh yang keren: unity3d, paradox3d
+- editor, cool examples: unity3d, paradox3d
 
-Catatan
+
+Notes
 ------
-- Referensi contoh misi sebuah game engine: [referensi](https://github.com/turbulenz/turbulenz_engine#what-are-the-design-goals-of-the-turbulenz-engine)
+- This is a good sample of game engine goal: [what-are-the-design-goals-of-the-turbulenz-engine](https://github.com/turbulenz/turbulenz_engine#what-are-the-design-goals-of-the-turbulenz-engine)
 
-
-Terima kasih telah mengunjungi reindeer.

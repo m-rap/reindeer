@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(reindeer)
 
-add_subdirectory(../glm glm)
+set(GLM_SRC_DIR ../glm CACHE STRING "glm library source dir")
+set(BULLET_SRC_DIR ../bullet3 CACHE STRING "bullet3 library source dir")
+
+add_subdirectory(${GLM_SRC_DIR} glm)
 
 set(TMP ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -16,12 +19,15 @@ set(BUILD_ENET OFF)
 set(BUILD_CLSOCKET OFF)
 set(INSTALL_LIBS OFF)
 set(INSTALL_CMAKE_FILES OFF)
-add_subdirectory(../bullet3 bullet3)
+add_subdirectory(${BULLET_SRC_DIR} bullet3)
 set(CMAKE_CXX_FLAGS "${TMP}")
 
+message("ANDROID_NDK ${ANDROID_NDK}")
+message("CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
+message("GLM_SRC_DIR ${GLM_SRC_DIR}")
+message("BULLET_SRC_DIR ${BULLET_SRC_DIR}")
 
-message(INFO " varsss ANDROID_NDK ${ANDROID_NDK} CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
-
+set(USING_TERMUX false)
 if (NOT ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
     set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
     set(USING_TERMUX TRUE)
@@ -59,7 +65,7 @@ set(REINDEER_SRC
 )
 set(REINDEER_INCLUDE
     src/core
-    ../bullet3/src
+    ${BULLET_SRC_DIR}/src
 )
 
 if (ANDROID_NDK)
@@ -129,15 +135,17 @@ if (ANDROID_NDK)
 
     set(EXAMPLE_LINK_FLAGS "-u ANativeActivity_onCreate")
 
-    message("USING_TERMUXXXX ${USING_TERMUX}")
+    message("USING_TERMUX ${USING_TERMUX}")
     if (USING_TERMUX)
         set(EXAMPLE_LINK_FLAGS "${EXAMPLE_LINK_FLAGS} -Wl,--no-undefined")
     endif()
+    message("EXAMPLE_LINK_FLAGS ${EXAMPLE_LINK_FLAGS}")
 
     set_target_properties(reindeer-example
         PROPERTIES LINK_FLAGS ${EXAMPLE_LINK_FLAGS}
     )
 else()
+    find_package(GLEW 2 REQUIRED)
     
     add_executable(reindeer-example
         examples/fallingboxes.cpp
@@ -154,5 +162,12 @@ else()
         X11
         GLEW
         #glfw
+    )
+    
+    add_custom_target(copyResDir ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/res
+    )
+    add_custom_target(copyShaderDir ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/shader ${CMAKE_BINARY_DIR}/shader
     )
 endif()
