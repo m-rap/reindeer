@@ -11,8 +11,8 @@ Building
 - Get the bullet3 and glm source code and extract them, it's recommended to extract them in same directory where the reindeer source dir exists.
 - Execute this in a terminal emulator:
 ```
-$ cd <reindeer_path>
-$ mkdir build
+$ mkdir <reindeer_path>/build
+$ cd <reindeer_path>/build
 ```
 - If the bullet3 and glm source code are in the recommended path:
 ```
