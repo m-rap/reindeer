@@ -4,6 +4,9 @@ project(reindeer)
 
 set(GLM_SRC_DIR ../glm CACHE STRING "glm library source dir")
 set(BULLET_SRC_DIR ../bullet3 CACHE STRING "bullet3 library source dir")
+set(GLFW_SRC_DIR ../glfw CACHE STRING "glfw library source dir")
+set(USE_GLFW false CACHE STRING "enable glfw")
+set(USE_EGL false CACHE STRING "enable EGL")
 
 add_subdirectory(${GLM_SRC_DIR} glm)
 
@@ -26,6 +29,9 @@ message("ANDROID_NDK ${ANDROID_NDK}")
 message("CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
 message("GLM_SRC_DIR ${GLM_SRC_DIR}")
 message("BULLET_SRC_DIR ${BULLET_SRC_DIR}")
+message("GLFW_SRC_DIR ${GLFW_SRC_DIR}")
+message("USE_GLFW ${USE_GLFW}")
+message("USE_EGL ${USE_EGL}")
 
 set(USING_TERMUX false)
 if (NOT ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
@@ -38,7 +44,6 @@ set(BUILD_FLAGS "${EXAMPLE_BUILD_FLAGS} -fPIC")
 
 set(REINDEER_SRC
     src/container/Container.cpp
-    src/container/EglContainer.cpp
     src/core/RdrTransform.cpp
     src/core/RdrHelper.cpp
     src/core/RdrNode.cpp
@@ -81,13 +86,29 @@ if (ANDROID_NDK)
     set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLES")
     set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLES")
 else()
-    set(REINDEER_SRC
-        ${REINDEER_SRC}
-        src/container/GlxContainer.cpp
-        #src/container/GlfwContainer.cpp
-    )
-    #set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLFW")
-    #set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLFW")
+    if (USE_GLFW)
+        message("configuring glfw")
+        add_subdirectory(${GLFW_SRC_DIR} glfw)
+        set(REINDEER_SRC
+            ${REINDEER_SRC}
+            src/container/GlfwContainer.cpp
+        )
+        set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLFW")
+        set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_GLFW")
+    else()
+        set(REINDEER_SRC
+            ${REINDEER_SRC}
+            src/container/GlxContainer.cpp
+        )
+    endif()
+    if (USE_EGL)
+        set(REINDEER_SRC
+            ${REINDEER_SRC}
+            src/container/EglContainer.cpp
+        )
+        set(EXAMPLE_BUILD_FLAGS "${BUILD_FLAGS} -DUSE_EGL")
+        set(BUILD_FLAGS "${BUILD_FLAGS} -DUSE_EGL")
+    endif()
 endif()
 
 add_library(reindeer
@@ -104,12 +125,21 @@ target_include_directories(reindeer PUBLIC
 #    ${CMAKE_BINARY_DIR}/bullet3/src/Bullet3Commom
 #)
 
-target_link_libraries(reindeer
+set(REINDEER_LIB
     glm
     Bullet3Common
     BulletDynamics
     BulletCollision
     LinearMath
+)
+if(USE_GLFW)
+    set(REINDEER_LIB
+        ${REINDEER_LIB}
+        glfw
+    )
+endif()
+target_link_libraries(reindeer
+    ${REINDEER_LIB}
 )
 
 set_target_properties(reindeer PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
@@ -155,13 +185,33 @@ else()
         PROPERTIES COMPILE_FLAGS ${EXAMPLE_BUILD_FLAGS}
     )
     
-    target_link_libraries(reindeer-example
+    set(EXAMPLE_LIB
         reindeer
-        EGL
-        GL
-        X11
-        GLEW
-        #glfw
+        GLEW::GLEW
+    )
+
+    if (USE_EGL)
+        set(EXAMPLE_LIB
+            ${EXAMPLE_LIB}
+            EGL
+        )
+    endif()
+
+    if (APPLE)
+        set(EXAMPLE_LIB
+            ${EXAMPLE_LIB}
+            "-framework OpenGL"
+        )
+    else()
+        set(EXAMPLE_LIB
+            ${EXAMPLE_LIB}
+            GL
+            X11
+        )
+    endif()
+
+    target_link_libraries(reindeer-example
+        ${EXAMPLE_LIB}
     )
     
     add_custom_target(copyResDir ALL

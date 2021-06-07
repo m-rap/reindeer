@@ -1,7 +1,10 @@
 #include "RdrWorld_OpenGL.h"
 #include "RdrLight_LegacyOpenGL.h"
 #include "RdrLight_OpenGL.h"
+
+#ifdef USE_EGL
 #include "../container/EglContainer.h"
+#endif
 
 RdrWorld_OpenGL::RdrWorld_OpenGL(Container* container) : RdrWorld(container)
 {
