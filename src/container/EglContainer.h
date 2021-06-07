@@ -5,20 +5,6 @@
 
 #include <EGL/egl.h>
 
-#ifdef __ANDROID_API__
-
-#include <android_native_app_glue.h>
-#include <android/log.h>
-
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-
-#else
-
-#define LOGI(...) (printf(__VA_ARGS__))
-
-#endif
-
-
 
 class EglContainer : public Container {
 protected:
