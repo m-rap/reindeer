@@ -34,9 +34,9 @@ int main(int argc, char *argv[])
     Win32Container container;
     D3d9World world(&container);
 #else
-    GlfwContainer container;
+    //GlfwContainer container;
     //WglContainer container;
-    //GlxContainer container;
+    GlxContainer container;
     //RdrGtkContainer container;
     RdrWorld_OpenGL world(&container);
 #endif

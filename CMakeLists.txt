@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.5.0)
 
 project(reindeer)
 
@@ -33,14 +33,19 @@ message("GLFW_SRC_DIR ${GLFW_SRC_DIR}")
 message("USE_GLFW ${USE_GLFW}")
 message("USE_EGL ${USE_EGL}")
 
-set(USING_TERMUX false)
-if (NOT ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
-    set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
-    set(USING_TERMUX TRUE)
-endif()
-
 set(EXAMPLE_BUILD_FLAGS "-Wno-writable-strings -DUSE_OPENGL")
 set(BUILD_FLAGS "${EXAMPLE_BUILD_FLAGS} -fPIC")
+
+set(USING_TERMUX false)
+if (NOT ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
+#    set(ANDROID_NDK /data/data/com.termux/files/home/android-ndk-r21d)
+#    set(USING_TERMUX TRUE)
+    set(EXAMPLE_BUILD_FLAGS "${EXAMPLE_BUILD_FLAGS} -DNONDK")
+    set(BUILD_FLAGS "${BUILD_FLAGS} -DNONDK")
+endif()
+if (ANDROID_NDK AND ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
+    set(USING_TERMUX TRUE)
+endif()
 
 set(REINDEER_SRC
     src/container/Container.cpp

@@ -29,6 +29,7 @@ extern LPDIRECT3DDEVICE9 d3ddev;
 #endif
 
 #define GLM_FORCE_RADIANS
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -56,7 +57,7 @@ extern bool USE_LEGACY;
 #define snprintf _snprintf
 #endif
 
-#ifdef __ANDROID_API__
+#if defined(__ANDROID_API__) && !defined(NONDK)
 
 #include <android_native_app_glue.h>
 #include <android/log.h>
